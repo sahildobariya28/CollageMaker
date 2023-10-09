@@ -21,7 +21,7 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true" />
 
-        <com.photo.collagemaker.queshot.QueShotMosaicView
+        <com.photo.collagemaker.custom_view.MosaicView
             android:id="@+id/mosaic_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

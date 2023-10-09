@@ -1,18 +1,18 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
-public class QueShotSquareView extends QueShotGridView {
-    public QueShotSquareView(Context context) {
+public class SquareView extends CustomGridView {
+    public SquareView(Context context) {
         super(context);
     }
 
-    public QueShotSquareView(Context context, AttributeSet attributeSet) {
+    public SquareView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
     }
 
-    public QueShotSquareView(Context context, AttributeSet attributeSet, int i) {
+    public SquareView(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
     }
 

@@ -1,4 +1,4 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,13 +12,13 @@ import androidx.annotation.NonNull;
 
 import com.photo.collagemaker.sticker.Sticker;
 
-public class QueShotSplashSticker extends Sticker {
+public class SplashSticker extends Sticker {
     private Bitmap bitmapOver;
     private Bitmap bitmapXor;
     private Paint over;
     private Paint xor = new Paint();
 
-    public QueShotSplashSticker(Bitmap paramBitmap1, Bitmap paramBitmap2) {
+    public SplashSticker(Bitmap paramBitmap1, Bitmap paramBitmap2) {
         this.xor.setDither(true);
         this.xor.setAntiAlias(true);
         this.xor.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
@@ -73,11 +73,11 @@ public class QueShotSplashSticker extends Sticker {
     }
 
     @NonNull
-    public QueShotSplashSticker setAlpha(@IntRange(from = 0L, to = 255L) int paramInt) {
+    public SplashSticker setAlpha(@IntRange(from = 0L, to = 255L) int paramInt) {
         return this;
     }
 
-    public QueShotSplashSticker setDrawable(@NonNull Drawable paramDrawable) {
+    public SplashSticker setDrawable(@NonNull Drawable paramDrawable) {
         return this;
     }
 }

@@ -1,4 +1,4 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.content.Context;
 import android.graphics.Bitmap;

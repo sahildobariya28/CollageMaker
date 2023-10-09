@@ -1,4 +1,4 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class QueShotGridView extends QueShotStickerView {
+public class CustomGridView extends StickerView {
     private static final String TAG = "QueShotGridView";
     private Map<QueShotArea, QueShotGrid> queShotAreaQueShotGridMap;
     private AspectRatio aspectRatio;
@@ -91,15 +91,15 @@ public class QueShotGridView extends QueShotStickerView {
         void onQuShotUnSelected();
     }
 
-    public QueShotGridView(Context context) {
+    public CustomGridView(Context context) {
         this(context, null);
     }
 
-    public QueShotGridView(Context context, AttributeSet attributeSet) {
+    public CustomGridView(Context context, AttributeSet attributeSet) {
         this(context, attributeSet, 0);
     }
 
-    public QueShotGridView(Context context, AttributeSet attributeSet, int i) {
+    public CustomGridView(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
         this.actionMode = ActionMode.NONE;
         this.queShotGrids = new ArrayList();
@@ -114,9 +114,9 @@ public class QueShotGridView extends QueShotStickerView {
         this.canSwap = true;
         this.switchToSwapAction = new Runnable() {
             public void run() {
-                if (QueShotGridView.this.canSwap) {
-                    QueShotGridView.this.actionMode = ActionMode.SWAP;
-                    QueShotGridView.this.invalidate();
+                if (CustomGridView.this.canSwap) {
+                    CustomGridView.this.actionMode = ActionMode.SWAP;
+                    CustomGridView.this.invalidate();
                 }
             }
         };

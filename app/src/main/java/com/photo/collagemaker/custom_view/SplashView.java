@@ -1,4 +1,4 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -31,7 +31,7 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Stack;
 
-public class QueShotSplashView extends AppCompatImageView {
+public class SplashView extends AppCompatImageView {
     private Bitmap bitmap;
     private int brushSize = 100;
     private final PointF pointF = new PointF();
@@ -61,17 +61,17 @@ public class QueShotSplashView extends AppCompatImageView {
         this.cSplashMode = i;
     }
 
-    public QueShotSplashView(Context context) {
+    public SplashView(Context context) {
         super(context);
         init();
     }
 
-    public QueShotSplashView(Context context, AttributeSet attributeSet) {
+    public SplashView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         init();
     }
 
-    public QueShotSplashView(Context context, AttributeSet attributeSet, int i) {
+    public SplashView(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
         init();
     }
@@ -130,7 +130,7 @@ public class QueShotSplashView extends AppCompatImageView {
         } else {
             post(new Runnable() {
                 public void run() {
-                    QueShotSplashView.this.addStickerImmediately(sticker2, i);
+                    SplashView.this.addStickerImmediately(sticker2, i);
                 }
             });
         }

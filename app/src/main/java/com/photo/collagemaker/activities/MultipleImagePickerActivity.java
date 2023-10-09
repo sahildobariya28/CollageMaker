@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -66,10 +65,10 @@ public class MultipleImagePickerActivity extends AppCompatActivity
         }
 
         binding.textViewDone.setOnClickListener(view -> {
-            ArrayList<String> listString = getListString(listItemSelect);
-            if (listString.size() >= limitImageMin) {
-                Intent intent = new Intent(this, QueShotGridActivity.class);
-                intent.putStringArrayListExtra(KEY_DATA_RESULT, listString);
+            ArrayList<String> imageList = getListString(listItemSelect);
+            if (imageList.size() >= limitImageMin) {
+                Intent intent = new Intent(this, GridActivity.class);
+                intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "Please select at least " + limitImageMin + " images", Toast.LENGTH_SHORT).show();

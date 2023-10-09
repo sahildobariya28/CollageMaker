@@ -1,4 +1,4 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -18,24 +18,24 @@ import com.photo.collagemaker.draw.OnSaveBitmap;
 
 import org.wysaid.view.ImageGLSurfaceView;
 
-public class QueShotView extends QueShotStickerView {
+public class CustomCollageView extends StickerView {
 
     private Bitmap currentBitmap;
     private BrushDrawingView brushDrawingView;
     public ImageGLSurfaceView imageGLSurfaceView;
     private FilterImageView filterImageView;
 
-    public QueShotView(Context context) {
+    public CustomCollageView(Context context) {
         super(context);
         init(null);
     }
 
-    public QueShotView(Context context, AttributeSet attributeSet) {
+    public CustomCollageView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         init(attributeSet);
     }
 
-    public QueShotView(Context context, AttributeSet attributeSet, int i) {
+    public CustomCollageView(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
         init(attributeSet);
     }
@@ -78,7 +78,7 @@ public class QueShotView extends QueShotStickerView {
         } else {
             this.imageGLSurfaceView.setSurfaceCreatedCallback(new ImageGLSurfaceView.OnSurfaceCreatedCallback() {
                 public void surfaceCreated() {
-                    QueShotView.this.imageGLSurfaceView.setImageBitmap(bitmap);
+                    CustomCollageView.this.imageGLSurfaceView.setImageBitmap(bitmap);
                 }
             });
         }

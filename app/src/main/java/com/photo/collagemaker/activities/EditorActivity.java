@@ -22,8 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -31,10 +29,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.constraintlayout.widget.Guideline;
 import androidx.core.content.ContextCompat;
 import androidx.core.internal.view.SupportMenu;
 import androidx.exifinterface.media.ExifInterface;
@@ -42,7 +37,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.adapters.AdjustAdapter;
@@ -65,7 +59,7 @@ import com.photo.collagemaker.fragment.ColoredFragment;
 import com.photo.collagemaker.fragment.MosaicFragment;
 import com.photo.collagemaker.preference.KeyboardHeightObserver;
 import com.photo.collagemaker.preference.KeyboardHeightProvider;
-import com.photo.collagemaker.queshot.QueShotText;
+import com.photo.collagemaker.custom_view.CustomText;
 import com.photo.collagemaker.assets.EffectCodeAsset;
 import com.photo.collagemaker.assets.FilterCodeAsset;
 import com.photo.collagemaker.assets.WomenBeautyAssets;
@@ -85,15 +79,15 @@ import com.photo.collagemaker.fragment.CropFragment;
 import com.photo.collagemaker.fragment.RatioFragment;
 import com.photo.collagemaker.fragment.SplashFragment;
 import com.photo.collagemaker.listener.OnQuShotEditorListener;
-import com.photo.collagemaker.queshot.QueShotEditor;
-import com.photo.collagemaker.queshot.QueShotView;
+import com.photo.collagemaker.custom_view.CustomEditor;
+import com.photo.collagemaker.custom_view.CustomCollageView;
 import com.photo.collagemaker.draw.Drawing;
 import com.photo.collagemaker.picker.PermissionsUtils;
-import com.photo.collagemaker.queshot.QueShotStickerIcons;
+import com.photo.collagemaker.custom_view.StickerIcons;
 import com.photo.collagemaker.sticker.DrawableSticker;
 import com.photo.collagemaker.sticker.Sticker;
-import com.photo.collagemaker.queshot.QueShotStickerView;
-import com.photo.collagemaker.queshot.QueShotTextView;
+import com.photo.collagemaker.custom_view.StickerView;
+import com.photo.collagemaker.custom_view.CustomTextView;
 import com.photo.collagemaker.event.AlignHorizontallyEvent;
 import com.photo.collagemaker.event.DeleteIconEvent;
 import com.photo.collagemaker.event.EditTextIconEvent;
@@ -118,7 +112,7 @@ import java.util.List;
 import java.util.Locale;
 
 @SuppressLint("StaticFieldLeak")
-public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuShotEditorListener,
+public class EditorActivity extends BaseActivity implements OnQuShotEditorListener,
         View.OnClickListener, StickerAdapter.OnClickSplashListener, KeyboardHeightObserver,
         MenBeautyAdapter.OnClickBeautyItemListener, WomenBeautyAdapter.OnClickBeautyItemListener,
         CropFragment.OnCropPhoto, RotateFragment.OnCropPhoto, BrushColorListener,
@@ -141,15 +135,14 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
     private final QueShotDrawToolsAdapter mEditingEffectToolsAdapter = new QueShotDrawToolsAdapter(this);
     private final QueShotStickersToolsAdapter mEditingStickersToolsAdapter = new QueShotStickersToolsAdapter(this);
     // QuShot
-    public QueShotEditor quShotEditor;
-    public QueShotView quShotView;
+    public CustomEditor quShotCustomEditor;
     // BitmapStickerIcon
-    QueShotStickerIcons quShotStickerIconClose;
-    QueShotStickerIcons quShotStickerIconScale;
-    QueShotStickerIcons quShotStickerIconFlip;
-    QueShotStickerIcons quShotStickerIconRotate;
-    QueShotStickerIcons quShotStickerIconEdit;
-    QueShotStickerIcons quShotStickerIconAlign;
+    StickerIcons quShotStickerIconClose;
+    StickerIcons quShotStickerIconScale;
+    StickerIcons quShotStickerIconFlip;
+    StickerIcons quShotStickerIconRotate;
+    StickerIcons quShotStickerIconEdit;
+    StickerIcons quShotStickerIconAlign;
 
     public TextFragment.TextEditor textEditor;
     public TextFragment addTextFragment;
@@ -210,86 +203,50 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         binding.relativeLayoutLoading.setVisibility(View.VISIBLE);
         binding.photoEditorView.setVisibility(View.INVISIBLE);
-
-        recyclerViewSmoothFilter = findViewById(R.id.recycler_view_filter_smooth);
-        recyclerViewLegacyFilter = findViewById(R.id.recycler_view_filter_legacy);
         binding.recyclerViewFilterBw.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        recyclerViewSmoothFilter.setVisibility(View.GONE);
+        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        recyclerViewLegacyFilter.setVisibility(View.GONE);
-        viewAll = findViewById(R.id.view_all);
-        viewCold = findViewById(R.id.view_cold);
-        viewBW = findViewById(R.id.view_bw);
-        viewVintage = findViewById(R.id.view_vintage);
-        viewSmooth = findViewById(R.id.view_smooth);
-        viewWarm = findViewById(R.id.view_warm);
-        viewLegacy = findViewById(R.id.view_legacy);
-        viewBW.setVisibility(View.INVISIBLE);
-        viewCold.setVisibility(View.INVISIBLE);
-        viewVintage.setVisibility(View.INVISIBLE);
-        viewSmooth.setVisibility(View.INVISIBLE);
-        viewWarm.setVisibility(View.INVISIBLE);
-        viewLegacy.setVisibility(View.INVISIBLE);
-        linearLayoutBurn = findViewById(R.id.linearLayoutBurn);
-        linearLayoutDivide = findViewById(R.id.linearLayoutDivide);
+        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
 
-        linearLayoutLegacy = findViewById(R.id.linearLayoutLegacy);
-        textViewListAllFilter = findViewById(R.id.text_view_list_all);
-        textViewListBwFilter = findViewById(R.id.text_view_list_bw);
-        textViewListVintageFilter = findViewById(R.id.text_view_list_vintage);
-        textViewListSmoothFilter = findViewById(R.id.text_view_list_smooth);
-        textViewListColdFilter = findViewById(R.id.text_view_list_cold);
-        textViewListWarmFilter = findViewById(R.id.text_view_list_warm);
-        textViewListLegacyFilter = findViewById(R.id.text_view_list_legacy);
-        recyclerViewDodge = findViewById(R.id.recycler_view_dodge);
-        recyclerViewHardmix = findViewById(R.id.recycler_view_hardmix);
-        recyclerViewDivide = findViewById(R.id.recycler_view_divide);
-        recyclerViewDodge.setVisibility(View.GONE);
-        recyclerViewDivide.setVisibility(View.GONE);
-        recyclerViewHardmix.setVisibility(View.GONE);
+        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewCold.setVisibility(View.INVISIBLE);
+        binding.viewVintage.setVisibility(View.INVISIBLE);
+        binding.viewSmooth.setVisibility(View.INVISIBLE);
+        binding.viewWarm.setVisibility(View.INVISIBLE);
+        binding.viewLegacy.setVisibility(View.INVISIBLE);
+
+
+        binding.recyclerViewDodge.setVisibility(View.GONE);
+        binding.recyclerViewDivide.setVisibility(View.GONE);
+        binding.recyclerViewHardmix.setVisibility(View.GONE);
         binding.recyclerViewBurn.setVisibility(View.GONE);
-        recyclerViewAdjust = findViewById(R.id.recyclerViewAdjust);
-        constraintLayoutAdjust = findViewById(R.id.constraintLayoutAdjust);
-        constraintLayoutSticker = findViewById(R.id.constraint_layout_sticker);
-        constraintLayoutStickerWomen = findViewById(R.id.constraint_layout_sticker_women);
-        constraintLayoutStickerMen = findViewById(R.id.constraint_layout_sticker_men);
-        viewPagerWomenSticker = findViewById(R.id.stickerWomenViewpaper);
-        viewPagerStickers = findViewById(R.id.stickerViewpaper);
-        seekbarStickerMen = findViewById(R.id.seekbarStickerMenAlpha);
-        seekbarStickerMen.setVisibility(View.GONE);
-        seekbarStickerWomen = findViewById(R.id.seekbarStickerWomenAlpha);
-        seekbarStickerWomen.setVisibility(View.GONE);
-        seekbarSticker = findViewById(R.id.seekbarStickerAlpha);
-        seekbarSticker.setVisibility(View.GONE);
-        constraintLayoutPaint = findViewById(R.id.constraintLayoutPaint);
-        recyclerViewPaintListColor = findViewById(R.id.recyclerViewColorPaint);
-        imageViewColor = findViewById(R.id.imageViewBrush);
-        imageViewErasePaint = findViewById(R.id.image_view_erase);
-        imageViewUndoPaint = findViewById(R.id.image_view_undo);
-        imageViewUndoPaint.setVisibility(View.GONE);
-        imageViewRedoPaint = findViewById(R.id.image_view_redo);
-        imageViewRedoPaint.setVisibility(View.GONE);
-        imageViewCleanPaint = findViewById(R.id.image_view_clean);
-        imageViewCleanPaint.setVisibility(View.GONE);
-        imageViewCleanNeon = findViewById(R.id.image_view_clean_neon);
-        imageViewCleanNeon.setVisibility(View.GONE);
+
+
+        binding.seekbarStickerMenAlpha.setVisibility(View.GONE);
+
+        binding.seekbarStickerWomenAlpha.setVisibility(View.GONE);
+
+        binding.seekbarStickerAlpha.setVisibility(View.GONE);
+
+
+
+
+
+        binding.imageViewUndo.setVisibility(View.GONE);
+
+        binding.imageViewRedo.setVisibility(View.GONE);
+
+        binding.imageViewClean.setVisibility(View.GONE);
+
+        binding.imageViewCleanNeon.setVisibility(View.GONE);
         binding.imageViewUndoNeon.setVisibility(View.GONE);
         binding.imageViewRedoNeon.setVisibility(View.GONE);
-        seekbarBrushPaintSize = findViewById(R.id.seekbarBrushSize);
-        seekbarEraseNeonSize = findViewById(R.id.seekbarEraseSize);
-        imageViewNeon = findViewById(R.id.imageViewNeon);
-        textViewSaveEditing = findViewById(R.id.text_view_save);
-        image_view_exit = findViewById(R.id.image_view_exit);
-        constraintLayoutSaveEditing = findViewById(R.id.constraintLayoutSaveEditing);
-        constraintLayoutSave = findViewById(R.id.constraintLayoutSave);
-        constraintLayoutSavePaint = findViewById(R.id.constraint_layout_confirm_save_paint);
-        constraintLayoutDraw= findViewById(R.id.constraint_layout_draw);
-        constraintLayoutEmoji= findViewById(R.id.constraint_layout_emoji);
-        imageViewCompareAdjust = findViewById(R.id.imageViewCompareAdjust);
-        imageViewCompareAdjust.setOnTouchListener(onTouchListener);
-        imageViewCompareAdjust.setVisibility(View.GONE);
+
+
+        binding.imageViewCompareAdjust.setOnTouchListener(onTouchListener);
+        binding.imageViewCompareAdjust.setVisibility(View.GONE);
         binding.imageViewCompareFilter.setOnTouchListener(onTouchListener);
         binding.imageViewCompareFilter.setVisibility(View.GONE);
         binding.imageViewCompareEffect.setOnTouchListener(onTouchListener);
@@ -298,7 +255,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
     }
 
     private void setOnBackPressDialog() {
-        final Dialog dialogOnBackPressed = new Dialog(QueShotEditorActivity.this, R.style.UploadDialog);
+        final Dialog dialogOnBackPressed = new Dialog(EditorActivity.this, R.style.UploadDialog);
         dialogOnBackPressed.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogOnBackPressed.setContentView(R.layout.dialog_exit);
         dialogOnBackPressed.setCancelable(true);
@@ -324,46 +281,46 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         binding.recyclerViewDraw.setLayoutManager(new GridLayoutManager(getApplicationContext(), 4));
         binding.recyclerViewDraw.setAdapter(mEditingEffectToolsAdapter);
         binding.recyclerViewDraw.setHasFixedSize(true);
-        binding.recyclerViewEmoji.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
-        binding.recyclerViewEmoji.setAdapter(mEditingStickersToolsAdapter);
-        binding.recyclerViewEmoji.setHasFixedSize(true);
+        binding.recyclerViewemoji.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
+        binding.recyclerViewemoji.setAdapter(mEditingStickersToolsAdapter);
+        binding.recyclerViewemoji.setHasFixedSize(true);
         binding.recyclerViewFilterAll.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewFilterAll.setHasFixedSize(true);
         binding.recyclerViewFilterBw.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewFilterBw.setHasFixedSize(true);
         binding.recyclerViewFilterVintage.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewFilterVintage.setHasFixedSize(true);
-        recyclerViewSmoothFilter.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        recyclerViewSmoothFilter.setHasFixedSize(true);
+        binding.recyclerViewFilterSmooth.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        binding.recyclerViewFilterSmooth.setHasFixedSize(true);
         binding.recyclerViewFilterCold.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewFilterCold.setHasFixedSize(true);
         binding.recyclerViewFilterWarm.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewFilterWarm.setHasFixedSize(true);
-        recyclerViewLegacyFilter.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        recyclerViewLegacyFilter.setHasFixedSize(true);
-        recyclerViewDodge.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        recyclerViewDodge.setHasFixedSize(true);
-        recyclerViewHardmix.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        recyclerViewHardmix.setHasFixedSize(true);
+        binding.recyclerViewFilterLegacy.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        binding.recyclerViewFilterLegacy.setHasFixedSize(true);
+        binding.recyclerViewDodge.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        binding.recyclerViewDodge.setHasFixedSize(true);
+        binding.recyclerViewHardmix.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        binding.recyclerViewHardmix.setHasFixedSize(true);
         binding.recyclerViewOverlay.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewOverlay.setHasFixedSize(true);
-        recyclerViewDivide.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        recyclerViewDivide.setHasFixedSize(true);
+        binding.recyclerViewDivide.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        binding.recyclerViewDivide.setHasFixedSize(true);
         binding.recyclerViewBurn.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewBurn.setHasFixedSize(true);
         new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
-        recyclerViewAdjust.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        recyclerViewAdjust.setHasFixedSize(true);
+        binding.recyclerViewAdjust.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        binding.recyclerViewAdjust.setHasFixedSize(true);
         adjustAdapter = new AdjustAdapter(getApplicationContext(), this);
-        recyclerViewAdjust.setAdapter(adjustAdapter);
-        recyclerViewPaintListColor.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        recyclerViewPaintListColor.setHasFixedSize(true);
-        recyclerViewPaintListColor.setAdapter(new ColorAdapter(getApplicationContext(), this));
+        binding.recyclerViewAdjust.setAdapter(adjustAdapter);
+        binding.recyclerViewColorPaint.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        binding.recyclerViewColorPaint.setHasFixedSize(true);
+        binding.recyclerViewColorPaint.setAdapter(new ColorAdapter(getApplicationContext(), this));
         binding.recyclerViewColorNeon.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewColorNeon.setHasFixedSize(true);
         binding.recyclerViewColorNeon.setAdapter(new ColorAdapter(getApplicationContext(), this));
 
-        viewPagerWomenSticker.setAdapter(new PagerAdapter() {
+        binding.stickerWomenViewpager.setAdapter(new PagerAdapter() {
             public int getCount() {
                 return 11;
             }
@@ -385,37 +342,37 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                 recycler_view_sticker.setLayoutManager(new GridLayoutManager(getApplicationContext(), 7));
                 switch (i) {
                     case 0:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListCrown(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListCrown(), i, EditorActivity.this));
                         break;
                     case 1:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListSnsla(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListSnsla(), i, EditorActivity.this));
                         break;
                     case 2:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHalat(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHalat(), i, EditorActivity.this));
                         break;
                     case 3:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListFlower(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListFlower(), i, EditorActivity.this));
                         break;
                     case 4:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListGlass(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListGlass(), i, EditorActivity.this));
                         break;
                     case 5:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListChap(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListChap(), i, EditorActivity.this));
                         break;
                     case 6:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHairs(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHairs(), i, EditorActivity.this));
                         break;
                     case 7:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListSmile(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListSmile(), i, EditorActivity.this));
                         break;
                     case 8:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHjban(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHjban(), i, EditorActivity.this));
                         break;
                     case 9:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListChfer(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListChfer(), i, EditorActivity.this));
                         break;
                     case 10:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListZwaq(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListZwaq(), i, EditorActivity.this));
                         break;
 
                 }
@@ -425,11 +382,11 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             }
         });
         RecyclerTabLayout recycler_tab_layout_women = findViewById(R.id.recycler_tab_layout_women);
-        recycler_tab_layout_women.setUpWithAdapter(new WomenTabAdapter(viewPagerWomenSticker, getApplicationContext()));
+        recycler_tab_layout_women.setUpWithAdapter(new WomenTabAdapter(binding.stickerWomenViewpager, getApplicationContext()));
         recycler_tab_layout_women.setPositionThreshold(0.5f);
         recycler_tab_layout_women.setBackgroundColor(ContextCompat.getColor(this, R.color.TabColor));
 
-        viewPagerStickers.setAdapter(new PagerAdapter() {
+        binding.stickerViewpager.setAdapter(new PagerAdapter() {
             public int getCount() {
                 return 3;
             }
@@ -451,13 +408,13 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                 recycler_view_sticker.setLayoutManager(new GridLayoutManager(getApplicationContext(), 6));
                 switch (i) {
                     case 0:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListEmojy(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListEmojy(), i, EditorActivity.this));
                         break;
                     case 1:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListFlag(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListFlag(), i, EditorActivity.this));
                         break;
                     case 2:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListBoom(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListBoom(), i, EditorActivity.this));
                         break;
 
                 }
@@ -467,11 +424,11 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             }
         });
         RecyclerTabLayout recycler_tab_layout = findViewById(R.id.recycler_tab_layout);
-        recycler_tab_layout.setUpWithAdapter(new StickerTabAdapter(viewPagerStickers, getApplicationContext()));
+        recycler_tab_layout.setUpWithAdapter(new StickerTabAdapter(binding.stickerViewpager, getApplicationContext()));
         recycler_tab_layout.setPositionThreshold(0.5f);
         recycler_tab_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.TabColor));
 
-        binding.stickerMenViewpaper.setAdapter(new PagerAdapter() {
+        binding.stickerMenViewpager.setAdapter(new PagerAdapter() {
             public int getCount() {
                 return 8;
             }
@@ -493,28 +450,28 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                 recycler_view_sticker.setLayoutManager(new GridLayoutManager(getApplicationContext(), 6));
                 switch (i) {
                     case 0:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListhair(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListhair(), i, EditorActivity.this));
                         break;
                     case 1:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListGlasses(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListGlasses(), i, EditorActivity.this));
                         break;
                     case 2:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListMostach(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListMostach(), i, EditorActivity.this));
                         break;
                     case 3:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListLhya(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListLhya(), i, EditorActivity.this));
                         break;
                     case 4:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListScarf(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListScarf(), i, EditorActivity.this));
                         break;
                     case 5:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListTie(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListTie(), i, EditorActivity.this));
                         break;
                     case 6:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListTatoo(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListTatoo(), i, EditorActivity.this));
                         break;
                     case 7:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListChain(), i, QueShotEditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListChain(), i, EditorActivity.this));
                         break;
 
                 }
@@ -524,7 +481,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             }
         });
         RecyclerTabLayout recycler_tab_layout_men = findViewById(R.id.recycler_tab_layout_men);
-        recycler_tab_layout_men.setUpWithAdapter(new MenTabAdapter(binding.stickerMenViewpaper, getApplicationContext()));
+        recycler_tab_layout_men.setUpWithAdapter(new MenTabAdapter(binding.stickerMenViewpager, getApplicationContext()));
         recycler_tab_layout_men.setPositionThreshold(0.5f);
         recycler_tab_layout_men.setBackgroundColor(ContextCompat.getColor(this, R.color.TabColor));
 
@@ -540,8 +497,8 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         if (Build.VERSION.SDK_INT < 26) {
             getWindow().setSoftInputMode(48);
         }
-        quShotEditor = new QueShotEditor.Builder(this, quShotView).setPinchTextScalable(true).build();
-        quShotEditor.setOnPhotoEditorListener(this);
+        quShotCustomEditor = new CustomEditor.Builder(this, binding.photoEditorView).setPinchTextScalable(true).build();
+        quShotCustomEditor.setOnPhotoEditorListener(this);
 
     }
 
@@ -559,27 +516,27 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
     }
 
     private void  onClickListener(){
-        textViewSaveEditing.setOnClickListener(view -> {
-            if (PermissionsUtils.checkWriteStoragePermission(QueShotEditorActivity.this)) {
+        binding.textViewSave.setOnClickListener(view -> {
+            if (PermissionsUtils.checkWriteStoragePermission(EditorActivity.this)) {
                 new SaveEditingBitmap().execute();
             }
         });
-        image_view_exit.setOnClickListener(view -> onBackPressed());
-        imageViewErasePaint.setOnClickListener(view -> setImageErasePaint());
-        imageViewColor.setOnClickListener(view -> setColorPaint());
-        seekbarEraseNeonSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        binding.imageViewExit.setOnClickListener(view -> onBackPressed());
+        binding.imageViewErase.setOnClickListener(view -> setImageErasePaint());
+        binding.imageViewBrush.setOnClickListener(view -> setColorPaint());
+        binding.seekbarEraseSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
             public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
-                quShotEditor.setBrushEraserSize((float) i);
+                quShotCustomEditor.setBrushEraserSize((float) i);
             }
 
             public void onStopTrackingTouch(SeekBar seekBar) {
-                quShotEditor.brushEraser();
+                quShotCustomEditor.brushEraser();
             }
         });
-        seekbarBrushPaintSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        binding.seekbarBrushSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
@@ -587,21 +544,21 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             }
 
             public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
-                quShotEditor.setBrushSize((float) (i + 10));
+                quShotCustomEditor.setBrushSize((float) (i + 10));
             }
         });
         binding.imageViewEraseNeon.setOnClickListener(view -> setImageEraseNeon());
-        imageViewNeon.setOnClickListener(view -> setColorNeon());
+        binding.imageViewNeon.setOnClickListener(view -> setColorNeon());
         binding.seekbarEraseSizeNeon.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
             public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
-                quShotEditor.setBrushEraserSize((float) i);
+                quShotCustomEditor.setBrushEraserSize((float) i);
             }
 
             public void onStopTrackingTouch(SeekBar seekBar) {
-                quShotEditor.brushEraser();
+                quShotCustomEditor.brushEraser();
             }
         });
         binding.seekbarBrushSizeNeon.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -612,7 +569,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             }
 
             public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
-                quShotEditor.setBrushSize((float) (i + 10));
+                quShotCustomEditor.setBrushSize((float) (i + 10));
             }
         });
         binding.linearLayoutAll.setOnClickListener(view -> setAllFilter());
@@ -627,7 +584,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         binding.linearLayoutDodge.setOnClickListener(view -> setDodgeEffect());
         binding.linearLayoutDivide.setOnClickListener(view -> setDivideEffect());
         binding.linearLayoutBurn.setOnClickListener(view -> setBurnEffect());
-        seekbarSticker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        binding.seekbarStickerAlpha.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
@@ -635,13 +592,13 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             }
 
             public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
-                Sticker currentSticker = quShotView.getCurrentSticker();
+                Sticker currentSticker = binding.photoEditorView.getCurrentSticker();
                 if (currentSticker != null) {
                     currentSticker.setAlpha(i);
                 }
             }
         });
-        seekbarStickerMen.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        binding.seekbarStickerMenAlpha.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
@@ -649,13 +606,13 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             }
 
             public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
-                Sticker currentSticker = quShotView.getCurrentSticker();
+                Sticker currentSticker = binding.photoEditorView.getCurrentSticker();
                 if (currentSticker != null) {
                     currentSticker.setAlpha(i);
                 }
             }
         });
-        seekbarStickerWomen.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        binding.seekbarStickerWomenAlpha.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
@@ -663,14 +620,13 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             }
 
             public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
-                Sticker currentSticker = quShotView.getCurrentSticker();
+                Sticker currentSticker = binding.photoEditorView.getCurrentSticker();
                 if (currentSticker != null) {
                     currentSticker.setAlpha(i);
                 }
             }
         });
 
-        binding.imageViewAddStickerWomen = findViewById(R.id.binding.imageViewAddStickerWomen);
         binding.imageViewAddStickerWomen.setVisibility(View.GONE);
         binding.imageViewAddStickerWomen.setOnClickListener(view -> {
             binding.imageViewAddStickerWomen.setVisibility(View.GONE);
@@ -680,11 +636,9 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         binding.imageViewAddStickerMen.setOnClickListener(view -> {
             binding.imageViewAddStickerMen.setVisibility(View.GONE);
-            binding.imageViewAddStickerMen = findViewById(R.id.binding.imageViewAddStickerMen);
             binding.linearLayoutWrapperStickerMenList.setVisibility(View.VISIBLE);
             binding.imageViewAddStickerMen.setVisibility(View.GONE);
         });
-        imageViewAddSticker = findViewById(R.id.imageViewAddSticker);
         binding.imageViewAddSticker.setVisibility(View.GONE);
         binding.imageViewAddSticker.setOnClickListener(view -> {
             binding.imageViewAddSticker.setVisibility(View.GONE);
@@ -692,7 +646,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         });
 
         binding.relativeLayoutAddText.setOnClickListener(view -> {
-            quShotView.setHandlingSticker(null);
+            binding.photoEditorView.setHandlingSticker(null);
             textFragment();
         });
         binding.seekbarAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -703,27 +657,27 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             }
 
             public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
-                adjustAdapter.getCurrentAdjustModel().setSeekBarIntensity(quShotEditor, ((float) i) / ((float) seekBar.getMax()), true);
+                adjustAdapter.getCurrentAdjustModel().setSeekBarIntensity(quShotCustomEditor, ((float) i) / ((float) seekBar.getMax()), true);
             }
         });
-        quShotStickerIconClose = new QueShotStickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_close), 0, QueShotStickerIcons.DELETE);
+        quShotStickerIconClose = new StickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_close), 0, StickerIcons.DELETE);
         quShotStickerIconClose.setIconEvent(new DeleteIconEvent());
-        quShotStickerIconScale = new QueShotStickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_scale), 3, QueShotStickerIcons.SCALE);
+        quShotStickerIconScale = new StickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_scale), 3, StickerIcons.SCALE);
         quShotStickerIconScale.setIconEvent(new ZoomIconEvent());
-        quShotStickerIconFlip = new QueShotStickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_flip), 1, QueShotStickerIcons.FLIP);
+        quShotStickerIconFlip = new StickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_flip), 1, StickerIcons.FLIP);
         quShotStickerIconFlip.setIconEvent(new FlipHorizontallyEvent());
-        quShotStickerIconRotate = new QueShotStickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_rotate), 3, QueShotStickerIcons.ROTATE);
+        quShotStickerIconRotate = new StickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_rotate), 3, StickerIcons.ROTATE);
         quShotStickerIconRotate.setIconEvent(new ZoomIconEvent());
-        quShotStickerIconEdit = new QueShotStickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_edit), 1, QueShotStickerIcons.EDIT);
+        quShotStickerIconEdit = new StickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_edit), 1, StickerIcons.EDIT);
         quShotStickerIconEdit.setIconEvent(new EditTextIconEvent());
-        quShotStickerIconAlign = new QueShotStickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_center), 2, QueShotStickerIcons.ALIGN);
+        quShotStickerIconAlign = new StickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_center), 2, StickerIcons.ALIGN);
         quShotStickerIconAlign.setIconEvent(new AlignHorizontallyEvent());
-        quShotView.setIcons(Arrays.asList(quShotStickerIconClose, quShotStickerIconScale,
+        binding.photoEditorView.setIcons(Arrays.asList(quShotStickerIconClose, quShotStickerIconScale,
                 quShotStickerIconFlip, quShotStickerIconEdit, quShotStickerIconRotate, quShotStickerIconAlign));
-        quShotView.setBackgroundColor(-16777216);
-        quShotView.setLocked(false);
-        quShotView.setConstrained(true);
-        quShotView.setOnStickerOperationListener(new QueShotStickerView.OnStickerOperationListener() {
+        binding.photoEditorView.setBackgroundColor(-16777216);
+        binding.photoEditorView.setLocked(false);
+        binding.photoEditorView.setConstrained(true);
+        binding.photoEditorView.setOnStickerOperationListener(new StickerView.OnStickerOperationListener() {
             public void onStickerDrag(@NonNull Sticker sticker) {
             }
 
@@ -746,53 +700,53 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             }
 
             public void onAddSticker(@NonNull Sticker sticker) {
-                seekbarSticker.setVisibility(View.VISIBLE);
-                seekbarSticker.setProgress(sticker.getAlpha());
-                seekbarStickerMen.setVisibility(View.VISIBLE);
-                seekbarStickerMen.setProgress(sticker.getAlpha());
-                seekbarStickerWomen.setVisibility(View.VISIBLE);
-                seekbarStickerWomen.setProgress(sticker.getAlpha());
+                binding.seekbarStickerAlpha.setVisibility(View.VISIBLE);
+                binding.seekbarStickerAlpha.setProgress(sticker.getAlpha());
+                binding.seekbarStickerMenAlpha.setVisibility(View.VISIBLE);
+                binding.seekbarStickerMenAlpha.setProgress(sticker.getAlpha());
+                binding.seekbarStickerWomenAlpha.setVisibility(View.VISIBLE);
+                binding.seekbarStickerWomenAlpha.setProgress(sticker.getAlpha());
             }
 
             public void onStickerSelected(@NonNull Sticker sticker) {
-                if (sticker instanceof QueShotTextView) {
-                    ((QueShotTextView) sticker).setTextColor(SupportMenu.CATEGORY_MASK);
-                    quShotView.replace(sticker);
-                    quShotView.invalidate();
+                if (sticker instanceof CustomTextView) {
+                    ((CustomTextView) sticker).setTextColor(SupportMenu.CATEGORY_MASK);
+                    binding.photoEditorView.replace(sticker);
+                    binding.photoEditorView.invalidate();
                 }
-                seekbarSticker.setVisibility(View.VISIBLE);
-                seekbarSticker.setProgress(sticker.getAlpha());
-                seekbarStickerMen.setVisibility(View.VISIBLE);
-                seekbarStickerMen.setProgress(sticker.getAlpha());
-                seekbarStickerWomen.setVisibility(View.VISIBLE);
-                seekbarStickerWomen.setProgress(sticker.getAlpha());
+                binding.seekbarStickerAlpha.setVisibility(View.VISIBLE);
+                binding.seekbarStickerAlpha.setProgress(sticker.getAlpha());
+                binding.seekbarStickerMenAlpha.setVisibility(View.VISIBLE);
+                binding.seekbarStickerMenAlpha.setProgress(sticker.getAlpha());
+                binding.seekbarStickerWomenAlpha.setVisibility(View.VISIBLE);
+                binding.seekbarStickerWomenAlpha.setProgress(sticker.getAlpha());
             }
 
             public void onStickerDeleted(@NonNull Sticker sticker) {
-                seekbarSticker.setVisibility(View.GONE);
-                seekbarStickerMen.setVisibility(View.GONE);
-                seekbarStickerWomen.setVisibility(View.GONE);
+                binding.seekbarStickerAlpha.setVisibility(View.GONE);
+                binding.seekbarStickerMenAlpha.setVisibility(View.GONE);
+                binding.seekbarStickerWomenAlpha.setVisibility(View.GONE);
             }
 
             public void onStickerTouchOutside() {
-                seekbarSticker.setVisibility(View.GONE);
-                seekbarStickerMen.setVisibility(View.GONE);
-                seekbarStickerWomen.setVisibility(View.GONE);
+                binding.seekbarStickerAlpha.setVisibility(View.GONE);
+                binding.seekbarStickerMenAlpha.setVisibility(View.GONE);
+                binding.seekbarStickerWomenAlpha.setVisibility(View.GONE);
             }
 
             public void onStickerDoubleTap(@NonNull Sticker sticker) {
-                if (sticker instanceof QueShotTextView) {
+                if (sticker instanceof CustomTextView) {
                     sticker.setShow(false);
-                    quShotView.setHandlingSticker( (Sticker) null);
-                    addTextFragment = TextFragment.show(QueShotEditorActivity.this, ((QueShotTextView) sticker).getQuShotText());
+                    binding.photoEditorView.setHandlingSticker( (Sticker) null);
+                    addTextFragment = TextFragment.show(EditorActivity.this, ((CustomTextView) sticker).getQuShotText());
                     textEditor = new TextFragment.TextEditor() {
-                        public void onDone(QueShotText addTextProperties) {
-                            quShotView.getStickers().remove(quShotView.getLastHandlingSticker());
-                            quShotView.addSticker(new QueShotTextView(QueShotEditorActivity.this, addTextProperties));
+                        public void onDone(CustomText addTextProperties) {
+                            binding.photoEditorView.getStickers().remove(binding.photoEditorView.getLastHandlingSticker());
+                            binding.photoEditorView.addSticker(new CustomTextView(EditorActivity.this, addTextProperties));
                         }
 
                         public void onBackButton() {
-                            quShotView.showLastHandlingSticker();
+                            binding.photoEditorView.showLastHandlingSticker();
                         }
                     };
                     addTextFragment.setOnTextEditorListener(textEditor);
@@ -807,7 +761,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             }
 
             public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
-                quShotView.setFilterIntensity(((float) i) / 100.0f);
+                binding.photoEditorView.setFilterIntensity(((float) i) / 100.0f);
             }
         });
         binding.seekbarEffect.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -818,16 +772,16 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             }
 
             public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
-                quShotView.setFilterIntensity(((float) i) / 100.0f);
+                binding.photoEditorView.setFilterIntensity(((float) i) / 100.0f);
             }
         });
       }
 
     public void setOverlayEffect() {
         binding.recyclerViewOverlay.setVisibility(View.VISIBLE);
-        recyclerViewHardmix.setVisibility(View.GONE);
-        recyclerViewDodge.setVisibility(View.GONE);
-        recyclerViewDivide.setVisibility(View.GONE);
+        binding.recyclerViewHardmix.setVisibility(View.GONE);
+        binding.recyclerViewDodge.setVisibility(View.GONE);
+        binding.recyclerViewDivide.setVisibility(View.GONE);
         binding.recyclerViewBurn.setVisibility(View.GONE);
         binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.white));
         binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.grayText));
@@ -837,10 +791,10 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
     }
 
     public void setHardmixEffect() {
-        recyclerViewHardmix.setVisibility(View.VISIBLE);
-        recyclerViewDodge.setVisibility(View.GONE);
+        binding.recyclerViewHardmix.setVisibility(View.VISIBLE);
+        binding.recyclerViewDodge.setVisibility(View.GONE);
         binding.recyclerViewOverlay.setVisibility(View.GONE);
-        recyclerViewDivide.setVisibility(View.GONE);
+        binding.recyclerViewDivide.setVisibility(View.GONE);
         binding.recyclerViewBurn.setVisibility(View.GONE);
         binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.grayText));
         binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.white));
@@ -850,9 +804,9 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
     }
 
     public void setDodgeEffect() {
-        recyclerViewHardmix.setVisibility(View.GONE);
-        recyclerViewDodge.setVisibility(View.VISIBLE);
-        recyclerViewDivide.setVisibility(View.GONE);
+        binding.recyclerViewHardmix.setVisibility(View.GONE);
+        binding.recyclerViewDodge.setVisibility(View.VISIBLE);
+        binding.recyclerViewDivide.setVisibility(View.GONE);
         binding.recyclerViewOverlay.setVisibility(View.GONE);
         binding.recyclerViewBurn.setVisibility(View.GONE);
         binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.grayText));
@@ -863,10 +817,10 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
     }
 
     public void setDivideEffect() {
-        recyclerViewHardmix.setVisibility(View.GONE);
-        recyclerViewDodge.setVisibility(View.GONE);
+        binding.recyclerViewHardmix.setVisibility(View.GONE);
+        binding.recyclerViewDodge.setVisibility(View.GONE);
         binding.recyclerViewOverlay.setVisibility(View.GONE);
-        recyclerViewDivide.setVisibility(View.VISIBLE);
+        binding.recyclerViewDivide.setVisibility(View.VISIBLE);
         binding.recyclerViewBurn.setVisibility(View.GONE);
         binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.grayText));
         binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.grayText));
@@ -876,10 +830,10 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
     }
 
     public void setBurnEffect() {
-        recyclerViewHardmix.setVisibility(View.GONE);
-        recyclerViewDodge.setVisibility(View.GONE);
+        binding.recyclerViewHardmix.setVisibility(View.GONE);
+        binding.recyclerViewDodge.setVisibility(View.GONE);
         binding.recyclerViewOverlay.setVisibility(View.GONE);
-        recyclerViewDivide.setVisibility(View.GONE);
+        binding.recyclerViewDivide.setVisibility(View.GONE);
         binding.recyclerViewBurn.setVisibility(View.VISIBLE);
         binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.grayText));
         binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.grayText));
@@ -892,191 +846,191 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         binding.recyclerViewFilterAll.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterBw.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        recyclerViewSmoothFilter.setVisibility(View.GONE);
+        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        recyclerViewLegacyFilter.setVisibility(View.GONE);
-        textViewListAllFilter.setTextColor(ContextCompat.getColor(this, R.color.white));
-        textViewListColdFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListBwFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListVintageFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListSmoothFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListWarmFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListLegacyFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        viewAll.setVisibility(View.VISIBLE);
-        viewCold.setVisibility(View.INVISIBLE);
-        viewBW.setVisibility(View.INVISIBLE);
-        viewVintage.setVisibility(View.INVISIBLE);
-        viewSmooth.setVisibility(View.INVISIBLE);
-        viewWarm.setVisibility(View.INVISIBLE);
-        viewLegacy.setVisibility(View.INVISIBLE);
+        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
+        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.white));
+        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.viewAll.setVisibility(View.VISIBLE);
+        binding.viewCold.setVisibility(View.INVISIBLE);
+        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewVintage.setVisibility(View.INVISIBLE);
+        binding.viewSmooth.setVisibility(View.INVISIBLE);
+        binding.viewWarm.setVisibility(View.INVISIBLE);
+        binding.viewLegacy.setVisibility(View.INVISIBLE);
     }
 
     public void setBwFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
         binding.recyclerViewFilterBw.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        recyclerViewSmoothFilter.setVisibility(View.GONE);
+        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        recyclerViewLegacyFilter.setVisibility(View.GONE);
-        textViewListAllFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListColdFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListBwFilter.setTextColor(ContextCompat.getColor(this, R.color.white));
-        textViewListVintageFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListSmoothFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListWarmFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListLegacyFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        viewAll.setVisibility(View.INVISIBLE);
-        viewCold.setVisibility(View.INVISIBLE);
-        viewBW.setVisibility(View.VISIBLE);
-        viewVintage.setVisibility(View.INVISIBLE);
-        viewSmooth.setVisibility(View.INVISIBLE);
-        viewWarm.setVisibility(View.INVISIBLE);
-        viewLegacy.setVisibility(View.INVISIBLE);
+        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
+        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.white));
+        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.viewAll.setVisibility(View.INVISIBLE);
+        binding.viewCold.setVisibility(View.INVISIBLE);
+        binding.viewBw.setVisibility(View.VISIBLE);
+        binding.viewVintage.setVisibility(View.INVISIBLE);
+        binding.viewSmooth.setVisibility(View.INVISIBLE);
+        binding.viewWarm.setVisibility(View.INVISIBLE);
+        binding.viewLegacy.setVisibility(View.INVISIBLE);
     }
 
     public void setVintageFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
         binding.recyclerViewFilterBw.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.VISIBLE);
-        recyclerViewSmoothFilter.setVisibility(View.GONE);
+        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        recyclerViewLegacyFilter.setVisibility(View.GONE);
-        textViewListAllFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListColdFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListBwFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListVintageFilter.setTextColor(ContextCompat.getColor(this, R.color.white));
-        textViewListSmoothFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListWarmFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListLegacyFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        viewAll.setVisibility(View.INVISIBLE);
-        viewCold.setVisibility(View.INVISIBLE);
-        viewBW.setVisibility(View.INVISIBLE);
-        viewVintage.setVisibility(View.VISIBLE);
-        viewSmooth.setVisibility(View.INVISIBLE);
-        viewWarm.setVisibility(View.INVISIBLE);
-        viewLegacy.setVisibility(View.INVISIBLE);
+        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
+        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.white));
+        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.viewAll.setVisibility(View.INVISIBLE);
+        binding.viewCold.setVisibility(View.INVISIBLE);
+        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewVintage.setVisibility(View.VISIBLE);
+        binding.viewSmooth.setVisibility(View.INVISIBLE);
+        binding.viewWarm.setVisibility(View.INVISIBLE);
+        binding.viewLegacy.setVisibility(View.INVISIBLE);
     }
 
     public void setSmoothFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
         binding.recyclerViewFilterBw.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        recyclerViewSmoothFilter.setVisibility(View.VISIBLE);
+        binding.recyclerViewFilterSmooth.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        recyclerViewLegacyFilter.setVisibility(View.GONE);
-        textViewListAllFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListColdFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListBwFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListVintageFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListSmoothFilter.setTextColor(ContextCompat.getColor(this, R.color.white));
-        textViewListWarmFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListLegacyFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        viewAll.setVisibility(View.INVISIBLE);
-        viewCold.setVisibility(View.INVISIBLE);
-        viewBW.setVisibility(View.INVISIBLE);
-        viewVintage.setVisibility(View.INVISIBLE);
-        viewSmooth.setVisibility(View.VISIBLE);
-        viewWarm.setVisibility(View.INVISIBLE);
-        viewLegacy.setVisibility(View.INVISIBLE);
+        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
+        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.white));
+        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.viewAll.setVisibility(View.INVISIBLE);
+        binding.viewCold.setVisibility(View.INVISIBLE);
+        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewVintage.setVisibility(View.INVISIBLE);
+        binding.viewSmooth.setVisibility(View.VISIBLE);
+        binding.viewWarm.setVisibility(View.INVISIBLE);
+        binding.viewLegacy.setVisibility(View.INVISIBLE);
     }
 
     public void setColdFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
         binding.recyclerViewFilterBw.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        recyclerViewSmoothFilter.setVisibility(View.GONE);
+        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        recyclerViewLegacyFilter.setVisibility(View.GONE);
-        textViewListAllFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListColdFilter.setTextColor(ContextCompat.getColor(this, R.color.white));
-        textViewListBwFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListVintageFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListSmoothFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListWarmFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListLegacyFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        viewAll.setVisibility(View.INVISIBLE);
-        viewCold.setVisibility(View.VISIBLE);
-        viewBW.setVisibility(View.INVISIBLE);
-        viewVintage.setVisibility(View.INVISIBLE);
-        viewSmooth.setVisibility(View.INVISIBLE);
-        viewWarm.setVisibility(View.INVISIBLE);
-        viewLegacy.setVisibility(View.INVISIBLE);
+        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
+        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.white));
+        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.viewAll.setVisibility(View.INVISIBLE);
+        binding.viewCold.setVisibility(View.VISIBLE);
+        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewVintage.setVisibility(View.INVISIBLE);
+        binding.viewSmooth.setVisibility(View.INVISIBLE);
+        binding.viewWarm.setVisibility(View.INVISIBLE);
+        binding.viewLegacy.setVisibility(View.INVISIBLE);
     }
 
     public void setWarmFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
         binding.recyclerViewFilterBw.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        recyclerViewSmoothFilter.setVisibility(View.GONE);
+        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
         binding.recyclerViewFilterWarm.setVisibility(View.VISIBLE);
-        recyclerViewLegacyFilter.setVisibility(View.GONE);
-        textViewListAllFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListColdFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListBwFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListVintageFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListSmoothFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListWarmFilter.setTextColor(ContextCompat.getColor(this, R.color.white));
-        textViewListLegacyFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        viewAll.setVisibility(View.INVISIBLE);
-        viewCold.setVisibility(View.INVISIBLE);
-        viewBW.setVisibility(View.INVISIBLE);
-        viewVintage.setVisibility(View.INVISIBLE);
-        viewSmooth.setVisibility(View.INVISIBLE);
-        viewWarm.setVisibility(View.VISIBLE);
-        viewLegacy.setVisibility(View.INVISIBLE);
+        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
+        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.white));
+        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.viewAll.setVisibility(View.INVISIBLE);
+        binding.viewCold.setVisibility(View.INVISIBLE);
+        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewVintage.setVisibility(View.INVISIBLE);
+        binding.viewSmooth.setVisibility(View.INVISIBLE);
+        binding.viewWarm.setVisibility(View.VISIBLE);
+        binding.viewLegacy.setVisibility(View.INVISIBLE);
     }
 
     public void setLegacyFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
         binding.recyclerViewFilterBw.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        recyclerViewSmoothFilter.setVisibility(View.GONE);
+        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        recyclerViewLegacyFilter.setVisibility(View.VISIBLE);
-        textViewListAllFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListColdFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListBwFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListVintageFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListSmoothFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListWarmFilter.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        textViewListLegacyFilter.setTextColor(ContextCompat.getColor(this, R.color.white));
-        viewAll.setVisibility(View.INVISIBLE);
-        viewCold.setVisibility(View.INVISIBLE);
-        viewBW.setVisibility(View.INVISIBLE);
-        viewVintage.setVisibility(View.INVISIBLE);
-        viewSmooth.setVisibility(View.INVISIBLE);
-        viewWarm.setVisibility(View.INVISIBLE);
-        viewLegacy.setVisibility(View.VISIBLE);
+        binding.recyclerViewFilterLegacy.setVisibility(View.VISIBLE);
+        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.white));
+        binding.viewAll.setVisibility(View.INVISIBLE);
+        binding.viewCold.setVisibility(View.INVISIBLE);
+        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewVintage.setVisibility(View.INVISIBLE);
+        binding.viewSmooth.setVisibility(View.INVISIBLE);
+        binding.viewWarm.setVisibility(View.INVISIBLE);
+        binding.viewLegacy.setVisibility(View.VISIBLE);
     }
 
     private void setBottomToolbar(boolean z) {
         int mVisibility = !z ? View.GONE : View.VISIBLE;
-        imageViewColor.setVisibility(mVisibility);
-        imageViewErasePaint.setVisibility(mVisibility);
-        imageViewUndoPaint.setVisibility(mVisibility);
-        imageViewRedoPaint.setVisibility(mVisibility);
-        imageViewCleanPaint.setVisibility(mVisibility);
-        imageViewCleanNeon.setVisibility(mVisibility);
-        imageViewNeon.setVisibility(mVisibility);
+        binding.imageViewBrush.setVisibility(mVisibility);
+        binding.imageViewErase.setVisibility(mVisibility);
+        binding.imageViewUndo.setVisibility(mVisibility);
+        binding.imageViewRedo.setVisibility(mVisibility);
+        binding.imageViewClean.setVisibility(mVisibility);
+        binding.imageViewCleanNeon.setVisibility(mVisibility);
+        binding.imageViewNeon.setVisibility(mVisibility);
         binding.imageViewEraseNeon.setVisibility(mVisibility);
         binding.imageViewUndoNeon.setVisibility(mVisibility);
         binding.imageViewRedoNeon.setVisibility(mVisibility);
     }
 
     public void setImageErasePaint() {
-        seekbarBrushPaintSize.setVisibility(View.GONE);
-        recyclerViewPaintListColor.setVisibility(View.GONE);
-        seekbarEraseNeonSize.setVisibility(View.VISIBLE);
-        imageViewErasePaint.setImageResource(R.drawable.ic_erase_selected);
-        quShotEditor.brushEraser();
-        seekbarEraseNeonSize.setProgress(20);
+        binding.seekbarBrushSize.setVisibility(View.GONE);
+        binding.recyclerViewColorPaint.setVisibility(View.GONE);
+        binding.seekbarEraseSize.setVisibility(View.VISIBLE);
+        binding.imageViewErase.setImageResource(R.drawable.ic_erase_selected);
+        quShotCustomEditor.brushEraser();
+        binding.seekbarEraseSize.setProgress(20);
     }
 
     public void setImageEraseNeon() {
@@ -1084,7 +1038,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         binding.recyclerViewColorNeon.setVisibility(View.GONE);
         binding.seekbarEraseSizeNeon.setVisibility(View.VISIBLE);
         binding.imageViewEraseNeon.setImageResource(R.drawable.ic_erase_selected);
-        quShotEditor.brushEraser();
+        quShotCustomEditor.brushEraser();
         binding.seekbarEraseSizeNeon.setProgress(20);
     }
 
@@ -1101,27 +1055,27 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         }
         binding.seekbarEraseSizeNeon.setVisibility(View.GONE);
         binding.imageViewEraseNeon.setImageResource(R.drawable.ic_erase);
-        quShotEditor.setBrushMode(2);
-        quShotEditor.setBrushDrawingMode(true);
+        quShotCustomEditor.setBrushMode(2);
+        quShotCustomEditor.setBrushDrawingMode(true);
         binding.seekbarBrushSizeNeon.setProgress(20);
     }
 
     public void setColorPaint() {
-        seekbarBrushPaintSize.setVisibility(View.VISIBLE);
-        recyclerViewPaintListColor.setVisibility(View.VISIBLE);
-        recyclerViewPaintListColor.scrollToPosition(0);
-        colorAdapter = (ColorAdapter) recyclerViewPaintListColor.getAdapter();
+        binding.seekbarBrushSize.setVisibility(View.VISIBLE);
+        binding.recyclerViewColorPaint.setVisibility(View.VISIBLE);
+        binding.recyclerViewColorPaint.scrollToPosition(0);
+        colorAdapter = (ColorAdapter) binding.recyclerViewColorPaint.getAdapter();
         if (colorAdapter != null) {
             colorAdapter.setSelectedColorIndex(0);
         }
         if (colorAdapter != null) {
             colorAdapter.notifyDataSetChanged();
         }
-        seekbarEraseNeonSize.setVisibility(View.GONE);
-        imageViewErasePaint.setImageResource(R.drawable.ic_erase);
-        quShotEditor.setBrushMode(1);
-        quShotEditor.setBrushDrawingMode(true);
-        seekbarBrushPaintSize.setProgress(20);
+        binding.seekbarEraseSize.setVisibility(View.GONE);
+        binding.imageViewErase.setImageResource(R.drawable.ic_erase);
+        quShotCustomEditor.setBrushMode(1);
+        quShotCustomEditor.setBrushDrawingMode(true);
+        binding.seekbarBrushSize.setProgress(20);
     }
 
     public CGENativeLibrary.LoadImageCallback loadImageCallback = new CGENativeLibrary.LoadImageCallback() {
@@ -1141,10 +1095,10 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
     View.OnTouchListener onTouchListener = (view, motionEvent) -> {
         switch (motionEvent.getAction()) {
             case 0:
-                quShotView.getGLSurfaceView().setAlpha(0.0f);
+                binding.photoEditorView.getGLSurfaceView().setAlpha(0.0f);
                 return true;
             case 1:
-                quShotView.getGLSurfaceView().setAlpha(1.0f);
+                binding.photoEditorView.getGLSurfaceView().setAlpha(1.0f);
                 return false;
             default:
                 return true;
@@ -1183,10 +1137,10 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             
         } else if (id == R.id.imageViewSaveAdjust) {
             new SaveFilter().execute();
-            imageViewCompareAdjust.setVisibility(View.GONE);
-            constraintLayoutAdjust.setVisibility(View.GONE);
+            binding.imageViewCompareAdjust.setVisibility(View.GONE);
+            binding.constraintLayoutAdjust.setVisibility(View.GONE);
             binding.recyclerViewTools.setVisibility(View.VISIBLE);
-            constraintLayoutSave.setVisibility(View.VISIBLE);
+            binding.constraintLayoutSave.setVisibility(View.VISIBLE);
             ConstraintSet constraintsetAdjust = new ConstraintSet();
             constraintsetAdjust.clone(binding.constraintLayoutRootView);
             constraintsetAdjust.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
@@ -1199,22 +1153,22 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         } else if (id == R.id.image_view_save_paint) {
             showLoading(true);
             runOnUiThread(() -> {
-                quShotEditor.setBrushDrawingMode(false);
-                imageViewUndoPaint.setVisibility(View.GONE);
-                imageViewRedoPaint.setVisibility(View.GONE);
-                imageViewCleanPaint.setVisibility(View.GONE);
-                imageViewErasePaint.setVisibility(View.GONE);
+                quShotCustomEditor.setBrushDrawingMode(false);
+                binding.imageViewUndo.setVisibility(View.GONE);
+                binding.imageViewRedo.setVisibility(View.GONE);
+                binding.imageViewClean.setVisibility(View.GONE);
+                binding.imageViewErase.setVisibility(View.GONE);
                 binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                constraintLayoutSavePaint.setVisibility(View.GONE);
-                constraintLayoutPaint.setVisibility(View.GONE);
+                binding.constraintLayoutSave.setVisibility(View.GONE);
+                binding.constraintLayoutPaint.setVisibility(View.GONE);
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(binding.constraintLayoutRootView);
                 constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
                 constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
                 constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
                 constraintSet.applyTo(binding.constraintLayoutRootView);
-                quShotView.setImageSource(quShotEditor.getBrushDrawingView().getDrawBitmap(quShotView.getCurrentBitmap()));
-                quShotEditor.clearBrushAllViews();
+                binding.photoEditorView.setImageSource(quShotCustomEditor.getBrushDrawingView().getDrawBitmap(binding.photoEditorView.getCurrentBitmap()));
+                quShotCustomEditor.clearBrushAllViews();
                 showLoading(false);
                 reloadingLayout();
             });
@@ -1224,7 +1178,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         } else if (id == R.id.image_view_save_neon) {
             showLoading(true);
             runOnUiThread(() -> {
-                quShotEditor.setBrushDrawingMode(false);
+                quShotCustomEditor.setBrushDrawingMode(false);
                 binding.imageViewUndoNeon.setVisibility(View.GONE);
                 binding.imageViewRedoNeon.setVisibility(View.GONE);
                 binding.recyclerViewTools.setVisibility(View.VISIBLE);
@@ -1237,8 +1191,8 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                 constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
                 constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
                 constraintSet.applyTo(binding.constraintLayoutRootView);
-                quShotView.setImageSource(quShotEditor.getBrushDrawingView().getDrawBitmap(quShotView.getCurrentBitmap()));
-                quShotEditor.clearBrushAllViews();
+                binding.photoEditorView.setImageSource(quShotCustomEditor.getBrushDrawingView().getDrawBitmap(binding.photoEditorView.getCurrentBitmap()));
+                quShotCustomEditor.clearBrushAllViews();
                 showLoading(false);
                 reloadingLayout();
             });
@@ -1276,53 +1230,53 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             setVisibleSave();
             moduleToolsId = Module.NONE;
         } else if (id == R.id.image_view_save_sticker) {
-            quShotView.setHandlingSticker(null);
-            quShotView.setLocked(true);
-            seekbarSticker.setVisibility(View.GONE);
+            binding.photoEditorView.setHandlingSticker(null);
+            binding.photoEditorView.setLocked(true);
+            binding.seekbarStickerAlpha.setVisibility(View.GONE);
             binding.imageViewAddSticker.setVisibility(View.GONE);
             binding.recyclerViewTools.setVisibility(View.VISIBLE);
-            if (!quShotView.getStickers().isEmpty()) {
+            if (!binding.photoEditorView.getStickers().isEmpty()) {
                 new SaveSticker().execute();
             }
             binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-            constraintLayoutSticker.setVisibility(View.GONE);
+            binding.constraintLayoutSticker.setVisibility(View.GONE);
             setVisibleSave();
             moduleToolsId = Module.NONE;
             
         } else if (id == R.id.image_view_save_sticker_men) {
-            quShotView.setHandlingSticker(null);
-            quShotView.setLocked(true);
-            seekbarStickerMen.setVisibility(View.GONE);
+            binding.photoEditorView.setHandlingSticker(null);
+            binding.photoEditorView.setLocked(true);
+            binding.seekbarStickerMenAlpha.setVisibility(View.GONE);
             binding.recyclerViewTools.setVisibility(View.VISIBLE);
             binding.imageViewAddStickerMen.setVisibility(View.GONE);
-            if (!quShotView.getStickers().isEmpty()) {
+            if (!binding.photoEditorView.getStickers().isEmpty()) {
                 new SaveSticker().execute();
             }
             binding.linearLayoutWrapperStickerMenList.setVisibility(View.VISIBLE);
-            constraintLayoutStickerMen.setVisibility(View.GONE);
+            binding.constraintLayoutStickerMen.setVisibility(View.GONE);
             setVisibleSave();
             moduleToolsId = Module.NONE;
             
         } else if (id == R.id.image_view_save_sticker_women) {
-            quShotView.setHandlingSticker(null);
-            quShotView.setLocked(true);
-            seekbarStickerWomen.setVisibility(View.GONE);
+            binding.photoEditorView.setHandlingSticker(null);
+            binding.photoEditorView.setLocked(true);
+            binding.seekbarStickerWomenAlpha.setVisibility(View.GONE);
             binding.imageViewAddStickerWomen.setVisibility(View.GONE);
             binding.recyclerViewTools.setVisibility(View.VISIBLE);
-            if (!quShotView.getStickers().isEmpty()) {
+            if (!binding.photoEditorView.getStickers().isEmpty()) {
                 new SaveSticker().execute();
             }
             binding.linearLayoutWrapperStickerWomenList.setVisibility(View.VISIBLE);
-            constraintLayoutStickerWomen.setVisibility(View.GONE);
+            binding.constraintLayoutStickerWomen.setVisibility(View.GONE);
             setVisibleSave();
             moduleToolsId = Module.NONE;
             
         } else if (id == R.id.imageViewSaveText) {
-            quShotView.setHandlingSticker(null);
-            quShotView.setLocked(true);
+            binding.photoEditorView.setHandlingSticker(null);
+            binding.photoEditorView.setLocked(true);
             binding.constraintLayoutConfirmText.setVisibility(View.GONE);
             binding.relativeLayoutAddText.setVisibility(View.GONE);
-            if (!quShotView.getStickers().isEmpty()) {
+            if (!binding.photoEditorView.getStickers().isEmpty()) {
                 new SaveSticker().execute();
             }
             ConstraintSet constraintsetText = new ConstraintSet();
@@ -1335,11 +1289,11 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             setVisibleSave();
             moduleToolsId = Module.NONE;
         } else if (id == R.id.image_view_redo_neon || id == R.id.image_view_redo) {
-            quShotEditor.redoBrush();
+            quShotCustomEditor.redoBrush();
         } else if (id == R.id.image_view_undo_neon || id == R.id.image_view_undo) {
-            quShotEditor.undoBrush();
+            quShotCustomEditor.undoBrush();
         } else if (id == R.id.image_view_clean_neon || id == R.id.image_view_clean) {
-            quShotEditor.clearBrushAllViews();
+            quShotCustomEditor.clearBrushAllViews();
         }
     }
 
@@ -1350,14 +1304,14 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
     }
 
     public void onFilterSelected(String string) {
-        quShotEditor.setFilterEffect(string);
+        quShotCustomEditor.setFilterEffect(string);
         binding.seekbarFilter.setProgress(50);
         binding.seekbarEffect.setProgress(50);
         if (moduleToolsId == Module.FILTER) {
-            quShotView.getGLSurfaceView().setFilterIntensity(0.5f);
+            binding.photoEditorView.getGLSurfaceView().setFilterIntensity(0.5f);
         }
         if (moduleToolsId == Module.OVERLAY) {
-            quShotView.getGLSurfaceView().setFilterIntensity(0.5f);
+            binding.photoEditorView.getGLSurfaceView().setFilterIntensity(0.5f);
         }
 
     }
@@ -1365,12 +1319,12 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
     public void textFragment() {
         addTextFragment = TextFragment.show(this);
         textEditor = new TextFragment.TextEditor() {
-            public void onDone(QueShotText addTextProperties) {
-                quShotView.addSticker(new QueShotTextView(getApplicationContext(), addTextProperties));
+            public void onDone(CustomText addTextProperties) {
+                binding.photoEditorView.addSticker(new CustomTextView(getApplicationContext(), addTextProperties));
             }
 
             public void onBackButton() {
-                if (quShotView.getStickers().isEmpty()) {
+                if (binding.photoEditorView.getStickers().isEmpty()) {
                     onBackPressed();
                 }
             }
@@ -1384,21 +1338,21 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         switch (module) {
             case TEXT:
                 setGoneSave();
-                quShotView.setLocked(false);
+                binding.photoEditorView.setLocked(false);
                 textFragment();
                 binding.recyclerViewTools.setVisibility(View.GONE);
-                constraintLayoutDraw.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
-                quShotView.setHandlingSticker(null);
-                quShotView.getStickers().clear();
-                quShotEditor.setFilterEffect("");
-                quShotEditor.clearBrushAllViews();
-                quShotEditor.setBrushDrawingMode(false);
-                quShotView.setHandlingSticker(null);
-                quShotView.getStickers().clear();
-                quShotEditor.setFilterEffect("");
-                quShotEditor.clearBrushAllViews();
-                quShotEditor.setBrushDrawingMode(false);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
+                binding.photoEditorView.setHandlingSticker(null);
+                binding.photoEditorView.getStickers().clear();
+                quShotCustomEditor.setFilterEffect("");
+                quShotCustomEditor.clearBrushAllViews();
+                quShotCustomEditor.setBrushDrawingMode(false);
+                binding.photoEditorView.setHandlingSticker(null);
+                binding.photoEditorView.getStickers().clear();
+                quShotCustomEditor.setFilterEffect("");
+                quShotCustomEditor.clearBrushAllViews();
+                quShotCustomEditor.setBrushDrawingMode(false);
                 ConstraintSet constraintsetEffect = new ConstraintSet();
                 constraintsetEffect.clone(binding.constraintLayoutRootView);
                 constraintsetEffect.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
@@ -1410,16 +1364,16 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                 break;
             case ADJUST:
                 setGoneSave();
-                imageViewCompareAdjust.setVisibility(View.VISIBLE);
-                constraintLayoutDraw.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
-                constraintLayoutAdjust.setVisibility(View.VISIBLE);
+                binding.imageViewCompareAdjust.setVisibility(View.VISIBLE);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
+                binding.constraintLayoutAdjust.setVisibility(View.VISIBLE);
                 binding.constraintLayoutNeon.setVisibility(View.GONE);
                 binding.constraintLayoutFilter.setVisibility(View.GONE);
-                constraintLayoutPaint.setVisibility(View.GONE);
-                if (!quShotView.getStickers().isEmpty()) {
-                    quShotView.getStickers().clear();
-                    quShotView.setHandlingSticker(null);
+                binding.constraintLayoutPaint.setVisibility(View.GONE);
+                if (!binding.photoEditorView.getStickers().isEmpty()) {
+                    binding.photoEditorView.getStickers().clear();
+                    binding.photoEditorView.setHandlingSticker(null);
                 }
 
                 ConstraintSet constraintsetAdjust = new ConstraintSet();
@@ -1429,26 +1383,26 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                 constraintsetAdjust.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
                 constraintsetAdjust.applyTo(binding.constraintLayoutRootView);
                 binding.recyclerViewTools.setVisibility(View.GONE);
-                constraintLayoutSave.setVisibility(View.GONE);
+                binding.constraintLayoutSave.setVisibility(View.GONE);
                 binding.relativeLayoutAddText.setVisibility(View.GONE);
                 binding.constraintLayoutConfirmText.setVisibility(View.GONE);
-                quShotEditor.clearBrushAllViews();
-                quShotEditor.setBrushDrawingMode(false);
+                quShotCustomEditor.clearBrushAllViews();
+                quShotCustomEditor.setBrushDrawingMode(false);
                 adjustAdapter = new AdjustAdapter(getApplicationContext(), this);
-                recyclerViewAdjust.setAdapter(adjustAdapter);
+                binding.recyclerViewAdjust.setAdapter(adjustAdapter);
                 adjustAdapter.setSelectedAdjust(0);
-                quShotEditor.setAdjustFilter(adjustAdapter.getFilterConfig());
+                quShotCustomEditor.setAdjustFilter(adjustAdapter.getFilterConfig());
                 break;
             case FILTER:
                 setGoneSave();
-                if (!quShotView.getStickers().isEmpty()) {
-                    quShotView.getStickers().clear();
-                    quShotView.setHandlingSticker(null);
+                if (!binding.photoEditorView.getStickers().isEmpty()) {
+                    binding.photoEditorView.getStickers().clear();
+                    binding.photoEditorView.setHandlingSticker(null);
                 }
                 binding.relativeLayoutAddText.setVisibility(View.GONE);
                 binding.constraintLayoutConfirmText.setVisibility(View.GONE);
-                constraintLayoutDraw.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 new allFilters().execute();
                 new bwFilters().execute();
                 new vintageFilters().execute();
@@ -1458,12 +1412,12 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                 new legacyFilters().execute();
                 break;
             case EMOJI:
-                constraintLayoutEmoji.setVisibility(View.VISIBLE);
-                constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.VISIBLE);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
                 break;
             case DRAW:
-                constraintLayoutDraw.setVisibility(View.VISIBLE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                binding.constraintLayoutDraw.setVisibility(View.VISIBLE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 break;
             case OVERLAY:
                 setGoneSave();
@@ -1472,61 +1426,61 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                 new effectDodge().execute();
                 new effectBurn().execute();
                 new effectDivide().execute();
-                constraintLayoutDraw.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 break;
             case RATIO:
                 new openBlurFragment().execute();
-                constraintLayoutDraw.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 goneLayout();
                 break;
             case BACKGROUND:
                 new openFrameFragment().execute();
-                constraintLayoutDraw.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 goneLayout();
                 break;
             case SPLASH:
                 new openSplashBrushFragment(true).execute();
-                constraintLayoutDraw.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 break;
             case SQUARESPLASH:
                 new openSplashSquareFragment(true).execute();
-                constraintLayoutDraw.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 break;
             case BLUR:
                 new openSplashBrushFragment(false).execute();
-                constraintLayoutDraw.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 break;
             case SQUAEBLUR:
                 new openSplashSquareFragment(false).execute();
-                constraintLayoutDraw.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 break;
             case COLOR:
-                ColorSplashFragment.show(this, quShotView.getCurrentBitmap());
-                constraintLayoutDraw.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                ColorSplashFragment.show(this, binding.photoEditorView.getCurrentBitmap());
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 goneLayout();
                 break;
             case CROP:
-                CropFragment.show(this, this, quShotView.getCurrentBitmap());
-                constraintLayoutDraw.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                CropFragment.show(this, this, binding.photoEditorView.getCurrentBitmap());
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 goneLayout();
                 break;
             case ROTATE:
-                RotateFragment.show(this, this, quShotView.getCurrentBitmap());
-                constraintLayoutDraw.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                RotateFragment.show(this, this, binding.photoEditorView.getCurrentBitmap());
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 goneLayout();
                 break;
         }
-        quShotView.setHandlingSticker(null);
+        binding.photoEditorView.setHandlingSticker(null);
     }
 
     public void onQuShotStickerToolSelected(Module module) {
@@ -1535,63 +1489,63 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         switch (module) {
             case STICKER:
                 setGoneSave();
-                quShotView.setLocked(false);
-                constraintLayoutSticker.setVisibility(View.VISIBLE);
-                constraintLayoutAdjust.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                binding.photoEditorView.setLocked(false);
+                binding.constraintLayoutSticker.setVisibility(View.VISIBLE);
+                binding.constraintLayoutAdjust.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 binding.constraintLayoutNeon.setVisibility(View.GONE);
                 binding.constraintLayoutFilter.setVisibility(View.GONE);
                 binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-                quShotEditor.setFilterEffect("");
-                quShotEditor.clearBrushAllViews();
-                quShotEditor.setBrushDrawingMode(false);
-                if (!quShotView.getStickers().isEmpty()) {
-                    quShotView.getStickers().clear();
-                    quShotView.setHandlingSticker(null);
+                quShotCustomEditor.setFilterEffect("");
+                quShotCustomEditor.clearBrushAllViews();
+                quShotCustomEditor.setBrushDrawingMode(false);
+                if (!binding.photoEditorView.getStickers().isEmpty()) {
+                    binding.photoEditorView.getStickers().clear();
+                    binding.photoEditorView.setHandlingSticker(null);
                 }
                 binding.relativeLayoutAddText.setVisibility(View.GONE);
                 binding.constraintLayoutConfirmText.setVisibility(View.GONE);
                 break;
             case MACKUER:
                 setGoneSave();
-                quShotView.setLocked(false);
-                constraintLayoutStickerMen.setVisibility(View.VISIBLE);
-                constraintLayoutAdjust.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                binding.photoEditorView.setLocked(false);
+                binding.constraintLayoutStickerMen.setVisibility(View.VISIBLE);
+                binding.constraintLayoutAdjust.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 binding.constraintLayoutNeon.setVisibility(View.GONE);
                 binding.constraintLayoutFilter.setVisibility(View.GONE);
                 binding.linearLayoutWrapperStickerMenList.setVisibility(View.VISIBLE);
-                quShotEditor.setFilterEffect("");
-                quShotEditor.clearBrushAllViews();
-                quShotEditor.setBrushDrawingMode(false);
-                if (!quShotView.getStickers().isEmpty()) {
-                    quShotView.getStickers().clear();
-                    quShotView.setHandlingSticker(null);
+                quShotCustomEditor.setFilterEffect("");
+                quShotCustomEditor.clearBrushAllViews();
+                quShotCustomEditor.setBrushDrawingMode(false);
+                if (!binding.photoEditorView.getStickers().isEmpty()) {
+                    binding.photoEditorView.getStickers().clear();
+                    binding.photoEditorView.setHandlingSticker(null);
                 }
                 binding.relativeLayoutAddText.setVisibility(View.GONE);
                 binding.constraintLayoutConfirmText.setVisibility(View.GONE);
                 break;
             case BEAUTY:
                 setGoneSave();
-                quShotView.setLocked(false);
-                constraintLayoutStickerWomen.setVisibility(View.VISIBLE);
+                binding.photoEditorView.setLocked(false);
+                binding.constraintLayoutStickerWomen.setVisibility(View.VISIBLE);
                 binding.linearLayoutWrapperStickerWomenList.setVisibility(View.VISIBLE);
-                constraintLayoutAdjust.setVisibility(View.GONE);
-                constraintLayoutEmoji.setVisibility(View.GONE);
+                binding.constraintLayoutAdjust.setVisibility(View.GONE);
+                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 binding.constraintLayoutNeon.setVisibility(View.GONE);
                 binding.constraintLayoutFilter.setVisibility(View.GONE);
-                quShotEditor.setFilterEffect("");
-                quShotEditor.clearBrushAllViews();
-                quShotEditor.setBrushDrawingMode(false);
-                if (!quShotView.getStickers().isEmpty()) {
-                    quShotView.getStickers().clear();
-                    quShotView.setHandlingSticker(null);
+                quShotCustomEditor.setFilterEffect("");
+                quShotCustomEditor.clearBrushAllViews();
+                quShotCustomEditor.setBrushDrawingMode(false);
+                if (!binding.photoEditorView.getStickers().isEmpty()) {
+                    binding.photoEditorView.getStickers().clear();
+                    binding.photoEditorView.setHandlingSticker(null);
                 }
                 binding.relativeLayoutAddText.setVisibility(View.GONE);
                 binding.constraintLayoutConfirmText.setVisibility(View.GONE);
                 break;
         }
-        quShotView.setHandlingSticker(null);
+        binding.photoEditorView.setHandlingSticker(null);
     }
 
     public void onQuShotDrawToolSelected(Module module) {
@@ -1600,20 +1554,20 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         switch (module) {
             case PAINT:
                 setColorPaint();
-                quShotEditor.setBrushDrawingMode(true);
-                constraintLayoutPaint.setVisibility(View.VISIBLE);
+                quShotCustomEditor.setBrushDrawingMode(true);
+                binding.constraintLayoutPaint.setVisibility(View.VISIBLE);
                 binding.recyclerViewTools.setVisibility(View.GONE);
-                constraintLayoutDraw.setVisibility(View.GONE);
-                constraintLayoutPaint.setVisibility(View.VISIBLE);
-                constraintLayoutAdjust.setVisibility(View.GONE);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutPaint.setVisibility(View.VISIBLE);
+                binding.constraintLayoutAdjust.setVisibility(View.GONE);
                 binding.constraintLayoutFilter.setVisibility(View.GONE);
                 binding.constraintLayoutNeon.setVisibility(View.GONE);
-                constraintLayoutSavePaint.setVisibility(View.VISIBLE);
+                binding.constraintLayoutSave.setVisibility(View.VISIBLE);
                 binding.relativeLayoutAddText.setVisibility(View.GONE);
                 binding.constraintLayoutConfirmText.setVisibility(View.GONE);
-                quShotEditor.setFilterEffect("");
-                quShotEditor.clearBrushAllViews();
-                quShotEditor.setBrushDrawingMode(false);
+                quShotCustomEditor.setFilterEffect("");
+                quShotCustomEditor.clearBrushAllViews();
+                quShotCustomEditor.setBrushDrawingMode(false);
                 setGoneSave();
                 setBottomToolbar(true);
                 constraintSet = new ConstraintSet();
@@ -1622,29 +1576,29 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                 constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guidelinePaint.getId(), 3, 0);
                 constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
                 constraintSet.applyTo(binding.constraintLayoutRootView);
-                quShotEditor.setBrushMode(1);
+                quShotCustomEditor.setBrushMode(1);
                 reloadingLayout();
                 break;
             case COLORED:
                 new openColoredFragment().execute();
-                constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
                 goneLayout();
                 break;
             case NEON:
                 setColorNeon();
-                quShotEditor.setBrushDrawingMode(true);
+                quShotCustomEditor.setBrushDrawingMode(true);
                 binding.recyclerViewTools.setVisibility(View.GONE);
                 binding.constraintLayoutConfirmSaveNeon.setVisibility(View.VISIBLE);
-                constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
                 binding.constraintLayoutNeon.setVisibility(View.VISIBLE);
-                constraintLayoutAdjust.setVisibility(View.GONE);
+                binding.constraintLayoutAdjust.setVisibility(View.GONE);
                 binding.constraintLayoutFilter.setVisibility(View.GONE);
-                constraintLayoutPaint.setVisibility(View.GONE);
+                binding.constraintLayoutPaint.setVisibility(View.GONE);
                 binding.relativeLayoutAddText.setVisibility(View.GONE);
                 binding.constraintLayoutConfirmText.setVisibility(View.GONE);
-                quShotEditor.setFilterEffect("");
-                quShotEditor.clearBrushAllViews();
-                quShotEditor.setBrushDrawingMode(false);
+                quShotCustomEditor.setFilterEffect("");
+                quShotCustomEditor.clearBrushAllViews();
+                quShotCustomEditor.setBrushDrawingMode(false);
                 setGoneSave();
                 setBottomToolbar(true);
                 constraintSet = new ConstraintSet();
@@ -1653,16 +1607,16 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                 constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.constraintLayoutNeon.getId(), 3, 0);
                 constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
                 constraintSet.applyTo(binding.constraintLayoutRootView);
-                quShotEditor.setBrushMode(2);
+                quShotCustomEditor.setBrushMode(2);
                 reloadingLayout();
                 break;
             case MOSAIC:
                 new openShapeFragment().execute();
-                constraintLayoutDraw.setVisibility(View.GONE);
+                binding.constraintLayoutDraw.setVisibility(View.GONE);
                 goneLayout();
                 break;
         }
-        quShotView.setHandlingSticker(null);
+        binding.photoEditorView.setHandlingSticker(null);
     }
 
     private void goneLayout() {
@@ -1670,11 +1624,11 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
     }
 
     public void setGoneSave() {
-        constraintLayoutSaveEditing.setVisibility(View.GONE);
+        binding.constraintLayoutSaveEditing.setVisibility(View.GONE);
     }
 
     public void setVisibleSave() {
-        constraintLayoutSaveEditing.setVisibility(View.VISIBLE);
+        binding.constraintLayoutSaveEditing.setVisibility(View.VISIBLE);
     }
 
     public void onBackPressed() {
@@ -1682,22 +1636,22 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             try {
                 switch (moduleToolsId) {
                     case PAINT:
-                        constraintLayoutPaint.setVisibility(View.GONE);
+                        binding.constraintLayoutPaint.setVisibility(View.GONE);
                         setVisibleSave();
-                        imageViewUndoPaint.setVisibility(View.GONE);
-                        imageViewRedoPaint.setVisibility(View.GONE);
-                        imageViewCleanPaint.setVisibility(View.GONE);
-                        imageViewErasePaint.setVisibility(View.GONE);
+                        binding.imageViewUndo.setVisibility(View.GONE);
+                        binding.imageViewRedo.setVisibility(View.GONE);
+                        binding.imageViewClean.setVisibility(View.GONE);
+                        binding.imageViewErase.setVisibility(View.GONE);
                         binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                        constraintLayoutSavePaint.setVisibility(View.GONE);
-                        quShotEditor.setBrushDrawingMode(false);
+                        binding.constraintLayoutSave.setVisibility(View.GONE);
+                        quShotCustomEditor.setBrushDrawingMode(false);
                         ConstraintSet constraintSet = new ConstraintSet();
                         constraintSet.clone(binding.constraintLayoutRootView);
                         constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
                         constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
                         constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
                         constraintSet.applyTo(binding.constraintLayoutRootView);
-                        quShotEditor.clearBrushAllViews();
+                        quShotCustomEditor.clearBrushAllViews();
                         setVisibleSave();
                         moduleToolsId = Module.NONE;
                         reloadingLayout();
@@ -1710,28 +1664,28 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                         binding.constraintLayoutNeon.setVisibility(View.GONE);
                         binding.recyclerViewTools.setVisibility(View.VISIBLE);
                         binding.constraintLayoutConfirmSaveNeon.setVisibility(View.GONE);
-                        quShotEditor.setBrushDrawingMode(false);
+                        quShotCustomEditor.setBrushDrawingMode(false);
                         ConstraintSet constraintSet1 = new ConstraintSet();
                         constraintSet1.clone(binding.constraintLayoutRootView);
                         constraintSet1.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
                         constraintSet1.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
                         constraintSet1.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
                         constraintSet1.applyTo(binding.constraintLayoutRootView);
-                        quShotEditor.clearBrushAllViews();
+                        quShotCustomEditor.clearBrushAllViews();
                         setVisibleSave();
                         moduleToolsId = Module.NONE;
                         reloadingLayout();
                         return;
                     case TEXT:
-                        if (!quShotView.getStickers().isEmpty()) {
-                            quShotView.getStickers().clear();
-                            quShotView.setHandlingSticker(null);
+                        if (!binding.photoEditorView.getStickers().isEmpty()) {
+                            binding.photoEditorView.getStickers().clear();
+                            binding.photoEditorView.setHandlingSticker(null);
                         }
                         binding.recyclerViewTools.setVisibility(View.VISIBLE);
                         binding.relativeLayoutAddText.setVisibility(View.GONE);
                         binding.constraintLayoutConfirmText.setVisibility(View.GONE);
-                        quShotView.setHandlingSticker(null);
-                        quShotView.setLocked(true);
+                        binding.photoEditorView.setHandlingSticker(null);
+                        binding.photoEditorView.setLocked(true);
                         ConstraintSet constraintsetEffect = new ConstraintSet();
                         constraintsetEffect.clone(binding.constraintLayoutRootView);
                         constraintsetEffect.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
@@ -1742,9 +1696,9 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                         moduleToolsId = Module.NONE;
                         return;
                     case ADJUST:
-                        quShotEditor.setFilterEffect("");
-                        imageViewCompareAdjust.setVisibility(View.GONE);
-                        constraintLayoutAdjust.setVisibility(View.GONE);
+                        quShotCustomEditor.setFilterEffect("");
+                        binding.imageViewCompareAdjust.setVisibility(View.GONE);
+                        binding.constraintLayoutAdjust.setVisibility(View.GONE);
                         ConstraintSet constraintsetAdjust = new ConstraintSet();
                         constraintsetAdjust.clone(binding.constraintLayoutRootView);
                         constraintsetAdjust.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
@@ -1752,7 +1706,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                         constraintsetAdjust.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
                         constraintsetAdjust.applyTo(binding.constraintLayoutRootView);
                         binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                        constraintLayoutSave.setVisibility(View.VISIBLE);
+                        binding.constraintLayoutSave.setVisibility(View.VISIBLE);
                         setVisibleSave();
                         moduleToolsId = Module.NONE;
                         return;
@@ -1767,7 +1721,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                         constraintsete.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
                         constraintsete.applyTo(binding.constraintLayoutRootView);
                         setVisibleSave();
-                        quShotEditor.setFilterEffect("");
+                        quShotCustomEditor.setFilterEffect("");
                         binding.imageViewCompareFilter.setVisibility(View.GONE);
                         listAllFilter.clear();
                         if (binding.recyclerViewFilterAll.getAdapter() != null) {
@@ -1776,20 +1730,20 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                         moduleToolsId = Module.NONE;
                         return;
                     case STICKER:
-                        if (quShotView.getStickers().size() <= 0) {
+                        if (binding.photoEditorView.getStickers().size() <= 0) {
                             binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-                            constraintLayoutSticker.setVisibility(View.GONE);
+                            binding.constraintLayoutSticker.setVisibility(View.GONE);
                             binding.imageViewAddSticker.setVisibility(View.GONE);
-                            quShotView.setHandlingSticker(null);
+                            binding.photoEditorView.setHandlingSticker(null);
                             binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                            quShotView.setLocked(true);
+                            binding.photoEditorView.setLocked(true);
                             moduleToolsId = Module.NONE;
                         } else if (binding.imageViewAddSticker.getVisibility() == View.VISIBLE) {
-                            quShotView.getStickers().clear();
+                            binding.photoEditorView.getStickers().clear();
                             binding.imageViewAddSticker.setVisibility(View.GONE);
-                            quShotView.setHandlingSticker(null);
+                            binding.photoEditorView.setHandlingSticker(null);
                             binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-                            constraintLayoutSticker.setVisibility(View.GONE);
+                            binding.constraintLayoutSticker.setVisibility(View.GONE);
                             binding.recyclerViewTools.setVisibility(View.VISIBLE);
                             moduleToolsId = Module.NONE;
                         } else {
@@ -1802,20 +1756,20 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                         return;
                     case MACKUER:
                         binding.linearLayoutWrapperStickerMenList.setVisibility(View.VISIBLE);
-                        if (quShotView.getStickers().size() <= 0) {
+                        if (binding.photoEditorView.getStickers().size() <= 0) {
                             binding.linearLayoutWrapperStickerMenList.setVisibility(View.VISIBLE);
-                            constraintLayoutStickerMen.setVisibility(View.GONE);
-                            quShotView.setHandlingSticker(null);
+                            binding.constraintLayoutStickerMen.setVisibility(View.GONE);
+                            binding.photoEditorView.setHandlingSticker(null);
                             binding.imageViewAddStickerMen.setVisibility(View.GONE);
                             binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                            quShotView.setLocked(true);
+                            binding.photoEditorView.setLocked(true);
                             moduleToolsId = Module.NONE;
                         } else if (binding.imageViewAddStickerMen.getVisibility() == View.VISIBLE) {
-                            quShotView.getStickers().clear();
-                            quShotView.setHandlingSticker(null);
+                            binding.photoEditorView.getStickers().clear();
+                            binding.photoEditorView.setHandlingSticker(null);
                             binding.imageViewAddStickerMen.setVisibility(View.GONE);
                             binding.linearLayoutWrapperStickerMenList.setVisibility(View.VISIBLE);
-                            constraintLayoutStickerMen.setVisibility(View.GONE);
+                            binding.constraintLayoutStickerMen.setVisibility(View.GONE);
                             binding.recyclerViewTools.setVisibility(View.VISIBLE);
                             moduleToolsId = Module.NONE;
                         } else {
@@ -1826,20 +1780,20 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                         setVisibleSave();
                         return;
                     case BEAUTY:
-                        if (quShotView.getStickers().size() <= 0) {
+                        if (binding.photoEditorView.getStickers().size() <= 0) {
                             binding.linearLayoutWrapperStickerWomenList.setVisibility(View.VISIBLE);
-                            constraintLayoutStickerWomen.setVisibility(View.GONE);
+                            binding.constraintLayoutStickerWomen.setVisibility(View.GONE);
                             binding.imageViewAddStickerWomen.setVisibility(View.GONE);
-                            quShotView.setHandlingSticker(null);
+                            binding.photoEditorView.setHandlingSticker(null);
                             binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                            quShotView.setLocked(true);
+                            binding.photoEditorView.setLocked(true);
                             moduleToolsId = Module.NONE;
                         } else if (binding.imageViewAddStickerWomen.getVisibility() == View.VISIBLE) {
-                            quShotView.getStickers().clear();
+                            binding.photoEditorView.getStickers().clear();
                             binding.imageViewAddStickerWomen.setVisibility(View.GONE);
-                            quShotView.setHandlingSticker(null);
+                            binding.photoEditorView.setHandlingSticker(null);
                             binding.linearLayoutWrapperStickerWomenList.setVisibility(View.VISIBLE);
-                            constraintLayoutStickerWomen.setVisibility(View.GONE);
+                            binding.constraintLayoutStickerWomen.setVisibility(View.GONE);
                             binding.recyclerViewTools.setVisibility(View.VISIBLE);
                             moduleToolsId = Module.NONE;
                         } else {
@@ -1851,7 +1805,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                         setVisibleSave();
                         return;
                     case OVERLAY:
-                        quShotEditor.setFilterEffect("");
+                        quShotCustomEditor.setFilterEffect("");
                         binding.imageViewCompareEffect.setVisibility(View.GONE);
                         binding.constraintLayoutEffect.setVisibility(View.GONE);
                         listOverlay.clear();
@@ -1895,7 +1849,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
     }
 
     public void addSticker(Bitmap bitmap) {
-        quShotView.addSticker(new DrawableSticker(new BitmapDrawable(getResources(), bitmap)));
+        binding.photoEditorView.addSticker(new DrawableSticker(new BitmapDrawable(getResources(), bitmap)));
         binding.linearLayoutWrapperStickerList.setVisibility(View.GONE);
         binding.linearLayoutWrapperStickerMenList.setVisibility(View.GONE);
         binding.linearLayoutWrapperStickerWomenList.setVisibility(View.GONE);
@@ -1905,28 +1859,28 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
     }
 
     public void finishCrop(Bitmap bitmap) {
-        quShotView.setImageSource(bitmap);
+        binding.photoEditorView.setImageSource(bitmap);
         moduleToolsId = Module.NONE;
         reloadingLayout();
     }
 
     public void onColorChanged(String string) {
-        quShotEditor.setBrushColor(Color.parseColor(string));
+        quShotCustomEditor.setBrushColor(Color.parseColor(string));
     }
 
     public void ratioSavedBitmap(Bitmap bitmap) {
-        quShotView.setImageSource(bitmap);
+        binding.photoEditorView.setImageSource(bitmap);
         moduleToolsId = Module.NONE;
         reloadingLayout();
     }
 
     public void onSaveSplash(Bitmap bitmap) {
-        quShotView.setImageSource(bitmap);
+        binding.photoEditorView.setImageSource(bitmap);
         moduleToolsId = Module.NONE;
     }
 
     public void onSaveMosaic(Bitmap bitmap) {
-        quShotView.setImageSource(bitmap);
+        binding.photoEditorView.setImageSource(bitmap);
         moduleToolsId = Module.NONE;
     }
 
@@ -1939,24 +1893,24 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public Void doInBackground(Void... voids) {
             listAllFilter.clear();
-            listAllFilter.addAll(FilterCodeAsset.getListBitmapFilterAll(ThumbnailUtils.extractThumbnail(quShotView.getCurrentBitmap(), 100, 100)));
+            listAllFilter.addAll(FilterCodeAsset.getListBitmapFilterAll(ThumbnailUtils.extractThumbnail(binding.photoEditorView.getCurrentBitmap(), 100, 100)));
             Log.d("XXXXXXXX", "allFilters " + listAllFilter.size());
             return null;
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterAll.setAdapter(new FilterAdapter(listAllFilter, QueShotEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.ALL_FILTERS)));
+            binding.recyclerViewFilterAll.setAdapter(new FilterAdapter(listAllFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.ALL_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.constraintLayoutFilter.setVisibility(View.VISIBLE);
             binding.constraintLayoutConfirmSaveFilter.setVisibility(View.VISIBLE);
             binding.recyclerViewTools.setVisibility(View.GONE);
-            quShotView.setHandlingSticker(null);
-            quShotView.getStickers().clear();
+            binding.photoEditorView.setHandlingSticker(null);
+            binding.photoEditorView.getStickers().clear();
             binding.seekbarFilter.setProgress(100);
             showLoading(false);
-            quShotEditor.setFilterEffect("");
-            quShotEditor.clearBrushAllViews();
-            quShotEditor.setBrushDrawingMode(false);
+            quShotCustomEditor.setFilterEffect("");
+            quShotCustomEditor.clearBrushAllViews();
+            quShotCustomEditor.setBrushDrawingMode(false);
 
             ConstraintSet constraintSet = new ConstraintSet();
             constraintSet.clone(binding.constraintLayoutRootView);
@@ -1976,13 +1930,13 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public Void doInBackground(Void... voids) {
             listBwFilter.clear();
-            listBwFilter.addAll(FilterCodeAsset.getListBitmapFilterBW(ThumbnailUtils.extractThumbnail(quShotView.getCurrentBitmap(), 100, 100)));
+            listBwFilter.addAll(FilterCodeAsset.getListBitmapFilterBW(ThumbnailUtils.extractThumbnail(binding.photoEditorView.getCurrentBitmap(), 100, 100)));
             Log.d("XXXXXXXX", "bwFilters " + listBwFilter.size());
             return null;
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterBw.setAdapter(new FilterAdapter(listBwFilter, QueShotEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
+            binding.recyclerViewFilterBw.setAdapter(new FilterAdapter(listBwFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.seekbarFilter.setProgress(100);
             showLoading(false);
@@ -1998,13 +1952,13 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public Void doInBackground(Void... voids) {
             listVintageFilter.clear();
-            listVintageFilter.addAll(FilterCodeAsset.getListBitmapFilterVintage(ThumbnailUtils.extractThumbnail(quShotView.getCurrentBitmap(), 100, 100)));
+            listVintageFilter.addAll(FilterCodeAsset.getListBitmapFilterVintage(ThumbnailUtils.extractThumbnail(binding.photoEditorView.getCurrentBitmap(), 100, 100)));
             Log.d("XXXXXXXX", "vintageFilters " + listVintageFilter.size());
             return null;
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterVintage.setAdapter(new FilterAdapter(listVintageFilter, QueShotEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.VINTAGE_FILTERS)));
+            binding.recyclerViewFilterVintage.setAdapter(new FilterAdapter(listVintageFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.VINTAGE_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.seekbarFilter.setProgress(100);
             showLoading(false);
@@ -2020,13 +1974,13 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public Void doInBackground(Void... voids) {
             listSmoothFilter.clear();
-            listSmoothFilter.addAll(FilterCodeAsset.getListBitmapFilterSmooth(ThumbnailUtils.extractThumbnail(quShotView.getCurrentBitmap(), 100, 100)));
+            listSmoothFilter.addAll(FilterCodeAsset.getListBitmapFilterSmooth(ThumbnailUtils.extractThumbnail(binding.photoEditorView.getCurrentBitmap(), 100, 100)));
             Log.d("XXXXXXXX", "smoothFilters " + listSmoothFilter.size());
             return null;
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterSmooth.setAdapter(new FilterAdapter(listSmoothFilter, QueShotEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.SMOOTH_FILTERS)));
+            binding.recyclerViewFilterSmooth.setAdapter(new FilterAdapter(listSmoothFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.SMOOTH_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.seekbarFilter.setProgress(100);
             showLoading(false);
@@ -2042,13 +1996,13 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public Void doInBackground(Void... voids) {
             listColdFilter.clear();
-            listColdFilter.addAll(FilterCodeAsset.getListBitmapFilterCold(ThumbnailUtils.extractThumbnail(quShotView.getCurrentBitmap(), 100, 100)));
+            listColdFilter.addAll(FilterCodeAsset.getListBitmapFilterCold(ThumbnailUtils.extractThumbnail(binding.photoEditorView.getCurrentBitmap(), 100, 100)));
             Log.d("XXXXXXXX", "coldFilters " + listColdFilter.size());
             return null;
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterCold.setAdapter(new FilterAdapter(listColdFilter, QueShotEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.COLD_FILTERS)));
+            binding.recyclerViewFilterCold.setAdapter(new FilterAdapter(listColdFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.COLD_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.seekbarFilter.setProgress(100);
             showLoading(false);
@@ -2064,13 +2018,13 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public Void doInBackground(Void... voids) {
             listWarmFilter.clear();
-            listWarmFilter.addAll(FilterCodeAsset.getListBitmapFilterWarm(ThumbnailUtils.extractThumbnail(quShotView.getCurrentBitmap(), 100, 100)));
+            listWarmFilter.addAll(FilterCodeAsset.getListBitmapFilterWarm(ThumbnailUtils.extractThumbnail(binding.photoEditorView.getCurrentBitmap(), 100, 100)));
             Log.d("XXXXXXXX", "warmFilters " + listWarmFilter.size());
             return null;
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterWarm.setAdapter(new FilterAdapter(listWarmFilter, QueShotEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.WARM_FILTERS)));
+            binding.recyclerViewFilterWarm.setAdapter(new FilterAdapter(listWarmFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.WARM_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.seekbarFilter.setProgress(100);
             showLoading(false);
@@ -2085,13 +2039,13 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public Void doInBackground(Void... voids) {
             listLegacyFilter.clear();
-            listLegacyFilter.addAll(FilterCodeAsset.getListBitmapFilterLegacy(ThumbnailUtils.extractThumbnail(quShotView.getCurrentBitmap(), 100, 100)));
+            listLegacyFilter.addAll(FilterCodeAsset.getListBitmapFilterLegacy(ThumbnailUtils.extractThumbnail(binding.photoEditorView.getCurrentBitmap(), 100, 100)));
             Log.d("XXXXXXXX", "legacyFilters " + listLegacyFilter.size());
             return null;
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterLegacy.setAdapter(new FilterAdapter(listLegacyFilter, QueShotEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.LEGACY_FILTERS)));
+            binding.recyclerViewFilterLegacy.setAdapter(new FilterAdapter(listLegacyFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.LEGACY_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.seekbarFilter.setProgress(100);
             showLoading(false);
@@ -2106,12 +2060,12 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         }
 
         public Bitmap doInBackground(Void... voids) {
-            return FilterUtils.getBlurImageFromBitmap(quShotView.getCurrentBitmap(), 5.0f);
+            return FilterUtils.getBlurImageFromBitmap(binding.photoEditorView.getCurrentBitmap(), 5.0f);
         }
 
         public void onPostExecute(Bitmap bitmap) {
             showLoading(false);
-            RatioFragment.show(QueShotEditorActivity.this, QueShotEditorActivity.this, quShotView.getCurrentBitmap(), bitmap);
+            RatioFragment.show(EditorActivity.this, EditorActivity.this, binding.photoEditorView.getCurrentBitmap(), bitmap);
         }
     }
 
@@ -2123,12 +2077,12 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         }
 
         public Bitmap doInBackground(Void... voids) {
-            return FilterUtils.getBlurImageFromBitmap(quShotView.getCurrentBitmap(), 5.0f);
+            return FilterUtils.getBlurImageFromBitmap(binding.photoEditorView.getCurrentBitmap(), 5.0f);
         }
 
         public void onPostExecute(Bitmap bitmap) {
             showLoading(false);
-            FrameFragment.show(QueShotEditorActivity.this, QueShotEditorActivity.this, quShotView.getCurrentBitmap(), bitmap);
+            FrameFragment.show(EditorActivity.this, EditorActivity.this, binding.photoEditorView.getCurrentBitmap(), bitmap);
         }
     }
 
@@ -2141,14 +2095,14 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public List<Bitmap> doInBackground(Void... voids) {
             List<Bitmap> arrayList = new ArrayList<>();
-            arrayList.add(FilterUtils.cloneBitmap(quShotView.getCurrentBitmap()));
-            arrayList.add(FilterUtils.getBlurImageFromBitmap(quShotView.getCurrentBitmap(), 8.0f));
+            arrayList.add(FilterUtils.cloneBitmap(binding.photoEditorView.getCurrentBitmap()));
+            arrayList.add(FilterUtils.getBlurImageFromBitmap(binding.photoEditorView.getCurrentBitmap(), 8.0f));
             return arrayList;
         }
 
         public void onPostExecute(List<Bitmap> list) {
             showLoading(false);
-            MosaicFragment.show(QueShotEditorActivity.this, list.get(0), list.get(1), QueShotEditorActivity.this);
+            MosaicFragment.show(EditorActivity.this, list.get(0), list.get(1), EditorActivity.this);
         }
     }
 
@@ -2161,14 +2115,14 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public List<Bitmap> doInBackground(Void... voids) {
             List<Bitmap> arrayList = new ArrayList<>();
-            arrayList.add(FilterUtils.cloneBitmap(quShotView.getCurrentBitmap()));
-            arrayList.add(FilterUtils.getBlurImageFromBitmap(quShotView.getCurrentBitmap(), 8.0f));
+            arrayList.add(FilterUtils.cloneBitmap(binding.photoEditorView.getCurrentBitmap()));
+            arrayList.add(FilterUtils.getBlurImageFromBitmap(binding.photoEditorView.getCurrentBitmap(), 8.0f));
             return arrayList;
         }
 
         public void onPostExecute(List<Bitmap> list) {
             showLoading(false);
-            ColoredFragment.show(QueShotEditorActivity.this, list.get(0), list.get(1), QueShotEditorActivity.this);
+            ColoredFragment.show(EditorActivity.this, list.get(0), list.get(1), EditorActivity.this);
         }
     }
 
@@ -2181,12 +2135,12 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public Void doInBackground(Void... voids) {
             listDodge.clear();
-            listDodge.addAll(EffectCodeAsset.getListBitmapDodgeEffect(ThumbnailUtils.extractThumbnail(quShotView.getCurrentBitmap(), 100, 100)));
+            listDodge.addAll(EffectCodeAsset.getListBitmapDodgeEffect(ThumbnailUtils.extractThumbnail(binding.photoEditorView.getCurrentBitmap(), 100, 100)));
             return null;
         }
 
         public void onPostExecute(Void voids) {
-            recyclerViewDodge.setAdapter(new HardmixAdapter(listDodge, QueShotEditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.DODGE_EFFECTS)));
+            binding.recyclerViewDodge.setAdapter(new HardmixAdapter(listDodge, EditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.DODGE_EFFECTS)));
             binding.imageViewCompareEffect.setVisibility(View.VISIBLE);
             binding.seekbarEffect.setProgress(100);
         }
@@ -2201,12 +2155,12 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public Void doInBackground(Void... voids) {
             listDivide.clear();
-            listDivide.addAll(EffectCodeAsset.getListBitmapDivideEffect(ThumbnailUtils.extractThumbnail(quShotView.getCurrentBitmap(), 100, 100)));
+            listDivide.addAll(EffectCodeAsset.getListBitmapDivideEffect(ThumbnailUtils.extractThumbnail(binding.photoEditorView.getCurrentBitmap(), 100, 100)));
             return null;
         }
 
         public void onPostExecute(Void voids) {
-            recyclerViewDivide.setAdapter(new HardmixAdapter(listDivide, QueShotEditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.DIVIDE_EFFECTS)));
+            binding.recyclerViewDivide.setAdapter(new HardmixAdapter(listDivide, EditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.DIVIDE_EFFECTS)));
             binding.imageViewCompareEffect.setVisibility(View.VISIBLE);
             binding.seekbarEffect.setProgress(100);
         }
@@ -2221,12 +2175,12 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public Void doInBackground(Void... voids) {
             listHardmix.clear();
-            listHardmix.addAll(EffectCodeAsset.getListBitmapHardmixEffect(ThumbnailUtils.extractThumbnail(quShotView.getCurrentBitmap(), 100, 100)));
+            listHardmix.addAll(EffectCodeAsset.getListBitmapHardmixEffect(ThumbnailUtils.extractThumbnail(binding.photoEditorView.getCurrentBitmap(), 100, 100)));
             return null;
         }
 
         public void onPostExecute(Void voids) {
-            recyclerViewHardmix.setAdapter(new HardmixAdapter(listHardmix, QueShotEditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.HARDMIX_EFFECTS)));
+            binding.recyclerViewHardmix.setAdapter(new HardmixAdapter(listHardmix, EditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.HARDMIX_EFFECTS)));
             binding.imageViewCompareEffect.setVisibility(View.VISIBLE);
             binding.seekbarEffect.setProgress(100);
         }
@@ -2241,12 +2195,12 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public Void doInBackground(Void... voids) {
             listOverlay.clear();
-            listOverlay.addAll(EffectCodeAsset.getListBitmapOverlayEffect(ThumbnailUtils.extractThumbnail(quShotView.getCurrentBitmap(), 100, 100)));
+            listOverlay.addAll(EffectCodeAsset.getListBitmapOverlayEffect(ThumbnailUtils.extractThumbnail(binding.photoEditorView.getCurrentBitmap(), 100, 100)));
             return null;
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewOverlay.setAdapter(new HardmixAdapter(listOverlay, QueShotEditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.OVERLAY_EFFECTS)));
+            binding.recyclerViewOverlay.setAdapter(new HardmixAdapter(listOverlay, EditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.OVERLAY_EFFECTS)));
             binding.constraintLayoutEffect.setVisibility(View.VISIBLE);
             binding.constraintLayoutConfirmSaveHardmix.setVisibility(View.VISIBLE);
             binding.recyclerViewTools.setVisibility(View.GONE);
@@ -2272,12 +2226,12 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public Void doInBackground(Void... voids) {
             listBurn.clear();
-            listBurn.addAll(EffectCodeAsset.getListBitmapColorEffect(ThumbnailUtils.extractThumbnail(quShotView.getCurrentBitmap(), 100, 100)));
+            listBurn.addAll(EffectCodeAsset.getListBitmapColorEffect(ThumbnailUtils.extractThumbnail(binding.photoEditorView.getCurrentBitmap(), 100, 100)));
             return null;
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewBurn.setAdapter(new HardmixAdapter(listBurn, QueShotEditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.COLOR_EFFECTS)));
+            binding.recyclerViewBurn.setAdapter(new HardmixAdapter(listBurn, EditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.COLOR_EFFECTS)));
             binding.imageViewCompareEffect.setVisibility(View.VISIBLE);
             binding.seekbarEffect.setProgress(100);
         }
@@ -2294,7 +2248,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         }
 
         public List<Bitmap> doInBackground(Void... voids) {
-            Bitmap currentBitmap = quShotView.getCurrentBitmap();
+            Bitmap currentBitmap = binding.photoEditorView.getCurrentBitmap();
             List<Bitmap> arrayList = new ArrayList<>();
             arrayList.add(currentBitmap);
             if (isSplashBrush) {
@@ -2307,9 +2261,9 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public void onPostExecute(List<Bitmap> list) {
             if (isSplashBrush) {
-                SplashFragment.show(QueShotEditorActivity.this, list.get(0), null, list.get(1), QueShotEditorActivity.this, true);
+                SplashFragment.show(EditorActivity.this, list.get(0), null, list.get(1), EditorActivity.this, true);
             } else {
-                SplashFragment.show(QueShotEditorActivity.this, list.get(0), list.get(1), null, QueShotEditorActivity.this, false);
+                SplashFragment.show(EditorActivity.this, list.get(0), list.get(1), null, EditorActivity.this, false);
             }
             showLoading(false);
         }
@@ -2326,7 +2280,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         }
 
         public List<Bitmap> doInBackground(Void... voids) {
-            Bitmap currentBitmap = quShotView.getCurrentBitmap();
+            Bitmap currentBitmap = binding.photoEditorView.getCurrentBitmap();
             List<Bitmap> arrayList = new ArrayList<>();
             arrayList.add(currentBitmap);
             if (isSplashSquared) {
@@ -2339,9 +2293,9 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public void onPostExecute(List<Bitmap> list) {
             if (isSplashSquared) {
-                SplashBlurSquareFragment.show(QueShotEditorActivity.this, list.get(0), null, list.get(1), QueShotEditorActivity.this, true);
+                SplashBlurSquareFragment.show(EditorActivity.this, list.get(0), null, list.get(1), EditorActivity.this, true);
             } else {
-                SplashBlurSquareFragment.show(QueShotEditorActivity.this, list.get(0), list.get(1), null, QueShotEditorActivity.this, false);
+                SplashBlurSquareFragment.show(EditorActivity.this, list.get(0), list.get(1), null, EditorActivity.this, false);
             }
             showLoading(false);
         }
@@ -2356,7 +2310,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public Bitmap doInBackground(Void... voids) {
             final Bitmap[] bitmaps = {null};
-            quShotView.saveGLSurfaceViewAsBitmap(bitmap -> bitmaps[0] = bitmap);
+            binding.photoEditorView.saveGLSurfaceViewAsBitmap(bitmap -> bitmaps[0] = bitmap);
             while (bitmaps[0] == null) {
                 try {
                     Thread.sleep(100);
@@ -2368,8 +2322,8 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         }
 
         public void onPostExecute(Bitmap bitmap) {
-            quShotView.setImageSource(bitmap);
-            quShotView.setFilterEffect("");
+            binding.photoEditorView.setImageSource(bitmap);
+            binding.photoEditorView.setFilterEffect("");
             showLoading(false);
         }
     }
@@ -2378,7 +2332,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         SaveSticker() {}
 
         public void onPreExecute() {
-            quShotView.getGLSurfaceView().setAlpha(0.0f);
+            binding.photoEditorView.getGLSurfaceView().setAlpha(0.0f);
             showLoading(true);
         }
 
@@ -2386,7 +2340,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             final Bitmap[] bitmaps = {null};
             while (bitmaps[0] == null) {
                 try {
-                    quShotEditor.saveStickerAsBitmap(bitmap -> bitmaps[0] = bitmap);
+                    quShotCustomEditor.saveStickerAsBitmap(bitmap -> bitmaps[0] = bitmap);
                     while (bitmaps[0] == null) {
                         try {
                             Thread.sleep(100);
@@ -2401,9 +2355,9 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
         }
 
         public void onPostExecute(Bitmap bitmap) {
-            quShotView.setImageSource(bitmap);
-            quShotView.getStickers().clear();
-            quShotView.getGLSurfaceView().setAlpha(1.0f);
+            binding.photoEditorView.setImageSource(bitmap);
+            binding.photoEditorView.getStickers().clear();
+            binding.photoEditorView.getGLSurfaceView().setAlpha(1.0f);
             showLoading(false);
             reloadingLayout();
         }
@@ -2426,7 +2380,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                         bitmap.recycle();
                         bitmap = null;
                     }
-                    quShotView.setImageSource(bitmap);
+                    binding.photoEditorView.setImageSource(bitmap);
                     reloadingLayout();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -2449,12 +2403,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
             try {
                 Uri fromFile = Uri.fromFile(new File(string[0]));
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), fromFile);
-                float width = (float) bitmap.getWidth();
-                float height = (float) bitmap.getHeight();
-                float max = Math.max(width / 1280.0f, height / 1280.0f);
-                if (max > 1.0f) {
-                    bitmap = Bitmap.createScaledBitmap(bitmap, (int) (width / max), (int) (height / max), false);
-                }
+                
                 Bitmap bitmap1 = SystemUtil.rotateBitmap(bitmap, new ExifInterface(getContentResolver().openInputStream(fromFile)).getAttributeInt(ExifInterface.TAG_ORIENTATION, 1));
                 if (bitmap1 != bitmap) {
                     bitmap.recycle();
@@ -2468,32 +2417,32 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
 
         public void onPostExecute(Bitmap bitmap) {
-            quShotView.setImageSource(bitmap);
+            binding.photoEditorView.setImageSource(bitmap);
             reloadingLayout();
         }
     }
 
     public void reloadingLayout() {
-        quShotView.postDelayed(() -> {
+        binding.photoEditorView.postDelayed(() -> {
             try {
                 Display display = getWindowManager().getDefaultDisplay();
                 Point point = new Point();
                 display.getSize(point);
                 int i = point.x;
                 int height = binding.relativeLayoutWrapperPhoto.getHeight();
-                int i2 = quShotView.getGLSurfaceView().getRenderViewport().width;
-                float f = (float) quShotView.getGLSurfaceView().getRenderViewport().height;
+                int i2 = binding.photoEditorView.getGLSurfaceView().getRenderViewport().width;
+                float f = (float) binding.photoEditorView.getGLSurfaceView().getRenderViewport().height;
                 float f2 = (float) i2;
                 if (((int) ((((float) i) * f) / f2)) <= height) {
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(-1, -2);
                     params.addRule(13);
-                    quShotView.setLayoutParams(params);
-                    quShotView.setVisibility(View.VISIBLE);
+                    binding.photoEditorView.setLayoutParams(params);
+                    binding.photoEditorView.setVisibility(View.VISIBLE);
                 } else {
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) ((((float) height) * f2) / f), -1);
                     params.addRule(13);
-                    quShotView.setLayoutParams(params);
-                    quShotView.setVisibility(View.VISIBLE);
+                    binding.photoEditorView.setLayoutParams(params);
+                    binding.photoEditorView.setVisibility(View.VISIBLE);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -2511,7 +2460,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
 
         public String doInBackground(Void... voids) {
             try {
-                return SaveFileUtils.saveBitmapFileEditor(QueShotEditorActivity.this, quShotView.getCurrentBitmap(), new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date())).getAbsolutePath();
+                return SaveFileUtils.saveBitmapFileEditor(EditorActivity.this, binding.photoEditorView.getCurrentBitmap(), new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date())).getAbsolutePath();
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
@@ -2524,7 +2473,7 @@ public class QueShotEditorActivity extends QueShotBaseActivity implements OnQuSh
                 Toast.makeText(getApplicationContext(), "Oop! Something went wrong", Toast.LENGTH_LONG).show();
                 return;
             }
-            Intent i = new Intent(QueShotEditorActivity.this, PhotoShareActivity.class);
+            Intent i = new Intent(EditorActivity.this, PhotoShareActivity.class);
             i.putExtra("path", string);
             startActivity(i);
         }

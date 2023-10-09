@@ -1,4 +1,4 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -33,12 +33,14 @@ import com.photo.collagemaker.sticker.Sticker;
 import com.photo.collagemaker.utils.StickerUtils;
 import com.photo.collagemaker.utils.SystemUtil;
 
+import org.wysaid.view.ImageGLSurfaceView;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class QueShotStickerView extends RelativeLayout {
+public class StickerView extends RelativeLayout {
     private static final String TAG = "QuShotStickerView";
     private final float[] bitmapPoints;
     private final Paint borderPaint;
@@ -48,7 +50,7 @@ public class QueShotStickerView extends RelativeLayout {
     private int circleRadius;
     private boolean constrained;
     private final PointF currentCenterPoint;
-    private QueShotStickerIcons currentIcon;
+    private StickerIcons currentIcon;
     private int currentMode;
     private float currentMoveingX;
     private float currentMoveingY;
@@ -57,7 +59,7 @@ public class QueShotStickerView extends RelativeLayout {
     private float downY;
     private boolean drawCirclePoint;
     private Sticker handlingSticker;
-    private final List<QueShotStickerIcons> icons;
+    private final List<StickerIcons> icons;
     private long lastClickTime;
     private Sticker lastHandlingSticker;
     private final Paint linePaint;
@@ -105,16 +107,16 @@ public class QueShotStickerView extends RelativeLayout {
         void onTouchUpBeauty(float f, float f2);
     }
 
-    public QueShotStickerView(Context context) {
+    public StickerView(Context context) {
         this(context, (AttributeSet) null);
     }
 
-    public QueShotStickerView(Context context, AttributeSet attributeSet) {
+    public StickerView(Context context, AttributeSet attributeSet) {
         this(context, attributeSet, 0);
     }
 
     @SuppressLint("ResourceType")
-    public QueShotStickerView(Context context, AttributeSet attributeSet, int i) {
+    public StickerView(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
         TypedArray typedArray;
         this.stickers = new ArrayList();
@@ -180,7 +182,7 @@ public class QueShotStickerView extends RelativeLayout {
     }
 
     @RequiresApi(api = 21)
-    public QueShotStickerView(Context context, AttributeSet attributeSet, int i, int i2) {
+    public StickerView(Context context, AttributeSet attributeSet, int i, int i2) {
         super(context, attributeSet, i, i2);
         this.stickers = new ArrayList();
         this.icons = new ArrayList(4);
@@ -223,13 +225,13 @@ public class QueShotStickerView extends RelativeLayout {
     }
 
     public void getStickerIcons() {
-        QueShotStickerIcons quShotStickerIconClose = new QueShotStickerIcons(ContextCompat.getDrawable(getContext(), R.drawable.ic_outline_close), 0, QueShotStickerIcons.DELETE);
+        StickerIcons quShotStickerIconClose = new StickerIcons(ContextCompat.getDrawable(getContext(), R.drawable.ic_outline_close), 0, StickerIcons.DELETE);
         quShotStickerIconClose.setIconEvent(new DeleteIconEvent());
-        QueShotStickerIcons quShotStickerIconScale = new QueShotStickerIcons(ContextCompat.getDrawable(getContext(), R.drawable.ic_outline_scale), 3, QueShotStickerIcons.SCALE);
+        StickerIcons quShotStickerIconScale = new StickerIcons(ContextCompat.getDrawable(getContext(), R.drawable.ic_outline_scale), 3, StickerIcons.SCALE);
         quShotStickerIconScale.setIconEvent(new ZoomIconEvent());
-        QueShotStickerIcons quShotStickerIconFlip = new QueShotStickerIcons(ContextCompat.getDrawable(getContext(), R.drawable.ic_outline_flip), 1, QueShotStickerIcons.FLIP);
+        StickerIcons quShotStickerIconFlip = new StickerIcons(ContextCompat.getDrawable(getContext(), R.drawable.ic_outline_flip), 1, StickerIcons.FLIP);
         quShotStickerIconFlip.setIconEvent(new FlipHorizontallyEvent());
-        QueShotStickerIcons quShotStickerIconEdit = new QueShotStickerIcons(ContextCompat.getDrawable(getContext(), R.drawable.ic_outline_edit), 2, QueShotStickerIcons.EDIT);
+        StickerIcons quShotStickerIconEdit = new StickerIcons(ContextCompat.getDrawable(getContext(), R.drawable.ic_outline_edit), 2, StickerIcons.EDIT);
         quShotStickerIconEdit.setIconEvent(new FlipHorizontallyEvent());
         this.icons.clear();
         this.icons.add(quShotStickerIconClose);
@@ -320,21 +322,21 @@ public class QueShotStickerView extends RelativeLayout {
                 float f18 = f;
                 float calculateRotation = calculateRotation(f16, f15, f18, f17);
                 while (i < this.icons.size()) {
-                    QueShotStickerIcons bitmapStickerIcon = this.icons.get(i);
+                    StickerIcons bitmapStickerIcon = this.icons.get(i);
                     switch (bitmapStickerIcon.getPosition()) {
                         case 0:
                             configIconMatrix(bitmapStickerIcon, f5, f6, calculateRotation);
                             bitmapStickerIcon.draw(canvas2, this.borderPaintRed);
                             break;
                         case 1:
-                            if (((this.handlingSticker instanceof QueShotTextView) && bitmapStickerIcon.getTag().equals(QueShotStickerIcons.EDIT)) || ((this.handlingSticker instanceof DrawableSticker) && bitmapStickerIcon.getTag().equals(QueShotStickerIcons.FLIP))) {
+                            if (((this.handlingSticker instanceof CustomTextView) && bitmapStickerIcon.getTag().equals(StickerIcons.EDIT)) || ((this.handlingSticker instanceof DrawableSticker) && bitmapStickerIcon.getTag().equals(StickerIcons.FLIP))) {
                                 configIconMatrix(bitmapStickerIcon, f7, f8, calculateRotation);
                                 bitmapStickerIcon.draw(canvas2, this.borderPaint);
                                 break;
                             }
                         case 2:
-                            if (this.handlingSticker instanceof QueShotSticker) {
-                                if (((QueShotSticker) this.handlingSticker).getType() != 0) {
+                            if (this.handlingSticker instanceof CustomSticker) {
+                                if (((CustomSticker) this.handlingSticker).getType() != 0) {
                                     break;
                                 } else {
                                     configIconMatrix(bitmapStickerIcon, f18, f17, calculateRotation);
@@ -347,9 +349,9 @@ public class QueShotStickerView extends RelativeLayout {
                                 break;
                             }
                         case 3:
-                            if ((!(this.handlingSticker instanceof QueShotTextView) || !bitmapStickerIcon.getTag().equals(QueShotStickerIcons.ROTATE)) && (!(this.handlingSticker instanceof DrawableSticker) || !bitmapStickerIcon.getTag().equals(QueShotStickerIcons.SCALE))) {
-                                if (this.handlingSticker instanceof QueShotSticker) {
-                                    QueShotSticker beautySticker = (QueShotSticker) this.handlingSticker;
+                            if ((!(this.handlingSticker instanceof CustomTextView) || !bitmapStickerIcon.getTag().equals(StickerIcons.ROTATE)) && (!(this.handlingSticker instanceof DrawableSticker) || !bitmapStickerIcon.getTag().equals(StickerIcons.SCALE))) {
+                                if (this.handlingSticker instanceof CustomSticker) {
+                                    CustomSticker beautySticker = (CustomSticker) this.handlingSticker;
                                     if (beautySticker.getType() != i3) {
                                         if (beautySticker.getType() != 2 && beautySticker.getType() != 8) {
                                             if (beautySticker.getType() != 4) {
@@ -379,7 +381,7 @@ public class QueShotStickerView extends RelativeLayout {
     }
 
 
-    public void configIconMatrix(@NonNull QueShotStickerIcons bitmapStickerIcon, float f, float f2, float f3) {
+    public void configIconMatrix(@NonNull StickerIcons bitmapStickerIcon, float f, float f2, float f3) {
         bitmapStickerIcon.setX(f);
         bitmapStickerIcon.setY(f2);
         bitmapStickerIcon.getMatrix().reset();
@@ -523,8 +525,8 @@ public class QueShotStickerView extends RelativeLayout {
                 }
                 if (this.handlingSticker != null) {
                     this.moveMatrix.set(this.downMatrix);
-                    if (this.handlingSticker instanceof QueShotSticker) {
-                        QueShotSticker beautySticker = (QueShotSticker) this.handlingSticker;
+                    if (this.handlingSticker instanceof CustomSticker) {
+                        CustomSticker beautySticker = (CustomSticker) this.handlingSticker;
                         if (beautySticker.getType() == 10 || beautySticker.getType() == 11) {
                             this.moveMatrix.postTranslate(0.0f, motionEvent.getY() - this.downY);
                         } else {
@@ -576,14 +578,14 @@ public class QueShotStickerView extends RelativeLayout {
     public void zoomAndRotateSticker(@Nullable Sticker sticker, @NonNull MotionEvent motionEvent) {
         float f;
         if (sticker != null) {
-            boolean z = sticker instanceof QueShotSticker;
+            boolean z = sticker instanceof CustomSticker;
             if (z) {
-                QueShotSticker beautySticker = (QueShotSticker) sticker;
+                CustomSticker beautySticker = (CustomSticker) sticker;
                 if (beautySticker.getType() == 10 || beautySticker.getType() == 11) {
                     return;
                 }
             }
-            if (sticker instanceof QueShotTextView) {
+            if (sticker instanceof CustomTextView) {
                 f = this.oldDistance;
             } else {
                 f = calculateDistance(this.midPoint.x, this.midPoint.y, motionEvent.getX(), motionEvent.getY());
@@ -621,8 +623,8 @@ public class QueShotStickerView extends RelativeLayout {
 
 
     @Nullable
-    public QueShotStickerIcons findCurrentIconTouched() {
-        for (QueShotStickerIcons next : this.icons) {
+    public StickerIcons findCurrentIconTouched() {
+        for (StickerIcons next : this.icons) {
             float x = next.getX() - this.downX;
             float y = next.getY() - this.downY;
             if (((double) ((x * x) + (y * y))) <= Math.pow((double) (next.getIconRadius() + next.getIconRadius()), 2.0d)) {
@@ -778,12 +780,12 @@ public class QueShotStickerView extends RelativeLayout {
             this.handlingSticker.getMatrix().reset();
             sticker.getMatrix().postTranslate((width - ((float) this.handlingSticker.getWidth())) / 2.0f, (height - ((float) this.handlingSticker.getHeight())) / 2.0f);
             if (width < height) {
-                if (this.handlingSticker instanceof QueShotTextView) {
+                if (this.handlingSticker instanceof CustomTextView) {
                     f = width / ((float) this.handlingSticker.getWidth());
                 } else {
                     f = width / ((float) this.handlingSticker.getDrawable().getIntrinsicWidth());
                 }
-            } else if (this.handlingSticker instanceof QueShotTextView) {
+            } else if (this.handlingSticker instanceof CustomTextView) {
                 f = height / ((float) this.handlingSticker.getHeight());
             } else {
                 f = height / ((float) this.handlingSticker.getDrawable().getIntrinsicHeight());
@@ -827,17 +829,17 @@ public class QueShotStickerView extends RelativeLayout {
     }
 
     @NonNull
-    public QueShotStickerView addSticker(@NonNull Sticker sticker) {
+    public StickerView addSticker(@NonNull Sticker sticker) {
         return addSticker(sticker, 1);
     }
 
-    public QueShotStickerView addSticker(@NonNull final Sticker sticker, final int i) {
+    public StickerView addSticker(@NonNull final Sticker sticker, final int i) {
         if (ViewCompat.isLaidOut(this)) {
             addStickerImmediately(sticker, i);
         } else {
             post(new Runnable() {
                 public void run() {
-                    QueShotStickerView.this.addStickerImmediately(sticker, i);
+                    StickerView.this.addStickerImmediately(sticker, i);
                 }
             });
         }
@@ -861,8 +863,8 @@ public class QueShotStickerView extends RelativeLayout {
         float f;
         float width = ((float) getWidth()) - ((float) sticker.getWidth());
         float height = ((float) getHeight()) - ((float) sticker.getHeight());
-        if (sticker instanceof QueShotSticker) {
-            QueShotSticker beautySticker = (QueShotSticker) sticker;
+        if (sticker instanceof CustomSticker) {
+            CustomSticker beautySticker = (CustomSticker) sticker;
             f = height / 2.0f;
             if (beautySticker.getType() == 0) {
                 width /= 3.0f;
@@ -931,14 +933,14 @@ public class QueShotStickerView extends RelativeLayout {
     }
 
     @NonNull
-    public QueShotStickerView setLocked(boolean z) {
+    public StickerView setLocked(boolean z) {
         this.locked = z;
         invalidate();
         return this;
     }
 
     @NonNull
-    public QueShotStickerView setMinClickDelayTime(int i) {
+    public StickerView setMinClickDelayTime(int i) {
         this.minClickDelayTime = i;
         return this;
     }
@@ -952,14 +954,14 @@ public class QueShotStickerView extends RelativeLayout {
     }
 
     @NonNull
-    public QueShotStickerView setConstrained(boolean z) {
+    public StickerView setConstrained(boolean z) {
         this.constrained = z;
         postInvalidate();
         return this;
     }
 
     @NonNull
-    public QueShotStickerView setOnStickerOperationListener(@Nullable OnStickerOperationListener onStickerOperationListener2) {
+    public StickerView setOnStickerOperationListener(@Nullable OnStickerOperationListener onStickerOperationListener2) {
         this.onStickerOperationListener = onStickerOperationListener2;
         return this;
     }
@@ -975,11 +977,11 @@ public class QueShotStickerView extends RelativeLayout {
     }
 
     @NonNull
-    public List<QueShotStickerIcons> getIcons() {
+    public List<StickerIcons> getIcons() {
         return this.icons;
     }
 
-    public void setIcons(@NonNull List<QueShotStickerIcons> list) {
+    public void setIcons(@NonNull List<StickerIcons> list) {
         this.icons.clear();
         this.icons.addAll(list);
         invalidate();

@@ -1,21 +1,14 @@
 package com.photo.collagemaker.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Bitmap;
-import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +19,6 @@ import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.databinding.FragmentSplashBinding;
 import com.photo.collagemaker.utils.FilterUtils;
-import com.photo.collagemaker.queshot.QueShotSplashView;
 
 public class SplashFragment extends DialogFragment {
     private static final String TAG = "SplashFragment";

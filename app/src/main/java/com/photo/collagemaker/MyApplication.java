@@ -6,12 +6,12 @@ import android.os.Build;
 import android.os.StrictMode;
 
 
-public class QueShot extends Application {
-    private static QueShot queShot;
+public class MyApplication extends Application {
+    private static MyApplication myApplication;
 
     public void onCreate() {
         super.onCreate();
-        queShot = this;
+        myApplication = this;
         if (Build.VERSION.SDK_INT >= 26) {
             try {
                 StrictMode.class.getMethod("disableDeathOnFileUriExposure", new Class[0]).invoke( null, new Object[0]);
@@ -22,7 +22,7 @@ public class QueShot extends Application {
     }
 
     public Context getContext() {
-        return queShot.getContext();
+        return myApplication.getContext();
     }
 
 }

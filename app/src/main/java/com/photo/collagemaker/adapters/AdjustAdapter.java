@@ -13,8 +13,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
+import com.photo.collagemaker.databinding.ItemAdjustBinding;
+import com.photo.collagemaker.databinding.ItemCropBinding;
 import com.photo.collagemaker.listener.AdjustListener;
-import com.photo.collagemaker.queshot.QueShotEditor;
+import com.photo.collagemaker.custom_view.CustomEditor;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -49,11 +51,11 @@ public class AdjustAdapter extends RecyclerView.Adapter<AdjustAdapter.ViewHolder
             this.maxValue = maxValue;
         }
 
-        public void setSeekBarIntensity(QueShotEditor photoEditor, float mFloat, boolean mBoolean) {
-            if (photoEditor != null) {
+        public void setSeekBarIntensity(CustomEditor photoCustomEditor, float mFloat, boolean mBoolean) {
+            if (photoCustomEditor != null) {
                 seekbarIntensity = mFloat;
                 intensity = calcIntensity(mFloat);
-                photoEditor.setFilterIntensityForIndex(intensity, index, mBoolean);
+                photoCustomEditor.setFilterIntensityForIndex(intensity, index, mBoolean);
             }
         }
 
@@ -84,19 +86,20 @@ public class AdjustAdapter extends RecyclerView.Adapter<AdjustAdapter.ViewHolder
 
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_adjust, viewGroup, false));
+        ItemAdjustBinding binding = ItemAdjustBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.text_view_adjust_name.setText(adjustModelList.get(i).name);
-        viewHolder.image_view_adjust_icon.setImageDrawable(selectedIndex != i ? adjustModelList.get(i).icon : adjustModelList.get(i).icon);
+        viewHolder.binding.textViewAdjustName.setText(adjustModelList.get(i).name);
+        viewHolder.binding.imageViewAdjustIcon.setImageDrawable(selectedIndex != i ? adjustModelList.get(i).icon : adjustModelList.get(i).icon);
         if (selectedIndex == i) {
-            viewHolder.text_view_adjust_name.setTextColor(ContextCompat.getColor(context, R.color.white));
-            viewHolder.image_view_adjust_icon.setColorFilter(ContextCompat.getColor(context, R.color.white));
+            viewHolder.binding.textViewAdjustName.setTextColor(ContextCompat.getColor(context, R.color.white));
+            viewHolder.binding.imageViewAdjustIcon.setColorFilter(ContextCompat.getColor(context, R.color.white));
 
         } else {
-            viewHolder.text_view_adjust_name.setTextColor(ContextCompat.getColor(context, R.color.tintCol));
-            viewHolder.image_view_adjust_icon.setColorFilter(ContextCompat.getColor(context, R.color.tintCol));
+            viewHolder.binding.textViewAdjustName.setTextColor(ContextCompat.getColor(context, R.color.tintCol));
+            viewHolder.binding.imageViewAdjustIcon.setColorFilter(ContextCompat.getColor(context, R.color.tintCol));
         }
     }
 
@@ -116,19 +119,16 @@ public class AdjustAdapter extends RecyclerView.Adapter<AdjustAdapter.ViewHolder
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image_view_adjust_icon;
-        TextView text_view_adjust_name;
+        ItemAdjustBinding binding;
+        ViewHolder(ItemAdjustBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-        ViewHolder(View view) {
-            super(view);
-            image_view_adjust_icon = view.findViewById(R.id.image_view_adjust_icon);
-            text_view_adjust_name = view.findViewById(R.id.text_view_adjust_name);
-            view.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    selectedIndex = ViewHolder.this.getLayoutPosition();
-                    adjustListener.onAdjustSelected( adjustModelList.get(selectedIndex));
-                    notifyDataSetChanged();
-                }
+
+            binding.getRoot().setOnClickListener(view -> {
+                selectedIndex = ViewHolder.this.getLayoutPosition();
+                adjustListener.onAdjustSelected( adjustModelList.get(selectedIndex));
+                notifyDataSetChanged();
             });
         }
     }

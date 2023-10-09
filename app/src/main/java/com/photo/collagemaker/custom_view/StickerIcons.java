@@ -1,4 +1,4 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 import com.photo.collagemaker.event.StickerIconEvent;
 import com.photo.collagemaker.sticker.DrawableSticker;
 
-public class QueShotStickerIcons extends DrawableSticker implements StickerIconEvent {
+public class StickerIcons extends DrawableSticker implements StickerIconEvent {
     public static final String ALIGN = "ALIGN";
 
     public static final String EDIT = "EDIT";
@@ -35,7 +35,7 @@ public class QueShotStickerIcons extends DrawableSticker implements StickerIconE
 
     private float y;
 
-    public QueShotStickerIcons(Drawable paramDrawable, int paramInt, String paramString) {
+    public StickerIcons(Drawable paramDrawable, int paramInt, String paramString) {
         super(paramDrawable);
         this.position = paramInt;
         this.tag = paramString;
@@ -66,17 +66,17 @@ public class QueShotStickerIcons extends DrawableSticker implements StickerIconE
         return this.y;
     }
 
-    public void onActionDown(QueShotStickerView paramStickerView, MotionEvent paramMotionEvent) {
+    public void onActionDown(StickerView paramStickerView, MotionEvent paramMotionEvent) {
         if (this.iconEvent != null)
             this.iconEvent.onActionDown(paramStickerView, paramMotionEvent);
     }
 
-    public void onActionMove(QueShotStickerView paramStickerView, MotionEvent paramMotionEvent) {
+    public void onActionMove(StickerView paramStickerView, MotionEvent paramMotionEvent) {
         if (this.iconEvent != null)
             this.iconEvent.onActionMove(paramStickerView, paramMotionEvent);
     }
 
-    public void onActionUp(QueShotStickerView paramStickerView, MotionEvent paramMotionEvent) {
+    public void onActionUp(StickerView paramStickerView, MotionEvent paramMotionEvent) {
         if (this.iconEvent != null)
             this.iconEvent.onActionUp(paramStickerView, paramMotionEvent);
     }

@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
@@ -18,14 +16,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.assets.ColoredCodeAsset;
 import com.photo.collagemaker.adapters.ColoredAdapter;
 import com.photo.collagemaker.databinding.FragmentColoredBinding;
-import com.photo.collagemaker.databinding.FragmentCropBinding;
-import com.photo.collagemaker.queshot.QueShotColoredView;
 
 public class ColoredFragment extends DialogFragment implements ColoredAdapter.ColoredChangeListener {
     private static final String TAG = "ColoredFragment";

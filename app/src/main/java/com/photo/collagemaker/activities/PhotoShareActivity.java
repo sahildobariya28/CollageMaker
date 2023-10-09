@@ -17,11 +17,10 @@ import com.bumptech.glide.Glide;
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.constants.Constants;
 import com.photo.collagemaker.databinding.ActivitySharePhotoBinding;
-import com.photo.collagemaker.preference.Preference;
 
 import java.io.File;
 
-public class PhotoShareActivity extends QueShotBaseActivity implements View.OnClickListener {
+public class PhotoShareActivity extends BaseActivity implements View.OnClickListener {
     private File file;
 
     ActivitySharePhotoBinding binding;

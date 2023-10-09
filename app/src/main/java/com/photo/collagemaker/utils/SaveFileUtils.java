@@ -11,7 +11,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 
-import com.photo.collagemaker.queshot.QueShotGridView;
+import com.photo.collagemaker.custom_view.CustomGridView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -97,7 +97,7 @@ public class SaveFileUtils {
         return image;
     }
 
-    public static Bitmap createBitmap(QueShotGridView quShotCollageView, int i) {
+    public static Bitmap createBitmap(CustomGridView quShotCollageView, int i) {
         quShotCollageView.clearHandling();
         quShotCollageView.invalidate();
         Bitmap createBitmap = Bitmap.createBitmap(i, (int) (((float) i) / (((float) quShotCollageView.getWidth()) / ((float) quShotCollageView.getHeight()))), Bitmap.Config.ARGB_8888);
@@ -105,7 +105,7 @@ public class SaveFileUtils {
         return createBitmap;
     }
 
-    public static Bitmap createBitmap(QueShotGridView quShotCollageView) {
+    public static Bitmap createBitmap(CustomGridView quShotCollageView) {
         quShotCollageView.clearHandling();
         quShotCollageView.invalidate();
         Bitmap createBitmap = Bitmap.createBitmap(quShotCollageView.getWidth(), quShotCollageView.getHeight(), Bitmap.Config.ARGB_8888);

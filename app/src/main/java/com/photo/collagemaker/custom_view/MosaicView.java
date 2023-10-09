@@ -1,4 +1,4 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -22,14 +22,14 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.photo.collagemaker.R;
-import com.photo.collagemaker.adapters.ColoredAdapter;
+import com.photo.collagemaker.adapters.MosaicAdapter;
 import com.photo.collagemaker.utils.SystemUtil;
 
 import java.util.Iterator;
 import java.util.Stack;
 
 @SuppressLint("AppCompatCustomView")
-public class QueShotColoredView extends ImageView {
+public class MosaicView extends ImageView {
     private Paint bitmapPaint;
     private Paint blurPaint;
     private int brushBitmapSize = 65;
@@ -42,27 +42,27 @@ public class QueShotColoredView extends ImageView {
     private Stack<BrushDrawingView.LinePath> mRedoPaths = new Stack<>();
     private float mTouchX;
     private float mTouchY;
-    private ColoredAdapter.ColoredItems coloredItems;
+    private MosaicAdapter.MosaicItem mosaicItem;
     private boolean showTouchIcon = false;
 
-    public void setColoredItems(ColoredAdapter.ColoredItems coloredItems) {
-        this.coloredItems = coloredItems;
-        if (coloredItems.mode == ColoredAdapter.COLORED.SHADER) {
-            this.bitmapPaint.setShader(new BitmapShader(BitmapFactory.decodeResource(getResources(), coloredItems.shaderId), Shader.TileMode.REPEAT, Shader.TileMode.REPEAT));
+    public void setMosaicItem(MosaicAdapter.MosaicItem mosaicItem) {
+        this.mosaicItem = mosaicItem;
+        if (mosaicItem.mode == MosaicAdapter.BLUR.SHADER) {
+            this.bitmapPaint.setShader(new BitmapShader(BitmapFactory.decodeResource(getResources(), mosaicItem.shaderId), Shader.TileMode.REPEAT, Shader.TileMode.REPEAT));
         }
     }
 
-    public QueShotColoredView(Context context) {
+    public MosaicView(Context context) {
         super(context);
         init();
     }
 
-    public QueShotColoredView(Context context, AttributeSet attributeSet) {
+    public MosaicView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         init();
     }
 
-    public QueShotColoredView(Context context, AttributeSet attributeSet, int i) {
+    public MosaicView(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
         init();
     }
@@ -111,21 +111,7 @@ public class QueShotColoredView extends ImageView {
             BrushDrawingView.LinePath linePath = (BrushDrawingView.LinePath) it.next();
             canvas.drawPath(linePath.getDrawPath(), linePath.getDrawPaint());
         }
-        if (this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_1 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_2 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_3 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_4 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_5 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_6 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_7 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_8 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_9 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_10 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_11 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_12 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_13 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_14||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_15 ) {
+        if (this.mosaicItem.mode == MosaicAdapter.BLUR.BLUR || this.mosaicItem.mode == MosaicAdapter.BLUR.MOSAIC) {
             canvas.drawPath(this.mPath, this.blurPaint);
         } else {
             canvas.drawPath(this.mPath, this.bitmapPaint);
@@ -171,21 +157,7 @@ public class QueShotColoredView extends ImageView {
     public void onTouchUp(@NonNull MotionEvent motionEvent) {
         BrushDrawingView.LinePath linePath;
         this.showTouchIcon = false;
-        if (this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_1 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_2 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_3 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_4 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_5 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_6 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_7 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_8 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_9 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_10 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_11 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_12 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_13 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_14 ||
-                this.coloredItems.mode == ColoredAdapter.COLORED.COLOR_15) {
+        if (this.mosaicItem.mode == MosaicAdapter.BLUR.BLUR || this.mosaicItem.mode == MosaicAdapter.BLUR.MOSAIC) {
             linePath = new BrushDrawingView.LinePath(this.mPath, this.blurPaint);
         } else {
             linePath = new BrushDrawingView.LinePath(this.mPath, this.bitmapPaint);
@@ -222,6 +194,7 @@ public class QueShotColoredView extends ImageView {
     }
 
     public boolean onTouchEvent(MotionEvent motionEvent) {
+//        int actionMasked = MotionEventCompat.getActionMasked(motionEvent);
         int actionMasked = motionEvent.getAction();
         float x = motionEvent.getX();
         float y = motionEvent.getY();

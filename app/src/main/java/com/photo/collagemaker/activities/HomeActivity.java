@@ -22,7 +22,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import java.io.IOException;
 import java.util.List;
 
-public class HomeActivity extends QueShotBaseActivity {
+public class HomeActivity extends BaseActivity {
     private ImageCaptureManager imageCaptureManager;
     ActivityHomeBinding binding;
 
@@ -104,7 +104,7 @@ public class HomeActivity extends QueShotBaseActivity {
                 imageCaptureManager = new ImageCaptureManager(this);
             }
             new Handler().post(() -> imageCaptureManager.galleryAddPic());
-            startActivity(new Intent(getApplicationContext(), QueShotEditorActivity.class).putExtra("SELECTED_PHOTOS", imageCaptureManager.getCurrentPhotoPath()));
+            startActivity(new Intent(getApplicationContext(), EditorActivity.class).putExtra("SELECTED_PHOTOS", imageCaptureManager.getCurrentPhotoPath()));
         }
     }
 

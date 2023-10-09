@@ -1,4 +1,4 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import com.photo.collagemaker.sticker.Sticker;
 import com.photo.collagemaker.utils.SystemUtil;
 
-public class QueShotSticker extends Sticker {
+public class CustomSticker extends Sticker {
     private Drawable drawable;
     private int drawableSizeBoobs;
     private int drawableSizeFace_Height;
@@ -26,7 +26,7 @@ public class QueShotSticker extends Sticker {
     private Rect realBounds;
     private int type;
 
-    public QueShotSticker(Context paramContext, int paramInt, Drawable paramDrawable) {
+    public CustomSticker(Context paramContext, int paramInt, Drawable paramDrawable) {
         this.drawableSizeBoobs = SystemUtil.dpToPx(paramContext, 50);
         this.drawableSizeHip1_Width = SystemUtil.dpToPx(paramContext, 150);
         this.drawableSizeHip1_Height = SystemUtil.dpToPx(paramContext, 75);
@@ -83,12 +83,12 @@ public class QueShotSticker extends Sticker {
     }
 
     @NonNull
-    public QueShotSticker setAlpha(@IntRange(from = 0L, to = 255L) int paramInt) {
+    public CustomSticker setAlpha(@IntRange(from = 0L, to = 255L) int paramInt) {
         this.drawable.setAlpha(paramInt);
         return this;
     }
 
-    public QueShotSticker setDrawable(@NonNull Drawable paramDrawable) {
+    public CustomSticker setDrawable(@NonNull Drawable paramDrawable) {
         return this;
     }
 

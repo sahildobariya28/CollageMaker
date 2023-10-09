@@ -1,9 +1,8 @@
 package com.photo.collagemaker.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class QueShotBaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity {
 //    public void isPermissionGranted(boolean z, String str) {}
 //
 //    public void setFullScreen() {

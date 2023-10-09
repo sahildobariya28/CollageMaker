@@ -1,4 +1,4 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import com.photo.collagemaker.activities.PhotoPagerActivity;
 
-public class QueShotPreview {
+public class CollagePreview {
     public static final String EXTRA_CURRENT_ITEM = "current_item";
     public static final String EXTRA_PHOTOS = "photos";
     public static final String EXTRA_SHOW_DELETE = "show_delete";
@@ -33,11 +33,11 @@ public class QueShotPreview {
         }
 
         public void start(@NonNull Context context, @NonNull Fragment fragment) {
-            fragment.startActivityForResult(getIntent(context), QueShotPreview.REQUEST_CODE);
+            fragment.startActivityForResult(getIntent(context), CollagePreview.REQUEST_CODE);
         }
 
         public void start(@NonNull Activity activity) {
-            start(activity, QueShotPreview.REQUEST_CODE);
+            start(activity, CollagePreview.REQUEST_CODE);
         }
 
         public Intent getIntent(@NonNull Context context) {

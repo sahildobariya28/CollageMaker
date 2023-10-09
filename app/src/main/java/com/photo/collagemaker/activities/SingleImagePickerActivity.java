@@ -3,7 +3,6 @@ package com.photo.collagemaker.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -46,13 +45,13 @@ public class SingleImagePickerActivity extends AppCompatActivity {
         }
         pickerFragment.getPhotoGridAdapter().setOnItemCheckListener((i, photo, i2) -> {
             if (!forwardMain) {
-                Intent intent = new Intent(SingleImagePickerActivity.this, QueShotEditorActivity.class);
+                Intent intent = new Intent(SingleImagePickerActivity.this, EditorActivity.class);
                 intent.putExtra("SELECTED_PHOTOS", photo.getPath());
                 startActivity(intent);
                 finish();
                 return true;
             }
-            QueShotGridActivity.getQueShotGridActivityInstance().replaceCurrentPiece(photo.getPath());
+            GridActivity.getQueShotGridActivityInstance().replaceCurrentPiece(photo.getPath());
             finish();
             return true;
         });

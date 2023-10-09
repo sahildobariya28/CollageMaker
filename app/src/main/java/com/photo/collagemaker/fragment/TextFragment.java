@@ -44,7 +44,7 @@ import com.photo.collagemaker.assets.FontAsset;
 import com.photo.collagemaker.databinding.FragmentAddTextBinding;
 import com.photo.collagemaker.picker.QuShotCarouselPicker;
 import com.photo.collagemaker.preference.Preference;
-import com.photo.collagemaker.queshot.QueShotText;
+import com.photo.collagemaker.custom_view.CustomText;
 import com.photo.collagemaker.utils.SystemUtil;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
     private FontAdapter fontAdapter;
     private InputMethodManager inputMethodManager;
 
-    public QueShotText quShotText;
+    public CustomText quShotText;
     private TextEditor textEditor;
     private List<ImageView> textFunctions;
 
@@ -69,7 +69,7 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
     public interface TextEditor {
         void onBackButton();
 
-        void onDone(QueShotText addTextProperties);
+        void onDone(CustomText addTextProperties);
     }
 
     FragmentAddTextBinding binding;
@@ -83,7 +83,7 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle bundle) {
         super.onViewCreated(view, bundle);
         if (quShotText == null) {
-            quShotText = QueShotText.getDefaultProperties();
+            quShotText = CustomText.getDefaultProperties();
         }
         binding.addTextEditText.setTextFragment(this);
         initAddTextLayout();
@@ -333,7 +333,7 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
         return addTextFragment;
     }
 
-    public static TextFragment show(@NonNull AppCompatActivity appCompatActivity, QueShotText addTextProperties) {
+    public static TextFragment show(@NonNull AppCompatActivity appCompatActivity, CustomText addTextProperties) {
         TextFragment addTextFragment = new TextFragment();
         addTextFragment.setQuShotText(addTextProperties);
         addTextFragment.show(appCompatActivity.getSupportFragmentManager(), TAG);
@@ -344,7 +344,7 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
         return show(appCompatActivity, "Test", ContextCompat.getColor(appCompatActivity, R.color.itemColorWhite));
     }
 
-    public void setQuShotText(QueShotText addTextProperties2) {
+    public void setQuShotText(CustomText addTextProperties2) {
         this.quShotText = addTextProperties2;
     }
 
@@ -419,7 +419,7 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
         binding.addTextEditText.requestFocus();
         binding.addTextEditText.setTextSize(20.0f);
         binding.addTextEditText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        binding.addTextEditText.setTextColor(Color.parseColor("#FFFFFF"));
+        binding.addTextEditText.setTextColor(Color.parseColor("#333333"));
     }
 
     private void initAddTextLayout() {
@@ -455,7 +455,7 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
     public void updateAddTextBottomToolbarHeight(final int i) {
         new Handler().post(() -> {
             ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) binding.linearLayoutEditTextTools.getLayoutParams();
-            layoutParams.bottomMargin = i;
+//            layoutParams.bottomMargin = i;
             binding.linearLayoutEditTextTools.setLayoutParams(layoutParams);
             binding.linearLayoutEditTextTools.invalidate();
             binding.scrollViewChangeFontLayout.invalidate();

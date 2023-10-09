@@ -1,4 +1,4 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -32,7 +32,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QueShotEditor implements BrushColorChangeListener {
+public class CustomEditor implements BrushColorChangeListener {
     private static final String TAG = "QuShotEditor";
     private List<View> viewList;
     private BrushDrawingView brushDrawingView;
@@ -45,7 +45,7 @@ public class QueShotEditor implements BrushColorChangeListener {
     private final LayoutInflater mLayoutInflater;
     private OnQuShotEditorListener mOnPhotoEditorListener;
 
-    public QueShotView parentView;
+    public CustomCollageView parentView;
     private List<View> redoViews;
 
     public interface OnSaveListener {
@@ -54,7 +54,7 @@ public class QueShotEditor implements BrushColorChangeListener {
         void onSuccess(@NonNull String str);
     }
 
-    private QueShotEditor(Builder builder) {
+    private CustomEditor(Builder builder) {
         this.context = builder.context;
         this.parentView = builder.parentView;
         this.deleteView = builder.deleteView;
@@ -231,19 +231,19 @@ public class QueShotEditor implements BrushColorChangeListener {
 
     @RequiresPermission(allOf = {"android.permission.WRITE_EXTERNAL_STORAGE"})
     public void saveAsFile(@NonNull String str, @NonNull OnSaveListener onSaveListener) {
-        saveAsFile(str, new QueShotSettings.Builder().build(), onSaveListener);
+        saveAsFile(str, new Settings.Builder().build(), onSaveListener);
     }
 
     @RequiresPermission(allOf = {"android.permission.WRITE_EXTERNAL_STORAGE"})
     @SuppressLint({"StaticFieldLeak"})
-    public void saveAsFile(@NonNull final String str, @NonNull final QueShotSettings saveSettings, @NonNull final OnSaveListener onSaveListener) {
+    public void saveAsFile(@NonNull final String str, @NonNull final Settings saveSettings, @NonNull final OnSaveListener onSaveListener) {
         this.parentView.saveGLSurfaceViewAsBitmap(new OnSaveBitmap() {
             public void onBitmapReady(Bitmap bitmap) {
                 new AsyncTask<String, String, Exception>() {
 
                     public void onPreExecute() {
                         super.onPreExecute();
-                        QueShotEditor.this.clearHelperBox();
+                        CustomEditor.this.clearHelperBox();
                     }
 
 
@@ -252,21 +252,21 @@ public class QueShotEditor implements BrushColorChangeListener {
                         Bitmap bitmap;
                         try {
                             FileOutputStream fileOutputStream = new FileOutputStream(new File(str), false);
-                            if (QueShotEditor.this.parentView != null) {
+                            if (CustomEditor.this.parentView != null) {
                                 if (saveSettings.isTransparencyEnabled()) {
-                                    bitmap = QueShotBitmapUtils.removeTransparency(getBitmapFromView(QueShotEditor.this.parentView));
+                                    bitmap = BitmapUtils.removeTransparency(getBitmapFromView(CustomEditor.this.parentView));
                                 } else {
-                                    bitmap = getBitmapFromView(QueShotEditor.this.parentView);
+                                    bitmap = getBitmapFromView(CustomEditor.this.parentView);
                                 }
                                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
                             }
                             fileOutputStream.flush();
                             fileOutputStream.close();
-                            Log.d(QueShotEditor.TAG, "Filed Saved Successfully");
+                            Log.d(CustomEditor.TAG, "Filed Saved Successfully");
                             return null;
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Log.d(QueShotEditor.TAG, "Failed to save File");
+                            Log.d(CustomEditor.TAG, "Failed to save File");
                             return e;
                         }
                     }
@@ -276,7 +276,7 @@ public class QueShotEditor implements BrushColorChangeListener {
                         super.onPostExecute(exc);
                         if (exc == null) {
                             if (saveSettings.isClearViewsEnabled()) {
-                                QueShotEditor.this.clearAllViews();
+                                CustomEditor.this.clearAllViews();
                             }
                             onSaveListener.onSuccess(str);
                             return;
@@ -294,15 +294,15 @@ public class QueShotEditor implements BrushColorChangeListener {
 
     @SuppressLint({"StaticFieldLeak"})
     public void saveStickerAsBitmap(@NonNull OnSaveBitmap onSaveBitmap) {
-        saveStickerAsBitmap(new QueShotSettings.Builder().build(), onSaveBitmap);
+        saveStickerAsBitmap(new Settings.Builder().build(), onSaveBitmap);
     }
 
     @SuppressLint({"StaticFieldLeak"})
-    public void saveStickerAsBitmap(@NonNull QueShotSettings saveSettings, @NonNull OnSaveBitmap onSaveBitmap) {
+    public void saveStickerAsBitmap(@NonNull Settings saveSettings, @NonNull OnSaveBitmap onSaveBitmap) {
         Bitmap bitmap;
 
         if (saveSettings.isTransparencyEnabled()) {
-            bitmap = QueShotBitmapUtils.removeTransparency(getBitmapFromView(this.parentView));
+            bitmap = BitmapUtils.removeTransparency(getBitmapFromView(this.parentView));
         } else {
             bitmap = getBitmapFromView(this.parentView);
         }
@@ -375,11 +375,11 @@ public class QueShotEditor implements BrushColorChangeListener {
 
         public boolean isTextPinchZoomable = true;
 
-        public QueShotView parentView;
+        public CustomCollageView parentView;
 
         public Typeface textTypeface;
 
-        public Builder(Context context2, QueShotView photoEditorView) {
+        public Builder(Context context2, CustomCollageView photoEditorView) {
             this.context = context2;
             this.parentView = photoEditorView;
             this.brushDrawingView = photoEditorView.getBrushDrawingView();
@@ -407,8 +407,8 @@ public class QueShotEditor implements BrushColorChangeListener {
             return this;
         }
 
-        public QueShotEditor build() {
-            return new QueShotEditor(this);
+        public CustomEditor build() {
+            return new CustomEditor(this);
         }
     }
 

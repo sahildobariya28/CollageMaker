@@ -20,7 +20,7 @@ public class StraightLayoutHelper {
                 }
                 break;
             case 2:
-                while (i2 < 6) {
+                while (i2 < 8) {
                     arrayList.add(new TwoStraightLayout(i2));
                     i2++;
                 }

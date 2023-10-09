@@ -14,7 +14,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -27,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -53,9 +53,11 @@ import com.photo.collagemaker.adapters.StickerTabAdapter;
 import com.photo.collagemaker.assets.EffectCodeAsset;
 import com.photo.collagemaker.assets.FilterCodeAsset;
 import com.photo.collagemaker.assets.StickersAsset;
+import com.photo.collagemaker.custom_view.CustomText;
 import com.photo.collagemaker.databinding.ActivityGridBinding;
 import com.photo.collagemaker.event.AlignHorizontallyEvent;
 import com.photo.collagemaker.event.DeleteIconEvent;
+import com.photo.collagemaker.event.EditTextIconEvent;
 import com.photo.collagemaker.event.FlipHorizontallyEvent;
 import com.photo.collagemaker.event.ZoomIconEvent;
 import com.photo.collagemaker.fragment.BurnFragment;
@@ -64,15 +66,16 @@ import com.photo.collagemaker.fragment.DivideFragment;
 import com.photo.collagemaker.fragment.DodgeFragment;
 import com.photo.collagemaker.fragment.FilterFragment;
 import com.photo.collagemaker.fragment.RotateFragment;
+import com.photo.collagemaker.fragment.TextFragment;
 import com.photo.collagemaker.grid.QueShotGrid;
 import com.photo.collagemaker.grid.QueShotLayout;
 import com.photo.collagemaker.grid.QueShotLayoutParser;
 import com.photo.collagemaker.listener.FilterListener;
 import com.photo.collagemaker.module.Module;
 import com.photo.collagemaker.picker.PermissionsUtils;
-import com.photo.collagemaker.queshot.QueShotStickerIcons;
-import com.photo.collagemaker.queshot.QueShotStickerView;
-import com.photo.collagemaker.queshot.QueShotTextView;
+import com.photo.collagemaker.custom_view.StickerIcons;
+import com.photo.collagemaker.custom_view.StickerView;
+import com.photo.collagemaker.custom_view.CustomTextView;
 import com.photo.collagemaker.sticker.DrawableSticker;
 import com.photo.collagemaker.sticker.Sticker;
 import com.photo.collagemaker.utils.CollageUtils;
@@ -96,7 +99,7 @@ import java.util.List;
 import java.util.Locale;
 
 @SuppressLint("StaticFieldLeak")
-public class QueShotGridActivity extends QueShotBaseActivity implements GridToolsAdapter.OnItemSelected,
+public class GridActivity extends BaseActivity implements GridToolsAdapter.OnItemSelected,
         AspectAdapter.OnNewSelectedListener, StickerAdapter.OnClickSplashListener,
         BackgroundGridAdapter.BackgroundGridListener, FilterListener, CropFragment.OnCropPhoto,
         RotateFragment.OnCropPhoto, FilterFragment.OnFilterSavePhoto, DodgeFragment.OnFilterSavePhoto,
@@ -104,8 +107,8 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         GridAdapter.OnItemClickListener {
 
 
-    private static QueShotGridActivity QueShotGridActivityInstance;
-    public static QueShotGridActivity QueShotGridActivityCollage;
+    private static GridActivity gridActivityInstance;
+    public static GridActivity gridActivityCollage;
 
 
     public AspectRatio aspectRatio;
@@ -129,7 +132,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
     public ArrayList listFilterWarm = new ArrayList<>();
     public ArrayList listFilterLegacy = new ArrayList<>();
     public List<Drawable> drawableList = new ArrayList<>();
-    public List<String> stringList;
+    public List<String> imageList;
     public List<Target> targets = new ArrayList();
 
     ActivityGridBinding binding;
@@ -157,7 +160,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
 
 
         binding.seekbarRadius.setOnSeekBarChangeListener(onSeekBarChangeListener);
-        stringList = getIntent().getStringArrayListExtra(MultipleImagePickerActivity.KEY_DATA_RESULT);
+        imageList = getIntent().getStringArrayListExtra(MultipleImagePickerActivity.KEY_DATA_RESULT);
 
         binding.recyclerViewFilterBw.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
@@ -167,7 +170,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
 
 
-        queShotLayout = CollageUtils.getCollageLayouts(stringList.size()).get(0);
+        queShotLayout = CollageUtils.getCollageLayouts(imageList.size()).get(0);
         binding.collageView.setQueShotLayout(queShotLayout);
         binding.collageView.setTouchEnable(true);
         binding.collageView.setNeedDrawLine(false);
@@ -176,8 +179,8 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         binding.collageView.setCollagePadding(6.0f);
         binding.collageView.setCollageRadian(15.0f);
         binding.collageView.setLineColor(ContextCompat.getColor(this, R.color.itemColorBlack));
-        binding.collageView.setSelectedLineColor(ContextCompat.getColor(this, R.color.mainColor));
-        binding.collageView.setHandleBarColor(ContextCompat.getColor(this, R.color.mainColor));
+        binding.collageView.setSelectedLineColor(ContextCompat.getColor(this, R.color.theme_color));
+        binding.collageView.setHandleBarColor(ContextCompat.getColor(this, R.color.theme_color));
         binding.collageView.setAnimateDuration(300);
 
         binding.collageView.setOnQueShotSelectedListener((collage, i) -> {
@@ -185,18 +188,35 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
             binding.imageToolContainer.setVisibility(View.VISIBLE);
             slideUp(binding.recyclerViewToolsCollage);
             setGoneSave();
-//            ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) binding.recyclerViewToolsCollage.getLayoutParams();
-//            layoutParams.bottomMargin = SystemUtil.dpToPx(getApplicationContext(), 10);
-//            binding.recyclerViewToolsCollage.setLayoutParams(layoutParams);
             moduleToolsId = Module.COLLAGE;
         });
         binding.collageView.setOnQueShotUnSelectedListener(() -> {
             binding.imageToolContainer.setVisibility(View.GONE);
             binding.recyclerViewTools.setVisibility(View.VISIBLE);
             setVisibleSave();
-//            ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) binding.recyclerViewToolsCollage.getLayoutParams();
-//            layoutParams.bottomMargin = 0;
-//            binding.recyclerViewToolsCollage.setLayoutParams(layoutParams);
+            moduleToolsId = Module.NONE;
+        });
+
+        binding.imageViewCloseText.setOnClickListener(view -> {
+            setVisibleSave();
+            onBackPressed();
+        });
+        binding.imageViewSaveText.setOnClickListener(view -> {
+            binding.collageView.setHandlingSticker(null);
+            binding.collageView.setLocked(true);
+            binding.constraintLayoutConfirmText.setVisibility(View.GONE);
+            binding.relativeLayoutAddText.setVisibility(View.GONE);
+            if (!binding.collageView.getStickers().isEmpty()) {
+//                new GridActivity.SaveSticker().execute();
+            }
+            ConstraintSet constraintsetText = new ConstraintSet();
+            constraintsetText.clone(binding.constraintLayoutCollageLayout);
+            constraintsetText.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
+            constraintsetText.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineTool.getId(), 3, 0);
+            constraintsetText.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
+            constraintsetText.applyTo(binding.constraintLayoutCollageLayout);
+            binding.recyclerViewTools.setVisibility(View.VISIBLE);
+            setVisibleSave();
             moduleToolsId = Module.NONE;
         });
 
@@ -210,6 +230,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         binding.linearLayoutLegacy.setOnClickListener(view -> setLegacyFilter());
 
         binding.btnDownArrow.setOnClickListener(view -> {
+            onBackPressed();
             binding.imageToolContainer.setVisibility(View.GONE);
             binding.recyclerViewTools.setVisibility(View.VISIBLE);
         });
@@ -265,30 +286,6 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
             binding.imageToolContainer.setVisibility(View.GONE);
             moduleToolsId = Module.NONE;
         });
-//        binding.backgroundContainer.imageViewSavebackground.setOnClickListener(view -> {
-//            setGuideLineTools();
-//            binding.backgroundContainer.constrantLayoutChangeBackground.setVisibility(View.GONE);
-//            binding.recyclerViewTools.setVisibility(View.VISIBLE);
-//            binding.imageToolContainer.setVisibility(View.GONE);
-//            setVisibleSave();
-//            binding.collageView.setLocked(true);
-//            binding.collageView.setTouchEnable(true);
-//            if (binding.collageView.getBackgroundResourceMode() == 0) {
-//                currentBackgroundState.isColor = true;
-//                currentBackgroundState.isBitmap = false;
-//                currentBackgroundState.drawableId = ((ColorDrawable) binding.collageView.getBackground()).getColor();
-//                currentBackgroundState.drawable = null;
-//            } else if (binding.collageView.getBackgroundResourceMode() == 1) {
-//                currentBackgroundState.isColor = false;
-//                currentBackgroundState.isBitmap = false;
-//                currentBackgroundState.drawable = binding.collageView.getBackground();
-//            } else {
-//                currentBackgroundState.isColor = false;
-//                currentBackgroundState.isBitmap = true;
-//                currentBackgroundState.drawable = binding.collageView.getBackground();
-//            }
-//            moduleToolsId = Module.NONE;
-//        });
         binding.imageViewSaveSticker.setOnClickListener(view -> {
             setGuideLineTools();
             binding.collageView.setHandlingSticker(null);
@@ -325,7 +322,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
 
         binding.recyclerViewCollage.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewCollage.setAdapter(collageAdapter);
-        collageAdapter.refreshData(CollageUtils.getCollageLayouts(stringList.size()), null);
+        collageAdapter.refreshData(CollageUtils.getCollageLayouts(imageList.size()), null);
         collageAdapter.setOnItemClickListener(this);
         AspectAdapter aspectRatioPreviewAdapter = new AspectAdapter(this);
         aspectRatioPreviewAdapter.setListener(this);
@@ -333,28 +330,35 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         binding.recyclerViewRatio.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewRatio.setAdapter(aspectRatioPreviewAdapter);
         binding.textViewSave.setOnClickListener(view -> {
-            if (PermissionsUtils.checkWriteStoragePermission(QueShotGridActivity.this)) {
+            if (PermissionsUtils.checkWriteStoragePermission(GridActivity.this)) {
                 Bitmap createBitmap = SaveFileUtils.createBitmap(binding.collageView, 1920);
                 Bitmap createBitmap2 = binding.collageView.createBitmap();
                 new SaveCollageAsFile().execute(createBitmap, createBitmap2);
             }
 
         });
-
+        binding.relativeLayoutAddText.setOnClickListener(view -> {
+            binding.collageView.setHandlingSticker(null);
+            textFragment();
+        });
         binding.relativeLayoutAddSticker.setVisibility(View.GONE);
         binding.relativeLayoutAddSticker.setOnClickListener(view -> {
             binding.relativeLayoutAddSticker.setVisibility(View.GONE);
             binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
         });
-        QueShotStickerIcons quShotStickerIconClose = new QueShotStickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_close), 0, QueShotStickerIcons.DELETE);
+        StickerIcons quShotStickerIconClose = new StickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_close), 0, StickerIcons.DELETE);
         quShotStickerIconClose.setIconEvent(new DeleteIconEvent());
-        QueShotStickerIcons quShotStickerIconScale = new QueShotStickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_scale), 3, QueShotStickerIcons.SCALE);
+        StickerIcons quShotStickerIconScale = new StickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_scale), 3, StickerIcons.SCALE);
         quShotStickerIconScale.setIconEvent(new ZoomIconEvent());
-        QueShotStickerIcons quShotStickerIconFlip = new QueShotStickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_flip), 1, QueShotStickerIcons.FLIP);
+        StickerIcons quShotStickerIconFlip = new StickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_flip), 1, StickerIcons.FLIP);
         quShotStickerIconFlip.setIconEvent(new FlipHorizontallyEvent());
-        QueShotStickerIcons quShotStickerIconCenter = new QueShotStickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_center), 2, QueShotStickerIcons.ALIGN);
+        StickerIcons quShotStickerIconRotate = new StickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_rotate), 3, StickerIcons.ROTATE);
+        quShotStickerIconRotate.setIconEvent(new ZoomIconEvent());
+        StickerIcons quShotStickerIconEdit = new StickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_edit), 1, StickerIcons.EDIT);
+        quShotStickerIconEdit.setIconEvent(new EditTextIconEvent());
+        StickerIcons quShotStickerIconCenter = new StickerIcons(ContextCompat.getDrawable(this, R.drawable.ic_outline_center), 2, StickerIcons.ALIGN);
         quShotStickerIconCenter.setIconEvent(new AlignHorizontallyEvent());
-        binding.collageView.setIcons(Arrays.asList(quShotStickerIconClose, quShotStickerIconScale, quShotStickerIconFlip, quShotStickerIconCenter));
+        binding.collageView.setIcons(Arrays.asList(quShotStickerIconClose, quShotStickerIconScale, quShotStickerIconFlip,quShotStickerIconEdit, quShotStickerIconRotate,quShotStickerIconCenter));
         binding.collageView.setConstrained(true);
         binding.collageView.setOnStickerOperationListener(onStickerOperationListener);
         binding.stickerViewpaper.setAdapter(new PagerAdapter() {
@@ -380,13 +384,13 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
                 recycler_view_sticker.setLayoutManager(new GridLayoutManager(getApplicationContext(), 7));
                 switch (i) {
                     case 0:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListEmojy(), i, QueShotGridActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListEmojy(), i, GridActivity.this));
                         break;
                     case 1:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListFlag(), i, QueShotGridActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListFlag(), i, GridActivity.this));
                         break;
                     case 2:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListBoom(), i, QueShotGridActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListBoom(), i, GridActivity.this));
                         break;
 
                 }
@@ -422,10 +426,10 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         binding.collageView.setLayoutParams(layoutParams);
         aspectRatio = new AspectRatio(1, 1);
         binding.collageView.setAspectRatio(new AspectRatio(1, 1));
-        QueShotGridActivityCollage = this;
+        gridActivityCollage = this;
         moduleToolsId = Module.NONE;
         CGENativeLibrary.setLoadImageCallback(loadImageCallback, null);
-        QueShotGridActivityInstance = this;
+        gridActivityInstance = this;
 
         binding.recyclerViewToolsCollage.setAlpha(0.0f);
         binding.constrantLayoutChangeLayout.post(() -> slideDown(binding.recyclerViewToolsCollage));
@@ -478,7 +482,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
             binding.collageView.invalidate();
         }
     };
-    QueShotStickerView.OnStickerOperationListener onStickerOperationListener = new QueShotStickerView.OnStickerOperationListener() {
+    StickerView.OnStickerOperationListener onStickerOperationListener = new StickerView.OnStickerOperationListener() {
         public void onStickerDrag(@NonNull Sticker sticker) {
         }
 
@@ -517,16 +521,32 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         }
 
         public void onStickerDoubleTap(@NonNull Sticker sticker) {
-            if (sticker instanceof QueShotTextView) {
+            if (sticker instanceof CustomTextView) {
                 sticker.setShow(false);
                 binding.collageView.setHandlingSticker(null);
+                addTextFragment = TextFragment.show(GridActivity.this, ((CustomTextView) sticker).getQuShotText());
+                textEditor = new TextFragment.TextEditor() {
+                    public void onDone(CustomText addTextProperties) {
+                        binding.collageView.getStickers().remove(binding.collageView.getLastHandlingSticker());
+                        binding.collageView.addSticker(new CustomTextView(GridActivity.this, addTextProperties));
+                    }
+
+                    public void onBackButton() {
+                        binding.collageView.showLastHandlingSticker();
+                    }
+                };
+                addTextFragment.setOnTextEditorListener(textEditor);
             }
+//            if (sticker instanceof CustomTextView) {
+//                sticker.setShow(false);
+//                binding.collageView.setHandlingSticker(null);
+//            }
         }
     };
 
 
-    public static QueShotGridActivity getQueShotGridActivityInstance() {
-        return QueShotGridActivityInstance;
+    public static GridActivity getQueShotGridActivityInstance() {
+        return gridActivityInstance;
     }
 
     public CGENativeLibrary.LoadImageCallback loadImageCallback = new CGENativeLibrary.LoadImageCallback() {
@@ -671,9 +691,6 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         binding.backgroundContainer.recyclerViewColor.setVisibility(View.VISIBLE);
         binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
-//        binding.backgroundContainer.viewColor.setVisibility(View.VISIBLE);
-//        binding.backgroundContainer.viewGradient.setVisibility(View.INVISIBLE);
-//        binding.backgroundContainer.viewBlur.setVisibility(View.INVISIBLE);
     }
 
     public void setBackgroundGradient() {
@@ -686,9 +703,6 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewGradient.setVisibility(View.VISIBLE);
         binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
-//        binding.backgroundContainer.viewColor.setVisibility(View.INVISIBLE);
-//        binding.backgroundContainer.viewGradient.setVisibility(View.VISIBLE);
-//        binding.backgroundContainer.viewBlur.setVisibility(View.INVISIBLE);
     }
 
     public void selectBackgroundBlur() {
@@ -704,16 +718,12 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewBlur.setVisibility(View.VISIBLE);
-//        binding.backgroundContainer.viewColor.setVisibility(View.INVISIBLE);
-//        binding.backgroundContainer.viewGradient.setVisibility(View.INVISIBLE);
-//        binding.backgroundContainer.viewBlur.setVisibility(View.VISIBLE);
     }
 
 
     public void setDown() {
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(binding.constrantLayoutChangeLayout);
-        //constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 3, adView.getId(), 4, 0);
         constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constrantLayoutChangeLayout.getId(), 1, 0);
         constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineTool.getId(), 3, 0);
         constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constrantLayoutChangeLayout.getId(), 2, 0);
@@ -831,26 +841,23 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
                 binding.collageView.setTouchEnable(false);
                 setGoneSave();
                 return;
-            case RATIO:
-                setRatio();
-                setGuideLine();
-                binding.constrantLayoutChangeLayout.setVisibility(View.VISIBLE);
+
+
+            case TEXT:
+                setGoneSave();
+                textFragment();
                 binding.recyclerViewTools.setVisibility(View.GONE);
-                binding.imageToolContainer.setVisibility(View.GONE);
-                queShotLayout = binding.collageView.getQueShotLayout();
-                aspectRatio = binding.collageView.getAspectRatio();
-                BorderRadius = binding.collageView.getCollageRadian();
-                Padding = binding.collageView.getCollagePadding();
-                binding.recyclerViewCollage.scrollToPosition(0);
-                ((GridAdapter) binding.recyclerViewCollage.getAdapter()).setSelectedIndex(-1);
-                binding.recyclerViewCollage.getAdapter().notifyDataSetChanged();
-                binding.recyclerViewRatio.scrollToPosition(0);
-                ((AspectAdapter) binding.recyclerViewRatio.getAdapter()).setLastSelectedView(-1);
-                binding.recyclerViewRatio.getAdapter().notifyDataSetChanged();
+                ConstraintSet constraintsetEffect = new ConstraintSet();
+                constraintsetEffect.clone(binding.constraintLayoutCollageLayout);
+                constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
+                constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineTool.getId(), 3, 0);
+                constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
+                constraintsetEffect.applyTo(binding.constraintLayoutCollageLayout);
+                binding.constraintLayoutConfirmText.setVisibility(View.VISIBLE);
+                binding.relativeLayoutAddText.setVisibility(View.VISIBLE);
                 binding.collageView.setLocked(false);
                 binding.collageView.setTouchEnable(false);
-                setGoneSave();
-                return;
+                break;
             case FILTER:
                 if (drawableList.isEmpty()) {
                     for (QueShotGrid drawable : binding.collageView.getQueShotGrids()) {
@@ -920,44 +927,33 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
                 binding.collageView.setTouchEnable(false);
                 setGoneSave();
 
-//                setGuideLine();
-//                binding.backgroundContainer.constrantLayoutChangeBackground.setVisibility(View.VISIBLE);
-//                binding.recyclerViewTools.setVisibility(View.GONE);
-//                binding.imageToolContainer.setVisibility(View.GONE);
-//                binding.collageView.setLocked(false);
-//                binding.collageView.setTouchEnable(false);
-//                setGoneSave();
-//                setBackgroundColor();
-//                if (binding.collageView.getBackgroundResourceMode() == 0) {
-//                    currentBackgroundState.isColor = true;
-//                    currentBackgroundState.isBitmap = false;
-//                    currentBackgroundState.drawableId = ((ColorDrawable) binding.collageView.getBackground()).getColor();
-//                    return;
-//                } else if (binding.collageView.getBackgroundResourceMode() == 2 || (binding.collageView.getBackground() instanceof ColorDrawable)) {
-//                    currentBackgroundState.isBitmap = true;
-//                    currentBackgroundState.isColor = false;
-//                    currentBackgroundState.drawable = binding.collageView.getBackground();
-//                    return;
-//                } else if (binding.collageView.getBackground() instanceof GradientDrawable) {
-//                    currentBackgroundState.isBitmap = false;
-//                    currentBackgroundState.isColor = false;
-//                    currentBackgroundState.drawable = binding.collageView.getBackground();
-//                    return;
-//                } else {
-//                    return;
-//                }
             default:
         }
     }
+    public TextFragment addTextFragment;
+    public TextFragment.TextEditor textEditor;
+    public void textFragment() {
+        addTextFragment = TextFragment.show(this);
+        textEditor = new TextFragment.TextEditor() {
+            public void onDone(CustomText addTextProperties) {
+                binding.collageView.addSticker(new CustomTextView(getApplicationContext(), addTextProperties));
+            }
 
-
+            public void onBackButton() {
+                if (binding.collageView.getStickers().isEmpty()) {
+                    onBackPressed();
+                }
+            }
+        };
+        addTextFragment.setOnTextEditorListener(textEditor);
+    }
     public void loadPhoto() {
         final int i;
         final ArrayList arrayList = new ArrayList();
-        if (stringList.size() > queShotLayout.getAreaCount()) {
+        if (imageList.size() > queShotLayout.getAreaCount()) {
             i = queShotLayout.getAreaCount();
         } else {
-            i = stringList.size();
+            i = imageList.size();
         }
         for (int i2 = 0; i2 < i; i2++) {
             Target r4 = new Target() {
@@ -968,16 +964,10 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
                 }
 
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-                    int width = bitmap.getWidth();
-                    float f = (float) width;
-                    float height = (float) bitmap.getHeight();
-                    float max = Math.max(f / f, height / f);
-                    if (max > 1.0f) {
-                        bitmap = Bitmap.createScaledBitmap(bitmap, (int) (f / max), (int) (height / max), false);
-                    }
+
                     arrayList.add(bitmap);
                     if (arrayList.size() == i) {
-                        if (stringList.size() < queShotLayout.getAreaCount()) {
+                        if (imageList.size() < queShotLayout.getAreaCount()) {
                             for (int i = 0; i < queShotLayout.getAreaCount(); i++) {
                                 binding.collageView.addQuShotCollage((Bitmap) arrayList.get(i % i));
                             }
@@ -989,14 +979,14 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
                 }
             };
             Picasso picasso = Picasso.get();
-            picasso.load("file:///" + stringList.get(i2)).resize(deviceWidth, deviceWidth).centerInside().config(Bitmap.Config.RGB_565).into((Target) r4);
+            picasso.load("file:///" + imageList.get(i2)).resize(deviceWidth, deviceWidth).centerInside().config(Bitmap.Config.RGB_565).into((Target) r4);
             targets.add(r4);
         }
     }
 
     private void setOnBackPressDialog() {
         TextView textViewCancel, textViewDiscard;
-        final Dialog dialogOnBackPressed = new Dialog(QueShotGridActivity.this, R.style.UploadDialog);
+        final Dialog dialogOnBackPressed = new Dialog(GridActivity.this, R.style.UploadDialog);
         dialogOnBackPressed.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogOnBackPressed.setContentView(R.layout.dialog_exit);
         dialogOnBackPressed.setCancelable(true);
@@ -1067,6 +1057,25 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
                     setVisibleSave();
                     moduleToolsId = Module.NONE;
                     return;
+                case TEXT:
+                    if (!binding.collageView.getStickers().isEmpty()) {
+                        binding.collageView.getStickers().clear();
+                        binding.collageView.setHandlingSticker(null);
+                    }
+                    binding.recyclerViewTools.setVisibility(View.VISIBLE);
+                    binding.relativeLayoutAddText.setVisibility(View.GONE);
+                    binding.constraintLayoutConfirmText.setVisibility(View.GONE);
+                    binding.collageView.setHandlingSticker(null);
+                    binding.collageView.setLocked(true);
+                    ConstraintSet constraintsetEffect = new ConstraintSet();
+                    constraintsetEffect.clone(binding.constraintLayoutCollageLayout);
+                    constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
+                    constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineTool.getId(), 3, 0);
+                    constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
+                    constraintsetEffect.applyTo(binding.constraintLayoutCollageLayout);
+                    setVisibleSave();
+                    moduleToolsId = Module.NONE;
+                    return;
                 case COLLAGE:
                     binding.backgroundContainer.backgroundTools.setVisibility(View.VISIBLE);
                     binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
@@ -1110,7 +1119,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
                         binding.collageView.setLocked(true);
                         moduleToolsId = Module.NONE;
                     } else if (binding.relativeLayoutAddSticker.getVisibility() == View.VISIBLE) {
-                        binding.collageView.getStickers().clear();
+                        binding.collageView.removeCurrentSticker();
                         binding.relativeLayoutAddSticker.setVisibility(View.GONE);
                         binding.collageView.setHandlingSticker(null);
                         binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
@@ -1133,6 +1142,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
                     return;
                 case GRADIENT:
                     setGuideLineTools();
+                    binding.constrantLayoutChangeLayout.setVisibility(View.GONE);
                     binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
                     binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
                     binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
@@ -1314,7 +1324,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterAll.setAdapter(new FilterAdapter(listFilterAll, QueShotGridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.ALL_FILTERS)));
+            binding.recyclerViewFilterAll.setAdapter(new FilterAdapter(listFilterAll, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.ALL_FILTERS)));
             binding.constraintLayoutFilterLayout.setVisibility(View.VISIBLE);
             binding.constraintLayoutConfirmSaveFilter.setVisibility(View.VISIBLE);
             binding.recyclerViewTools.setVisibility(View.GONE);
@@ -1342,7 +1352,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterBw.setAdapter(new FilterAdapter(listFilterBW, QueShotGridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
+            binding.recyclerViewFilterBw.setAdapter(new FilterAdapter(listFilterBW, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);
@@ -1365,7 +1375,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterVintage.setAdapter(new FilterAdapter(listFilterVintage, QueShotGridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.VINTAGE_FILTERS)));
+            binding.recyclerViewFilterVintage.setAdapter(new FilterAdapter(listFilterVintage, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.VINTAGE_FILTERS)));
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);
@@ -1388,7 +1398,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterSmooth.setAdapter(new FilterAdapter(listFilterSmooth, QueShotGridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.SMOOTH_FILTERS)));
+            binding.recyclerViewFilterSmooth.setAdapter(new FilterAdapter(listFilterSmooth, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.SMOOTH_FILTERS)));
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);
@@ -1411,7 +1421,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterCold.setAdapter(new FilterAdapter(listFilterCold, QueShotGridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.COLD_FILTERS)));
+            binding.recyclerViewFilterCold.setAdapter(new FilterAdapter(listFilterCold, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.COLD_FILTERS)));
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);
@@ -1434,7 +1444,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterWarm.setAdapter(new FilterAdapter(listFilterWarm, QueShotGridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.WARM_FILTERS)));
+            binding.recyclerViewFilterWarm.setAdapter(new FilterAdapter(listFilterWarm, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.WARM_FILTERS)));
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);
@@ -1457,7 +1467,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterLegacy.setAdapter(new FilterAdapter(listFilterLegacy, QueShotGridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.LEGACY_FILTERS)));
+            binding.recyclerViewFilterLegacy.setAdapter(new FilterAdapter(listFilterLegacy, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.LEGACY_FILTERS)));
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);
@@ -1480,7 +1490,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         public void onPostExecute(List<Bitmap> list) {
             setLoading(false);
             if (binding.collageView.getQueShotGrid() != null) {
-                FilterFragment.show(QueShotGridActivity.this, QueShotGridActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
+                FilterFragment.show(GridActivity.this, GridActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
             }
         }
     }
@@ -1501,7 +1511,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         public void onPostExecute(List<Bitmap> list) {
             setLoading(false);
             if (binding.collageView.getQueShotGrid() != null) {
-                DodgeFragment.show(QueShotGridActivity.this, QueShotGridActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
+                DodgeFragment.show(GridActivity.this, GridActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
             }
         }
     }
@@ -1522,7 +1532,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         public void onPostExecute(List<Bitmap> list) {
             setLoading(false);
             if (binding.collageView.getQueShotGrid() != null) {
-                DivideFragment.show(QueShotGridActivity.this, QueShotGridActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
+                DivideFragment.show(GridActivity.this, GridActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
             }
         }
     }
@@ -1543,7 +1553,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         public void onPostExecute(List<Bitmap> list) {
             setLoading(false);
             if (binding.collageView.getQueShotGrid() != null) {
-                BurnFragment.show(QueShotGridActivity.this, QueShotGridActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
+                BurnFragment.show(GridActivity.this, GridActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
             }
         }
     }
@@ -1630,7 +1640,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
             bitmap.recycle();
             bitmap2.recycle();
             try {
-                File image = SaveFileUtils.saveBitmapFileCollage(QueShotGridActivity.this, createBitmap, new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date()));
+                File image = SaveFileUtils.saveBitmapFileCollage(GridActivity.this, createBitmap, new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date()));
                 createBitmap.recycle();
                 return image.getAbsolutePath();
             } catch (IOException e) {
@@ -1642,7 +1652,7 @@ public class QueShotGridActivity extends QueShotBaseActivity implements GridTool
         @Override
         public void onPostExecute(String str) {
             setLoading(false);
-            Intent intent = new Intent(QueShotGridActivity.this, PhotoShareActivity.class);
+            Intent intent = new Intent(GridActivity.this, PhotoShareActivity.class);
             intent.putExtra("path", str);
             startActivity(intent);
         }

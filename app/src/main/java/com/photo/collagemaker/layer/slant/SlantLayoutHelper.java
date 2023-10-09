@@ -20,7 +20,7 @@ public class SlantLayoutHelper {
                 }
                 break;
             case 2:
-                while (i2 < 2) {
+                while (i2 < 8) {
                     arrayList.add(new TwoSlantLayout(i2));
                     i2++;
                 }

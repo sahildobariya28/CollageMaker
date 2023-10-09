@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.grid.QueShotLayout;
-import com.photo.collagemaker.queshot.QueShotSquareView;
+import com.photo.collagemaker.custom_view.SquareView;
 import com.photo.collagemaker.layer.slant.NumberSlantLayout;
 import com.photo.collagemaker.layer.straight.NumberStraightLayout;
 
@@ -92,7 +92,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
     }
 
     public static class GridViewHolder extends RecyclerView.ViewHolder {
-        QueShotSquareView square_collage_view;
+        SquareView square_collage_view;
 
         public GridViewHolder(View view) {
             super(view);

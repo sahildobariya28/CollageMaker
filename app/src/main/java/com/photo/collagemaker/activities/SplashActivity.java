@@ -9,18 +9,22 @@ import android.view.animation.AnimationUtils;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.photo.collagemaker.R;
+import com.photo.collagemaker.databinding.ActivitySplashBinding;
 
-public class QueShotSplashActivity extends AppCompatActivity {
+ public class SplashActivity extends AppCompatActivity {
+
+    ActivitySplashBinding binding;
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(R.layout.activity_splash);
+        binding = ActivitySplashBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
 
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.enter_from_bottom);
         Animation animation1 = AnimationUtils.loadAnimation(this, R.anim.enter_from_bottom_delay);
-        findViewById(R.id.imageViewLogo).startAnimation(animation);
-        findViewById(R.id.textViewTitle).startAnimation(animation1);
-        findViewById(R.id.textViewSubTitle).startAnimation(animation1);
+        binding.imageViewLogo.startAnimation(animation);
+        binding.textViewTitle.startAnimation(animation1);
+        binding.textViewSubTitle.startAnimation(animation1);
 
         new Handler().postDelayed(() -> {
             startActivity(new Intent(this, HomeActivity.class));

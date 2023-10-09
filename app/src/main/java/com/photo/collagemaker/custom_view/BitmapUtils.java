@@ -1,9 +1,9 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.graphics.Bitmap;
 
-class QueShotBitmapUtils {
-    QueShotBitmapUtils() {
+class BitmapUtils {
+    BitmapUtils() {
     }
 
     static Bitmap removeTransparency(Bitmap bitmap) {

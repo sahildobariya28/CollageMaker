@@ -240,7 +240,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.photo.collagemaker.queshot.QueShotView
+            <com.photo.collagemaker.custom_view.CustomCollageView
                 android:id="@+id/photo_editor_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -1082,7 +1082,7 @@
                 </FrameLayout>
 
                 <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/stickerWomenViewpaper"
+                    android:id="@+id/stickerWomenViewpager"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:background="@color/BackgroundColor"
@@ -1201,7 +1201,7 @@
                 </FrameLayout>
 
                 <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/stickerViewpaper"
+                    android:id="@+id/stickerViewpager"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:background="@color/BackgroundColor"
@@ -1320,7 +1320,7 @@
                 </FrameLayout>
 
                 <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/stickerMenViewpaper"
+                    android:id="@+id/stickerMenViewpager"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:background="@color/BackgroundColor"
@@ -1734,7 +1734,8 @@
                     android:src="@drawable/ic_round_close"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/icon_bg_color_dark"/>
 
                 <RelativeLayout
                     android:id="@+id/relative_layout_add_text"
@@ -1771,7 +1772,8 @@
                     android:src="@drawable/ic_round_check"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/icon_bg_color_dark" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

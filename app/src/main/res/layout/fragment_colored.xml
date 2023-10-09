@@ -21,7 +21,7 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true" />
 
-        <com.photo.collagemaker.queshot.QueShotColoredView
+        <com.photo.collagemaker.custom_view.ColoredView
             android:id="@+id/coloredView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

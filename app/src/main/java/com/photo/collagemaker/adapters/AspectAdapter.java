@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.custom.RatioCustom;
+import com.photo.collagemaker.databinding.ItemCropBinding;
 import com.steelkiwi.cropiwa.AspectRatio;
 
 import java.util.Arrays;
@@ -46,19 +47,20 @@ public class AspectAdapter extends RecyclerView.Adapter<AspectAdapter.ViewHolder
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_crop, viewGroup, false));
+        ItemCropBinding binding = ItemCropBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         RatioCustom aspectRatioCustom = ratios.get(i);
         if (i == lastSelectedView) {
-            viewHolder.ratioView.setImageResource(aspectRatioCustom.getSelectedIem());
-            viewHolder.ratioView.setColorFilter(ContextCompat.getColor(activity, R.color.icon_color_light), PorterDuff.Mode.SRC_IN);
-            viewHolder.relativeLayoutCropper.setBackgroundResource(R.drawable.icon_bg_theme);
+            viewHolder.binding.imageViewAspectRatio.setImageResource(aspectRatioCustom.getSelectedIem());
+            viewHolder.binding.imageViewAspectRatio.setColorFilter(ContextCompat.getColor(activity, R.color.icon_color_light), PorterDuff.Mode.SRC_IN);
+            viewHolder.binding.relativeLayoutCropper.setBackgroundResource(R.drawable.icon_bg_theme);
         } else {
-            viewHolder.ratioView.setImageResource(aspectRatioCustom.getSelectedIem());
-            viewHolder.ratioView.setColorFilter(ContextCompat.getColor(activity, R.color.icon_color_dark), PorterDuff.Mode.SRC_IN);
-            viewHolder.relativeLayoutCropper.setBackgroundResource(R.drawable.icon_bg_light);
+            viewHolder.binding.imageViewAspectRatio.setImageResource(aspectRatioCustom.getSelectedIem());
+            viewHolder.binding.imageViewAspectRatio.setColorFilter(ContextCompat.getColor(activity, R.color.icon_color_dark), PorterDuff.Mode.SRC_IN);
+            viewHolder.binding.relativeLayoutCropper.setBackgroundResource(R.drawable.icon_bg_light);
         }
     }
 
@@ -77,14 +79,11 @@ public class AspectAdapter extends RecyclerView.Adapter<AspectAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public ImageView ratioView;
-        public RelativeLayout relativeLayoutCropper;
-
-        public ViewHolder(View view) {
-            super(view);
-            ratioView = view.findViewById(R.id.image_view_aspect_ratio);
-            relativeLayoutCropper = view.findViewById(R.id.relativeLayoutCropper);
-            ratioView.setOnClickListener(this);
+        ItemCropBinding binding;
+        public ViewHolder(ItemCropBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            binding.imageViewAspectRatio.setOnClickListener(this);
         }
 
         public void onClick(View view) {

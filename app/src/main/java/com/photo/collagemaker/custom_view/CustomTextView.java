@@ -1,4 +1,4 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -23,9 +23,9 @@ import androidx.annotation.Nullable;
 import com.photo.collagemaker.sticker.Sticker;
 import com.photo.collagemaker.utils.SystemUtil;
 
-public class QueShotTextView extends Sticker {
+public class CustomTextView extends Sticker {
 
-    private QueShotText quShotText;
+    private CustomText quShotText;
 
     private int backgroundAlpha;
 
@@ -70,11 +70,11 @@ public class QueShotTextView extends Sticker {
     private int textWidth;
 
 
-    public QueShotTextView(@NonNull Context paramContext, QueShotText quShotText) {
+    public CustomTextView(@NonNull Context paramContext, CustomText quShotText) {
         this.context = paramContext;
         this.quShotText = quShotText;
         this.textPaint = new TextPaint(1);
-        QueShotTextView quShotTextView = setTextSize(quShotText.getQuShotTextSize()).setTextWidth(quShotText.getQuShotTextWidth()).setTextHeight(quShotText.getQuShotTextHeight()).setText(quShotText.getQuShotTexts()).setPaddingWidth(SystemUtil.dpToPx(paramContext, quShotText.getPaddingWidth())).setBackgroundBorder(SystemUtil.dpToPx(paramContext, quShotText.getQuShotBackgroundBorder())).setTextColor(quShotText.getQuShotTextColor()).setTextAlpha(quShotText.getQuShotTextAlpha()).setBackgroundColor(quShotText.getQuShotBackgroundColor()).setBackgroundAlpha(quShotText.getQuShotBackgroundAlpha()).setShowBackground(quShotText.isQuShotShowBackground()).setTextColor(quShotText.getQuShotTextColor());
+        CustomTextView quShotTextView = setTextSize(quShotText.getQuShotTextSize()).setTextWidth(quShotText.getQuShotTextWidth()).setTextHeight(quShotText.getQuShotTextHeight()).setText(quShotText.getQuShotTexts()).setPaddingWidth(SystemUtil.dpToPx(paramContext, quShotText.getPaddingWidth())).setBackgroundBorder(SystemUtil.dpToPx(paramContext, quShotText.getQuShotBackgroundBorder())).setTextColor(quShotText.getQuShotTextColor()).setTextAlpha(quShotText.getQuShotTextAlpha()).setBackgroundColor(quShotText.getQuShotBackgroundColor()).setBackgroundAlpha(quShotText.getQuShotBackgroundAlpha()).setShowBackground(quShotText.isQuShotShowBackground()).setTextColor(quShotText.getQuShotTextColor());
         AssetManager assetManager = paramContext.getAssets();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("fonts/");
@@ -117,7 +117,7 @@ public class QueShotTextView extends Sticker {
         paramCanvas.restore();
     }
 
-    public QueShotText getQuShotText() {
+    public CustomText getQuShotText() {
         return this.quShotText;
     }
 
@@ -152,7 +152,7 @@ public class QueShotTextView extends Sticker {
     }
 
     @NonNull
-    public QueShotTextView resizeText() {
+    public CustomTextView resizeText() {
         String str = getText();
         if (str != null) {
             if (str.length() <= 0)
@@ -170,52 +170,52 @@ public class QueShotTextView extends Sticker {
     }
 
     @NonNull
-    public QueShotTextView setAlpha(@IntRange(from = 0L, to = 255L) int paramInt) {
+    public CustomTextView setAlpha(@IntRange(from = 0L, to = 255L) int paramInt) {
         this.textPaint.setAlpha(paramInt);
         return this;
     }
 
-    public QueShotTextView setBackgroundAlpha(int paramInt) {
+    public CustomTextView setBackgroundAlpha(int paramInt) {
         this.backgroundAlpha = paramInt;
         return this;
     }
 
-    public QueShotTextView setBackgroundBorder(int paramInt) {
+    public CustomTextView setBackgroundBorder(int paramInt) {
         this.backgroundBorder = paramInt;
         return this;
     }
 
-    public QueShotTextView setBackgroundColor(int paramInt) {
+    public CustomTextView setBackgroundColor(int paramInt) {
         this.backgroundColor = paramInt;
         return this;
     }
 
 
-    public QueShotTextView setDrawable(@NonNull Drawable paramDrawable) {
+    public CustomTextView setDrawable(@NonNull Drawable paramDrawable) {
         this.drawable = paramDrawable;
         return this;
     }
 
 
-    public QueShotTextView setPaddingWidth(int paramInt) {
+    public CustomTextView setPaddingWidth(int paramInt) {
         this.paddingWidth = paramInt;
         return this;
     }
 
 
-    public QueShotTextView setShowBackground(boolean paramBoolean) {
+    public CustomTextView setShowBackground(boolean paramBoolean) {
         this.isShowBackground = paramBoolean;
         return this;
     }
 
     @NonNull
-    public QueShotTextView setText(@Nullable String paramString) {
+    public CustomTextView setText(@Nullable String paramString) {
         this.text = paramString;
         return this;
     }
 
     @NonNull
-    public QueShotTextView setTextAlign(@NonNull int paramInt) {
+    public CustomTextView setTextAlign(@NonNull int paramInt) {
         switch (paramInt) {
             default:
                 return this;
@@ -232,41 +232,41 @@ public class QueShotTextView extends Sticker {
         return this;
     }
 
-    public QueShotTextView setTextAlpha(int paramInt) {
+    public CustomTextView setTextAlpha(int paramInt) {
         this.textAlpha = paramInt;
         return this;
     }
 
     @NonNull
-    public QueShotTextView setTextColor(@ColorInt int paramInt) {
+    public CustomTextView setTextColor(@ColorInt int paramInt) {
         this.textColor = paramInt;
         return this;
     }
 
-    public QueShotTextView setTextHeight(int paramInt) {
+    public CustomTextView setTextHeight(int paramInt) {
         this.textHeight = paramInt;
         return this;
     }
 
     @NonNull
-    public QueShotTextView setTextShare(@Nullable Shader paramShader) {
+    public CustomTextView setTextShare(@Nullable Shader paramShader) {
         this.textPaint.setShader(paramShader);
         return this;
     }
 
     @NonNull
-    public QueShotTextView setTextSize(int paramInt) {
+    public CustomTextView setTextSize(int paramInt) {
         this.textPaint.setTextSize(convertSpToPx(paramInt));
         return this;
     }
 
-    public QueShotTextView setTextWidth(int paramInt) {
+    public CustomTextView setTextWidth(int paramInt) {
         this.textWidth = paramInt;
         return this;
     }
 
     @NonNull
-    public QueShotTextView setTypeface(@Nullable Typeface paramTypeface) {
+    public CustomTextView setTypeface(@Nullable Typeface paramTypeface) {
         this.textPaint.setTypeface(paramTypeface);
         return this;
     }

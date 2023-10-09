@@ -1,6 +1,5 @@
 package com.photo.collagemaker.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
@@ -9,10 +8,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,9 +20,8 @@ import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.adapters.SplashSquareAdapter;
 import com.photo.collagemaker.databinding.FragmentSplashSquareBinding;
-import com.photo.collagemaker.queshot.QueShotSplashView;
 import com.photo.collagemaker.assets.StickersAsset;
-import com.photo.collagemaker.queshot.QueShotSplashSticker;
+import com.photo.collagemaker.custom_view.SplashSticker;
 import com.photo.collagemaker.utils.FilterUtils;
 
 public class SplashBlurSquareFragment extends DialogFragment implements SplashSquareAdapter.SplashChangeListener {
@@ -35,10 +29,10 @@ public class SplashBlurSquareFragment extends DialogFragment implements SplashSq
     public Bitmap bitmap;
     private Bitmap blackAndWhiteBitmap;
     private Bitmap blurBitmap;
-    private QueShotSplashSticker blurSticker;
+    private SplashSticker blurSticker;
     public boolean isSplashView;
     public SplashDialogListener splashDialogListener;
-    private QueShotSplashSticker splashSticker;
+    private SplashSticker splashSticker;
     private ViewGroup viewGroup;
 
     public interface SplashDialogListener {
@@ -71,10 +65,10 @@ public class SplashBlurSquareFragment extends DialogFragment implements SplashSq
         binding.recyclerViewSplashSquare.setHasFixedSize(true);
         binding.recyclerViewSplashSquare.setAdapter(new SplashSquareAdapter(getContext(), this, isSplashView));
         if (isSplashView) {
-            splashSticker = new QueShotSplashSticker(StickersAsset.loadBitmapFromAssets(getContext(), "square/mask/m1.png"), StickersAsset.loadBitmapFromAssets(getContext(), "square/frame/f1.png"));
+            splashSticker = new SplashSticker(StickersAsset.loadBitmapFromAssets(getContext(), "square/mask/m1.png"), StickersAsset.loadBitmapFromAssets(getContext(), "square/frame/f1.png"));
             binding.splashView.addSticker(splashSticker);
         } else {
-            blurSticker = new QueShotSplashSticker(StickersAsset.loadBitmapFromAssets(getContext(), "square/mask/m1.png"), StickersAsset.loadBitmapFromAssets(getContext(), "square/frame/f1.png"));
+            blurSticker = new SplashSticker(StickersAsset.loadBitmapFromAssets(getContext(), "square/mask/m1.png"), StickersAsset.loadBitmapFromAssets(getContext(), "square/frame/f1.png"));
             binding.splashView.addSticker(blurSticker);
         }
         binding.splashView.refreshDrawableState();
@@ -165,7 +159,7 @@ public class SplashBlurSquareFragment extends DialogFragment implements SplashSq
         bitmap = null;
     }
 
-    public void onSelected(QueShotSplashSticker splashSticker2) {
+    public void onSelected(SplashSticker splashSticker2) {
         binding.splashView.addSticker(splashSticker2);
     }
 

@@ -1,4 +1,4 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,10 +9,10 @@ import androidx.appcompat.widget.AppCompatEditText;
 
 import com.photo.collagemaker.fragment.TextFragment;
 
-public class QueShotEditText extends AppCompatEditText {
+public class CustomEditText extends AppCompatEditText {
     private TextFragment textFragment;
 
-    public QueShotEditText(Context context, AttributeSet attributeSet) {
+    public CustomEditText(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
     }
 

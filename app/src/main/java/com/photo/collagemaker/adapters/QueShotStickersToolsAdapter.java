@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
+import com.photo.collagemaker.databinding.ItemCropBinding;
+import com.photo.collagemaker.databinding.ItemEffetToolBinding;
 import com.photo.collagemaker.module.Module;
 
 import java.util.ArrayList;
@@ -46,13 +48,14 @@ public class QueShotStickersToolsAdapter extends RecyclerView.Adapter<QueShotSti
 
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_effet_tool, viewGroup, false));
+        ItemEffetToolBinding binding = ItemEffetToolBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         ModuleModel toolModel = toolModelArrayList.get(i);
-        viewHolder.text_view_tool_name.setText(toolModel.toolName);
-        viewHolder.image_view_tool_icon.setImageResource(toolModel.toolIcon);
+        viewHolder.binding.textViewAdjustName.setText(toolModel.toolName);
+        viewHolder.binding.imageViewAdjustIcon.setImageResource(toolModel.toolIcon);
     }
 
     public int getItemCount() {
@@ -60,16 +63,12 @@ public class QueShotStickersToolsAdapter extends RecyclerView.Adapter<QueShotSti
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image_view_tool_icon;
-        TextView text_view_tool_name;
-        RelativeLayout relative_layout_wrapper_tool;
 
-        ViewHolder(View view) {
-            super(view);
-            image_view_tool_icon = view.findViewById(R.id.image_view_adjust_icon);
-            text_view_tool_name = view.findViewById(R.id.text_view_adjust_name);
-            relative_layout_wrapper_tool = view.findViewById(R.id.linear_layout_wrapper_adjust);
-            relative_layout_wrapper_tool.setOnClickListener(view1 ->
+        ItemEffetToolBinding binding;
+        ViewHolder(ItemEffetToolBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            binding.linearLayoutWrapperAdjust.setOnClickListener(view1 ->
                     onQuShotDrawItemSelected.onQuShotStickerToolSelected((toolModelArrayList.get(getLayoutPosition())).toolType));
         }
     }

@@ -1,8 +1,8 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.graphics.Shader;
 
-public class QueShotText {
+public class CustomText {
     private int quShotBackgroundAlpha;
     private int quShotBackgroundBorder;
     private int quShotBackgroundColor;
@@ -24,8 +24,8 @@ public class QueShotText {
     private int quShotTextSize;
     private int quShotTextWidth;
 
-    public static QueShotText getDefaultProperties() {
-        QueShotText quShotText = new QueShotText();
+    public static CustomText getDefaultProperties() {
+        CustomText quShotText = new CustomText();
         quShotText.setQuShotTextSize(30);
         quShotText.setQuShotTextAlign(4);
         quShotText.setQuShotFontName("font.ttf");

@@ -1,4 +1,4 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -17,14 +17,14 @@ import android.widget.ImageView;
 import com.photo.collagemaker.R;
 
 @SuppressLint("AppCompatCustomView")
-public class QueShotMaskImage extends ImageView {
+public class MaskImage extends ImageView {
     int mBackgroundSource;
     RuntimeException mException;
     int mImageSource;
     int mMaskSource;
 
     @SuppressLint("ResourceType")
-    public QueShotMaskImage(Context context, AttributeSet attributeSet) {
+    public MaskImage(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         final int[] MaskImage = {R.attr.frame, R.attr.image, R.attr.mask};
 

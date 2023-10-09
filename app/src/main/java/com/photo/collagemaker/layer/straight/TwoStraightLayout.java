@@ -7,7 +7,7 @@ public class TwoStraightLayout extends NumberStraightLayout {
     private float mRadio = 0.5f;
 
     public int getThemeCount() {
-        return 6;
+        return 8;
     }
 
     public TwoStraightLayout(StraightCollageLayout straightPuzzleLayout, boolean z) {
@@ -38,6 +38,14 @@ public class TwoStraightLayout extends NumberStraightLayout {
                 return;
             case 5:
                 addLine(0, QueShotLine.Direction.VERTICAL, 0.6666667f);
+                return;
+            case 6:
+                // Theme for two images in a horizontal line (1/2 ratio)
+                addLine(0, QueShotLine.Direction.HORIZONTAL, 0.5f);
+                return;
+            case 7:
+                // Theme for two images in a vertical line (1/2 ratio)
+                addLine(0, QueShotLine.Direction.VERTICAL, 0.5f);
                 return;
             default:
                 addLine(0, QueShotLine.Direction.HORIZONTAL, this.mRadio);

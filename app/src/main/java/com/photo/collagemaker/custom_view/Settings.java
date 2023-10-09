@@ -1,6 +1,6 @@
-package com.photo.collagemaker.queshot;
+package com.photo.collagemaker.custom_view;
 
-public class QueShotSettings {
+public class Settings {
     private boolean isClearViewsEnabled;
     private boolean isTransparencyEnabled;
 
@@ -12,7 +12,7 @@ public class QueShotSettings {
         return this.isClearViewsEnabled;
     }
 
-    private QueShotSettings(Builder builder) {
+    private Settings(Builder builder) {
         this.isClearViewsEnabled = builder.isClearViewsEnabled;
         this.isTransparencyEnabled = builder.isTransparencyEnabled;
     }
@@ -23,8 +23,8 @@ public class QueShotSettings {
 
         public boolean isTransparencyEnabled = true;
 
-        public QueShotSettings build() {
-            return new QueShotSettings(this);
+        public Settings build() {
+            return new Settings(this);
         }
     }
 }
