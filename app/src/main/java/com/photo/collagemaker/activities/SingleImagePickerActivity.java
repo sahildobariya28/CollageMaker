@@ -30,6 +30,7 @@ public class SingleImagePickerActivity extends AppCompatActivity {
         boolean booleanExtra = getIntent().getBooleanExtra("SHOW_CAMERA", true);
         boolean booleanExtra2 = getIntent().getBooleanExtra("SHOW_GIF", false);
         boolean booleanExtra3 = getIntent().getBooleanExtra("PREVIEW_ENABLED", true);
+        boolean isAddImage = getIntent().getBooleanExtra("ADD_IMAGE", true);
         forwardMain = getIntent().getBooleanExtra("MAIN_ACTIVITY", false);
         setShowGif(booleanExtra2);
         setContentView(R.layout.activity_single_image_picker);
@@ -51,7 +52,13 @@ public class SingleImagePickerActivity extends AppCompatActivity {
                 finish();
                 return true;
             }
-            GridActivity.getQueShotGridActivityInstance().replaceCurrentPiece(photo.getPath());
+            if (isAddImage){
+                GridActivity.getQueShotGridActivityInstance().resultAddImage(photo.getPath());
+            }else {
+                GridActivity.getQueShotGridActivityInstance().replaceCurrentPiece(photo.getPath());
+            }
+
+
             finish();
             return true;
         });

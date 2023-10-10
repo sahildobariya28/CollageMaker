@@ -33,5 +33,6 @@ public enum Module {
     LAYER,
     PADDING,
     REPLACE,
-    COLLAGE
+    COLLAGE,
+    ADDIMAGE
 }

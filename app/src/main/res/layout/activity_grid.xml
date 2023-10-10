@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/image_view_exit"
+            android:id="@+id/btnBack"
             android:layout_width="40dp"
             android:layout_height="45dp"
             android:padding="8dp"
@@ -35,11 +35,11 @@
             android:textColor="@color/text_color_dark"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/image_view_exit"
+            app:layout_constraintStart_toEndOf="@+id/btnBack"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/text_view_save"
+            android:id="@+id/btnSave"
             android:layout_width="70dp"
             android:layout_height="30dp"
             android:layout_marginHorizontal="10dp"
@@ -62,6 +62,8 @@
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     <!--Save TopBar-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_layout_confirm_save_filter"
@@ -95,6 +97,98 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_confirm_save_neon"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/image_view_close_neon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_view_save_neon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:onClick="onClick"
+            android:padding="8dp"
+            android:src="@drawable/ic_done"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_confirm_save_add_image"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/image_view_close_add_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_view_save_add_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:onClick="onClick"
+            android:padding="8dp"
+            android:src="@drawable/ic_done"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_confirm_save_paint"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/image_view_close_paint"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:onClick="onClick"
+            android:padding="8dp"
+            android:src="@drawable/ic_close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_view_save_paint"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:onClick="onClick"
+            android:padding="8dp"
+            android:src="@drawable/ic_done"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <!--Main Container-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_layout_collage_layout"
@@ -138,6 +232,319 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_end="160dp" />
+
+        <!--Paint-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout_draw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/rvPrimaryTool"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewDraw"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayoutPaint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint_layout_confirm_control"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginBottom="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayoutSeekbar">
+
+                <ImageView
+                    android:id="@+id/imageViewBrush"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/background_flip"
+                    android:onClick="onClick"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_brush"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="150dp"
+                    android:layout_height="35dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/image_view_undo"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/background_flip"
+                        android:onClick="onClick"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_undo"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/image_view_clean"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/background_flip"
+                        android:onClick="onClick"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_delete_outline"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/image_view_redo"
+                        app:layout_constraintStart_toEndOf="@id/image_view_undo" />
+
+                    <ImageView
+                        android:id="@+id/image_view_redo"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/background_flip"
+                        android:onClick="onClick"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_redo"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <ImageView
+                    android:id="@+id/image_view_erase"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/background_flip"
+                    android:onClick="onClick"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_erase"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutSeekbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/BackgroundColor"
+                android:paddingTop="8dp"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <SeekBar
+                    android:id="@+id/seekbarBrushSize"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@null"
+                    android:max="60"
+                    android:paddingTop="8dp"
+                    android:progress="20"
+                    android:progressDrawable="@drawable/progress_drawable"
+                    android:splitTrack="false"
+                    android:thumb="@drawable/progress_thumb"
+                    app:layout_constraintBottom_toTopOf="@id/recyclerViewColorPaint" />
+
+                <SeekBar
+                    android:id="@+id/seekbarEraseSize"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@null"
+                    android:max="100"
+                    android:paddingTop="8dp"
+                    android:progress="20"
+                    android:progressDrawable="@drawable/progress_drawable"
+                    android:splitTrack="false"
+                    android:thumb="@drawable/progress_thumb"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewColorPaint"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayoutNeon"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginBottom="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayoutSeekbarNeon">
+
+                <ImageView
+                    android:id="@+id/imageViewNeon"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:padding="6dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/background_flip"
+                    android:src="@drawable/ic_brush"
+                    android:onClick="onClick"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="150dp"
+                    android:layout_height="35dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <ImageView
+                        android:id="@+id/image_view_undo_neon"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/background_flip"
+                        android:onClick="onClick"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_undo"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <ImageView
+                        android:id="@+id/image_view_clean_neon"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/background_flip"
+                        android:onClick="onClick"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_delete_outline"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/image_view_undo_neon"
+                        app:layout_constraintEnd_toStartOf="@+id/image_view_redo_neon"/>
+
+                    <ImageView
+                        android:id="@+id/image_view_redo_neon"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:onClick="onClick"
+                        android:background="@drawable/background_flip"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_redo"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ImageView
+                    android:id="@+id/image_view_erase_neon"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_erase"
+                    android:background="@drawable/background_flip"
+                    android:onClick="onClick"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutSeekbarNeon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:background="@color/BackgroundColor"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <SeekBar
+                    android:id="@+id/seekbarBrushSizeNeon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@null"
+                    android:max="60"
+                    android:progress="20"
+                    android:progressDrawable="@drawable/progress_drawable"
+                    android:thumb="@drawable/progress_thumb"
+                    android:splitTrack="false"
+                    app:layout_constraintBottom_toTopOf="@id/recyclerViewColorNeon"/>
+
+                <SeekBar
+                    android:id="@+id/seekbarEraseSizeNeon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@null"
+                    android:max="100"
+                    android:progress="20"
+                    android:progressDrawable="@drawable/progress_drawable"
+                    android:thumb="@drawable/progress_thumb"
+                    android:splitTrack="false"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewColorNeon"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!--Loading-->
         <RelativeLayout
@@ -203,7 +610,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:textColor="@color/white"
+                        android:textColor="@color/text_color_dark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -991,7 +1398,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewToolsCollage"
+                    android:id="@+id/rvSecondaryTool"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_marginBottom="10dp"
@@ -1008,11 +1415,11 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_tools"
+            android:id="@+id/rvPrimaryTool"
             android:layout_width="match_parent"
             android:layout_height="65dp"
-            android:orientation="horizontal"
             android:background="@color/white"
+            android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

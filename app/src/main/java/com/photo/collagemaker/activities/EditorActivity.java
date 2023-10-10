@@ -1159,7 +1159,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
                 binding.imageViewClean.setVisibility(View.GONE);
                 binding.imageViewErase.setVisibility(View.GONE);
                 binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                binding.constraintLayoutSave.setVisibility(View.GONE);
+                binding.constraintLayoutConfirmSavePaint.setVisibility(View.GONE);
                 binding.constraintLayoutPaint.setVisibility(View.GONE);
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(binding.constraintLayoutRootView);
@@ -1558,11 +1558,10 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
                 binding.constraintLayoutPaint.setVisibility(View.VISIBLE);
                 binding.recyclerViewTools.setVisibility(View.GONE);
                 binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutPaint.setVisibility(View.VISIBLE);
                 binding.constraintLayoutAdjust.setVisibility(View.GONE);
                 binding.constraintLayoutFilter.setVisibility(View.GONE);
                 binding.constraintLayoutNeon.setVisibility(View.GONE);
-                binding.constraintLayoutSave.setVisibility(View.VISIBLE);
+                binding.constraintLayoutConfirmSavePaint.setVisibility(View.VISIBLE);
                 binding.relativeLayoutAddText.setVisibility(View.GONE);
                 binding.constraintLayoutConfirmText.setVisibility(View.GONE);
                 quShotCustomEditor.setFilterEffect("");
@@ -1643,7 +1642,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
                         binding.imageViewClean.setVisibility(View.GONE);
                         binding.imageViewErase.setVisibility(View.GONE);
                         binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                        binding.constraintLayoutSave.setVisibility(View.GONE);
+                        binding.constraintLayoutConfirmSavePaint.setVisibility(View.GONE);
                         quShotCustomEditor.setBrushDrawingMode(false);
                         ConstraintSet constraintSet = new ConstraintSet();
                         constraintSet.clone(binding.constraintLayoutRootView);
@@ -2402,9 +2401,14 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         public Bitmap doInBackground(String... string) {
             try {
                 Uri fromFile = Uri.fromFile(new File(string[0]));
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), fromFile);
-                
-                Bitmap bitmap1 = SystemUtil.rotateBitmap(bitmap, new ExifInterface(getContentResolver().openInputStream(fromFile)).getAttributeInt(ExifInterface.TAG_ORIENTATION, 1));
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(EditorActivity.this.getContentResolver(), fromFile);
+                float width = (float) bitmap.getWidth();
+                float height = (float) bitmap.getHeight();
+                float max = Math.max(width / 1280.0f, height / 1280.0f);
+                if (max > 1.0f) {
+                    bitmap = Bitmap.createScaledBitmap(bitmap, (int) (width / max), (int) (height / max), false);
+                }
+                Bitmap bitmap1 = SystemUtil.rotateBitmap(bitmap, new ExifInterface(EditorActivity.this.getContentResolver().openInputStream(fromFile)).getAttributeInt(ExifInterface.TAG_ORIENTATION, 1));
                 if (bitmap1 != bitmap) {
                     bitmap.recycle();
                 }

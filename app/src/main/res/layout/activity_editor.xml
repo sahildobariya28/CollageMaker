@@ -1516,7 +1516,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
-                android:background="@color/BackgroundColor"
+                android:background="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <SeekBar
@@ -1660,7 +1660,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
-                android:background="@color/BackgroundColor"
+                android:background="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <SeekBar

@@ -16,8 +16,10 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.photo.collagemaker.R;
+import com.photo.collagemaker.draw.BrushDrawingView;
 import com.photo.collagemaker.grid.QueShotArea;
 import com.photo.collagemaker.grid.QueShotGrid;
 import com.photo.collagemaker.grid.QueShotLayout;
@@ -122,7 +124,7 @@ public class CustomGridView extends StickerView {
         };
         init(context, attributeSet);
     }
-
+    private BrushDrawingView brushDrawingView;
     @SuppressLint("ResourceType")
     private void init(Context context, AttributeSet attributeSet) {
         int[] PuzzleView = {R.attr.animation_duration, R.attr.handle_bar_color, R.attr.line_color, R.attr.line_size, R.attr.need_draw_line, R.attr.need_draw_outer_line, R.attr.piece_padding, R.attr.radian, R.attr.selected_line_color};
@@ -158,8 +160,20 @@ public class CustomGridView extends StickerView {
         this.handleBarPaint.setColor(this.handleBarColor);
         this.handleBarPaint.setStrokeWidth((float) (this.lineSize * 3));
         this.midPoint = new PointF();
+
+        this.brushDrawingView = new BrushDrawingView(getContext());
+        this.brushDrawingView.setVisibility(View.GONE);
+        this.brushDrawingView.setId(2);
+        RelativeLayout.LayoutParams layoutParams2 = new RelativeLayout.LayoutParams(-1, -2);
+        layoutParams2.addRule(13, -1);
+        layoutParams2.addRule(6, 1);
+        layoutParams2.addRule(8, 1);
+        addView(this.brushDrawingView, layoutParams2);
     }
 
+    public BrushDrawingView getBrushDrawingView() {
+        return this.brushDrawingView;
+    }
 
     public void onSizeChanged(int i, int i2, int i3, int i4) {
         super.onSizeChanged(i, i2, i3, i4);

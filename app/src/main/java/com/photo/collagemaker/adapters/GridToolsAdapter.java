@@ -36,7 +36,7 @@ public class GridToolsAdapter extends RecyclerView.Adapter<GridToolsAdapter.View
         mToolList.add(new ToolModel("Sticker", R.drawable.icon_sticker, Module.STICKER));
         mToolList.add(new ToolModel("Background", R.drawable.icon_background, Module.GRADIENT));
         mToolList.add(new ToolModel("Draw", R.drawable.img_draw, Module.DRAW));
-        mToolList.add(new ToolModel("Add", R.drawable.gallery_add, Module.REPLACE));
+        mToolList.add(new ToolModel("Add", R.drawable.gallery_add, Module.ADDIMAGE));
     }
 
     class ToolModel {

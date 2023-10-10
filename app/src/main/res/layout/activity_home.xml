@@ -89,10 +89,10 @@
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
                 android:text="Collage"
-                android:layout_marginTop="15dp"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
@@ -133,10 +133,10 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
                 android:text="Editor"
-                android:layout_marginTop="15dp"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
@@ -204,7 +204,7 @@
 
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/feature_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -215,195 +215,223 @@
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toBottomOf="@+id/ly_home_panel">
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:id="@+id/cardFreeStyle"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:layout_marginHorizontal="10dp"
-            android:layout_weight="1"
-            android:backgroundTint="#F664AF"
-            card_view:cardCornerRadius="35dp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintDimensionRatio="1:1"
-            card_view:layout_constraintEnd_toStartOf="@+id/cardMultiFit"
-            card_view:layout_constraintHorizontal_bias="0.5"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_margin="5dp"
-                    android:padding="5dp"
-                    android:src="@drawable/img_freestyle" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/textFreeStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_medium"
-            android:gravity="center"
-            android:text="FreeStyle"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/text_color_dark"
-            android:textSize="16sp"
-            card_view:layout_constraintEnd_toEndOf="@+id/cardFreeStyle"
-            card_view:layout_constraintStart_toStartOf="@+id/cardFreeStyle"
-            card_view:layout_constraintTop_toBottomOf="@+id/cardFreeStyle" />
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
+            <androidx.cardview.widget.CardView
 
-        <androidx.cardview.widget.CardView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="#F664AF"
+                card_view:cardCornerRadius="35dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:src="@drawable/img_freestyle" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/textFreeStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="FreeStyle"
+                android:textColor="@color/text_color_dark"
+                android:textSize="16sp"
+                card_view:layout_constraintEnd_toEndOf="@+id/cardFreeStyle"
+                card_view:layout_constraintStart_toStartOf="@+id/cardFreeStyle"
+                card_view:layout_constraintTop_toBottomOf="@+id/cardFreeStyle" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/cardMultiFit"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:layout_marginHorizontal="10dp"
-            android:layout_weight="1"
-            android:backgroundTint="#64A5FF"
-            card_view:cardCornerRadius="35dp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintDimensionRatio="1:1"
-            card_view:layout_constraintEnd_toStartOf="@+id/cardStitch"
-            card_view:layout_constraintHorizontal_bias="0.5"
-            card_view:layout_constraintStart_toEndOf="@+id/cardFreeStyle"
-            card_view:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_margin="5dp"
-                    android:padding="5dp"
-                    android:src="@drawable/img_multi_fit" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/textMultiFit"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_medium"
-            android:gravity="center"
-            android:text="Multi-fit"
-            android:textColor="@color/text_color_dark"
-            android:textSize="16sp"
-            android:layout_marginTop="10dp"
-            card_view:layout_constraintEnd_toEndOf="@+id/cardMultiFit"
-            card_view:layout_constraintStart_toStartOf="@+id/cardMultiFit"
-            card_view:layout_constraintTop_toBottomOf="@+id/cardMultiFit" />
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="#64A5FF"
+                card_view:cardCornerRadius="35dp"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintDimensionRatio="1:1"
+                card_view:layout_constraintEnd_toStartOf="@+id/cardStitch"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintStart_toEndOf="@+id/cardFreeStyle"
+                card_view:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:src="@drawable/img_multi_fit" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
 
 
-        <androidx.cardview.widget.CardView
+            <TextView
+                android:id="@+id/textMultiFit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="Multi-fit"
+                android:textColor="@color/text_color_dark"
+                android:textSize="16sp"
+                card_view:layout_constraintEnd_toEndOf="@+id/cardMultiFit"
+                card_view:layout_constraintStart_toStartOf="@+id/cardMultiFit"
+                card_view:layout_constraintTop_toBottomOf="@+id/cardMultiFit" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/cardStitch"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:layout_marginHorizontal="10dp"
-            android:layout_weight="1"
-            android:backgroundTint="#FFB51E"
-            card_view:cardCornerRadius="35dp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintDimensionRatio="1:1"
-            card_view:layout_constraintEnd_toStartOf="@+id/cardMaterial"
-            card_view:layout_constraintHorizontal_bias="0.5"
-            card_view:layout_constraintStart_toEndOf="@+id/cardMultiFit"
-            card_view:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_margin="5dp"
-                    android:padding="5dp"
-                    android:src="@drawable/img_stitch" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/textStitch"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_medium"
-            android:gravity="center"
-            android:text="Stitch"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/text_color_dark"
-            android:textSize="16sp"
-            card_view:layout_constraintEnd_toEndOf="@+id/cardStitch"
-            card_view:layout_constraintStart_toStartOf="@+id/cardStitch"
-            card_view:layout_constraintTop_toBottomOf="@+id/cardStitch" />
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
+            <androidx.cardview.widget.CardView
 
-        <androidx.cardview.widget.CardView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="#FFB51E"
+                card_view:cardCornerRadius="35dp"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintDimensionRatio="1:1"
+                card_view:layout_constraintEnd_toStartOf="@+id/cardMaterial"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintStart_toEndOf="@+id/cardMultiFit"
+                card_view:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:src="@drawable/img_stitch" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/textStitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="Stitch"
+                android:textColor="@color/text_color_dark"
+                android:textSize="16sp"
+                card_view:layout_constraintEnd_toEndOf="@+id/cardStitch"
+                card_view:layout_constraintStart_toStartOf="@+id/cardStitch"
+                card_view:layout_constraintTop_toBottomOf="@+id/cardStitch" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/cardMaterial"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:layout_marginHorizontal="10dp"
-            android:layout_weight="1"
-            android:backgroundTint="#FF6161"
-            card_view:cardCornerRadius="35dp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintDimensionRatio="1:1"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintHorizontal_bias="0.5"
-            card_view:layout_constraintStart_toEndOf="@+id/cardStitch"
-            card_view:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_margin="5dp"
-                    android:padding="5dp"
-                    android:src="@drawable/img_material" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/textMaterial"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_medium"
-            android:gravity="center"
-            android:text="Material"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/text_color_dark"
-            android:textSize="16sp"
-            card_view:layout_constraintEnd_toEndOf="@+id/cardMaterial"
-            card_view:layout_constraintStart_toStartOf="@+id/cardMaterial"
-            card_view:layout_constraintTop_toBottomOf="@+id/cardMaterial" />
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
+            <androidx.cardview.widget.CardView
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="#FF6161"
+                card_view:cardCornerRadius="35dp"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintDimensionRatio="1:1"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintStart_toEndOf="@+id/cardStitch"
+                card_view:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:src="@drawable/img_material" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/textMaterial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="Material"
+                android:textColor="@color/text_color_dark"
+                android:textSize="16sp"
+                card_view:layout_constraintEnd_toEndOf="@+id/cardMaterial"
+                card_view:layout_constraintStart_toStartOf="@+id/cardMaterial"
+                card_view:layout_constraintTop_toBottomOf="@+id/cardMaterial" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
