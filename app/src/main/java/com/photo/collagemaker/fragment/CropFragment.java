@@ -3,6 +3,7 @@ package com.photo.collagemaker.fragment;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -43,8 +44,29 @@ public class CropFragment extends DialogFragment implements AspectAdapter.OnNewS
         binding.cropImageView.setCropMode(CropImageView.CropMode.FREE);
 
         binding.imageViewSaveCrop.setOnClickListener(view -> new OnSaveCrop().execute());
-        binding.relativeLayoutLoading.setVisibility(View.GONE);
+        binding.loadingView.setVisibility(View.GONE);
         binding.imageViewCloseCrop.setOnClickListener(view -> dismiss());
+
+        binding.btnRotate.setOnClickListener(view -> {
+            Matrix matrix = new Matrix();
+            matrix.preRotate(90);
+            bitmap = Bitmap.createBitmap(bitmap , 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            binding.cropImageView.setImageBitmap(bitmap);
+        });
+        binding.btnHorizontal.setOnClickListener(view -> {
+            Matrix matrix = new Matrix();
+            matrix.setScale(-1, 1);
+            matrix.postTranslate( bitmap.getWidth(),0);
+            bitmap = Bitmap.createBitmap( bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            binding.cropImageView.setImageBitmap(bitmap);
+        });
+        binding.btnVertical.setOnClickListener(view -> {
+            Matrix matrix = new Matrix();
+            matrix.setScale( 1,-1);
+            matrix.postTranslate( 0, bitmap.getHeight());
+            bitmap = Bitmap.createBitmap( bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            binding.cropImageView.setImageBitmap(bitmap);
+        });
 
         return binding.getRoot();
     }
@@ -125,10 +147,10 @@ public class CropFragment extends DialogFragment implements AspectAdapter.OnNewS
     public void mLoading(boolean z) {
         if (z) {
             getActivity().getWindow().setFlags(16, 16);
-            binding.relativeLayoutLoading.setVisibility(View.VISIBLE);
+            binding.loadingView.setVisibility(View.VISIBLE);
             return;
         }
         getActivity().getWindow().clearFlags(16);
-        binding.relativeLayoutLoading.setVisibility(View.GONE);
+        binding.loadingView.setVisibility(View.GONE);
     }
 }

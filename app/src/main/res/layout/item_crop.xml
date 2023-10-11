@@ -1,17 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/relativeLayoutCropper"
     android:layout_width="60dp"
-    android:layout_height="60dp"
-    android:layout_marginStart="5dp">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginStart="5dp"
+    android:paddingVertical="10dp"
+    android:gravity="center">
 
-    <ImageView
-        android:id="@+id/image_view_aspect_ratio"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/relativeLayoutCropper"
         android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/ic_crop_free"
-        android:layout_centerInParent="true"
-        app:tint="@color/icon_color_dark"/>
+        android:layout_height="wrap_content"
+        android:background="@drawable/icon_bg_light"
+        android:padding="5dp">
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/image_view_aspect_ratio"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_crop_9_16"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="9:16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/icon_color_dark" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textAspectName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:text="Select"
+        android:textColor="@color/black"
+        android:textSize="10sp" />
+
+
+</LinearLayout>
