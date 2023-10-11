@@ -94,12 +94,21 @@
                     android:gravity="center_horizontal"
                     android:paddingHorizontal="10dp">
 
-                    <ImageView
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/selectedColorPreview"
                         android:layout_width="40dp"
                         android:layout_height="55dp"
-                        android:background="@drawable/icon_bg_light"
-                        android:padding="5dp"
-                        android:src="@drawable/img_select" />
+                        app:cardCornerRadius="5dp"
+                        android:backgroundTint="@color/white">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="55dp"
+                            android:padding="5dp"
+                            android:src="@drawable/img_select" />
+
+                    </androidx.cardview.widget.CardView>
+
 
                     <TextView
                         android:layout_width="wrap_content"

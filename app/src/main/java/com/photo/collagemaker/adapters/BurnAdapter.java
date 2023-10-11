@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.assets.EffectCodeAsset;
+import com.photo.collagemaker.databinding.ItemOverlayBinding;
 import com.photo.collagemaker.listener.BurnListener;
 
 import java.util.List;
@@ -34,7 +35,8 @@ public class BurnAdapter extends RecyclerView.Adapter<BurnAdapter.ViewHolder> {
 
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_overlay, viewGroup, false));
+        ItemOverlayBinding binding = ItemOverlayBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void reset() {
@@ -43,17 +45,17 @@ public class BurnAdapter extends RecyclerView.Adapter<BurnAdapter.ViewHolder> {
     }
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.text_view_filter_name.setText(effectsCodeList.get(i).getName());
-        viewHolder.text_view_filter_name.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
-        viewHolder.round_image_view_filter_item.setImageBitmap(bitmapList.get(i));
+        viewHolder.binding.textViewFilterName.setText(effectsCodeList.get(i).getName());
+        viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
+        viewHolder.binding.roundImageViewFilterItem.setImageBitmap(bitmapList.get(i));
         if (selectIndex == i) {
-            viewHolder.round_image_view_filter_item.setBorderColor(ContextCompat.getColor(context, R.color.itemColorBlack));
-            viewHolder.text_view_filter_name.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
-            viewHolder.viewSelected.setVisibility(View.VISIBLE);
+            viewHolder.binding.roundImageViewFilterItem.setBorderColor(ContextCompat.getColor(context, R.color.itemColorBlack));
+            viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
+            viewHolder.binding.viewSelected.setVisibility(View.VISIBLE);
             return;
         }
-        viewHolder.text_view_filter_name.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
-        viewHolder.viewSelected.setVisibility(View.GONE);
+        viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
+        viewHolder.binding.viewSelected.setVisibility(View.GONE);
 
     }
 
@@ -62,16 +64,13 @@ public class BurnAdapter extends RecyclerView.Adapter<BurnAdapter.ViewHolder> {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        RoundedImageView round_image_view_filter_item;
-        TextView text_view_filter_name;
-        View viewSelected;
+        ItemOverlayBinding binding;
+        ViewHolder(ItemOverlayBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-        ViewHolder(View view) {
-            super(view);
-            round_image_view_filter_item = view.findViewById(R.id.round_image_view_filter_item);
-            text_view_filter_name = view.findViewById(R.id.text_view_filter_name);
-            viewSelected = view.findViewById(R.id.view_selected);
-            view.setOnClickListener(view1 -> {
+
+            binding.getRoot().setOnClickListener(view1 -> {
                 selectIndex = getLayoutPosition();
                 burnListener.onFilterSelected(effectsCodeList.get(selectIndex).getImage());
                 notifyDataSetChanged();

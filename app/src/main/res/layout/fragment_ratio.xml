@@ -39,7 +39,7 @@
                 android:adjustViewBounds="true" />
 
             <RelativeLayout
-                android:id="@+id/relative_layout_loading"
+                android:id="@+id/relativeLayoutLoading"
                 android:background="@android:color/transparent"
                 android:layout_width="120dp"
                 android:layout_height="120dp"

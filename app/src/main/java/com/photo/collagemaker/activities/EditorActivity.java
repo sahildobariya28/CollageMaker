@@ -80,7 +80,6 @@ import com.photo.collagemaker.fragment.RatioFragment;
 import com.photo.collagemaker.fragment.SplashFragment;
 import com.photo.collagemaker.listener.OnQuShotEditorListener;
 import com.photo.collagemaker.custom_view.CustomEditor;
-import com.photo.collagemaker.custom_view.CustomCollageView;
 import com.photo.collagemaker.draw.Drawing;
 import com.photo.collagemaker.picker.PermissionsUtils;
 import com.photo.collagemaker.custom_view.StickerIcons;
@@ -203,14 +202,14 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
         binding.relativeLayoutLoading.setVisibility(View.VISIBLE);
         binding.photoEditorView.setVisibility(View.INVISIBLE);
-        binding.recyclerViewFilterBw.setVisibility(View.GONE);
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
         binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
         binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
 
-        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewBW.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
         binding.viewVintage.setVisibility(View.INVISIBLE);
         binding.viewSmooth.setVisibility(View.INVISIBLE);
@@ -286,8 +285,8 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         binding.recyclerViewemoji.setHasFixedSize(true);
         binding.recyclerViewFilterAll.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewFilterAll.setHasFixedSize(true);
-        binding.recyclerViewFilterBw.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        binding.recyclerViewFilterBw.setHasFixedSize(true);
+        binding.recyclerViewFilterBW.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        binding.recyclerViewFilterBW.setHasFixedSize(true);
         binding.recyclerViewFilterVintage.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewFilterVintage.setHasFixedSize(true);
         binding.recyclerViewFilterSmooth.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
@@ -381,10 +380,10 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
                 return inflate;
             }
         });
-        RecyclerTabLayout recycler_tab_layout_women = findViewById(R.id.recycler_tab_layout_women);
-        recycler_tab_layout_women.setUpWithAdapter(new WomenTabAdapter(binding.stickerWomenViewpager, getApplicationContext()));
-        recycler_tab_layout_women.setPositionThreshold(0.5f);
-        recycler_tab_layout_women.setBackgroundColor(ContextCompat.getColor(this, R.color.TabColor));
+
+        binding.recyclerTabLayoutWomen.setUpWithAdapter(new WomenTabAdapter(binding.stickerWomenViewpager, getApplicationContext()));
+        binding.recyclerTabLayoutWomen.setPositionThreshold(0.5f);
+        binding.recyclerTabLayoutWomen.setBackgroundColor(ContextCompat.getColor(this, R.color.TabColor));
 
         binding.stickerViewpager.setAdapter(new PagerAdapter() {
             public int getCount() {
@@ -423,7 +422,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
                 return inflate;
             }
         });
-        RecyclerTabLayout recycler_tab_layout = findViewById(R.id.recycler_tab_layout);
+        RecyclerTabLayout recycler_tab_layout = findViewById(R.id.recyclerTabLayout);
         recycler_tab_layout.setUpWithAdapter(new StickerTabAdapter(binding.stickerViewpager, getApplicationContext()));
         recycler_tab_layout.setPositionThreshold(0.5f);
         recycler_tab_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.TabColor));
@@ -480,10 +479,9 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
                 return inflate;
             }
         });
-        RecyclerTabLayout recycler_tab_layout_men = findViewById(R.id.recycler_tab_layout_men);
-        recycler_tab_layout_men.setUpWithAdapter(new MenTabAdapter(binding.stickerMenViewpager, getApplicationContext()));
-        recycler_tab_layout_men.setPositionThreshold(0.5f);
-        recycler_tab_layout_men.setBackgroundColor(ContextCompat.getColor(this, R.color.TabColor));
+        binding.recyclerTabLayoutMen.setUpWithAdapter(new MenTabAdapter(binding.stickerMenViewpager, getApplicationContext()));
+        binding.recyclerTabLayoutMen.setPositionThreshold(0.5f);
+        binding.recyclerTabLayoutMen.setBackgroundColor(ContextCompat.getColor(this, R.color.TabColor));
 
 
         Bundle bundle = getIntent().getExtras();
@@ -708,6 +706,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
                 binding.seekbarStickerWomenAlpha.setProgress(sticker.getAlpha());
             }
 
+            @SuppressLint("RestrictedApi")
             public void onStickerSelected(@NonNull Sticker sticker) {
                 if (sticker instanceof CustomTextView) {
                     ((CustomTextView) sticker).setTextColor(SupportMenu.CATEGORY_MASK);
@@ -844,7 +843,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
     public void setAllFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.VISIBLE);
-        binding.recyclerViewFilterBw.setVisibility(View.GONE);
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
         binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
@@ -859,7 +858,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
         binding.viewAll.setVisibility(View.VISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewBW.setVisibility(View.INVISIBLE);
         binding.viewVintage.setVisibility(View.INVISIBLE);
         binding.viewSmooth.setVisibility(View.INVISIBLE);
         binding.viewWarm.setVisibility(View.INVISIBLE);
@@ -868,7 +867,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
     public void setBwFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBw.setVisibility(View.VISIBLE);
+        binding.recyclerViewFilterBW.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
         binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
@@ -883,7 +882,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBw.setVisibility(View.VISIBLE);
+        binding.viewBW.setVisibility(View.VISIBLE);
         binding.viewVintage.setVisibility(View.INVISIBLE);
         binding.viewSmooth.setVisibility(View.INVISIBLE);
         binding.viewWarm.setVisibility(View.INVISIBLE);
@@ -892,7 +891,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
     public void setVintageFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBw.setVisibility(View.GONE);
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
@@ -907,7 +906,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewBW.setVisibility(View.INVISIBLE);
         binding.viewVintage.setVisibility(View.VISIBLE);
         binding.viewSmooth.setVisibility(View.INVISIBLE);
         binding.viewWarm.setVisibility(View.INVISIBLE);
@@ -916,7 +915,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
     public void setSmoothFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBw.setVisibility(View.GONE);
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
         binding.recyclerViewFilterSmooth.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
@@ -931,7 +930,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewBW.setVisibility(View.INVISIBLE);
         binding.viewVintage.setVisibility(View.INVISIBLE);
         binding.viewSmooth.setVisibility(View.VISIBLE);
         binding.viewWarm.setVisibility(View.INVISIBLE);
@@ -940,7 +939,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
     public void setColdFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBw.setVisibility(View.GONE);
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
         binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.VISIBLE);
@@ -955,7 +954,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.VISIBLE);
-        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewBW.setVisibility(View.INVISIBLE);
         binding.viewVintage.setVisibility(View.INVISIBLE);
         binding.viewSmooth.setVisibility(View.INVISIBLE);
         binding.viewWarm.setVisibility(View.INVISIBLE);
@@ -964,7 +963,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
     public void setWarmFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBw.setVisibility(View.GONE);
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
         binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
@@ -979,7 +978,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewBW.setVisibility(View.INVISIBLE);
         binding.viewVintage.setVisibility(View.INVISIBLE);
         binding.viewSmooth.setVisibility(View.INVISIBLE);
         binding.viewWarm.setVisibility(View.VISIBLE);
@@ -988,7 +987,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
     public void setLegacyFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBw.setVisibility(View.GONE);
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
         binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
@@ -1003,7 +1002,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.white));
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewBW.setVisibility(View.INVISIBLE);
         binding.viewVintage.setVisibility(View.INVISIBLE);
         binding.viewSmooth.setVisibility(View.INVISIBLE);
         binding.viewWarm.setVisibility(View.INVISIBLE);
@@ -1131,7 +1130,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
     public void onClick(View view) {
         int id = view.getId();
-        if (id == R.id.imageViewCloseAdjust || id == R.id.image_view_close_paint || id == R.id.image_view_close_neon || id == R.id.image_view_close_sticker_men || id == R.id.image_view_close_sticker_women || id == R.id.image_view_close_sticker || id == R.id.imageViewCloseText || id == R.id.image_view_close_filter || id == R.id.image_view_close_hardmix) {
+        if (id == R.id.imageViewCloseAdjust || id == binding.imageViewClosePaint.getId() || id == binding.imageViewCloseNeon.getId() || id == binding.imageViewCloseStickerMen.getId() || id == binding.imageViewCloseStickerWomen.getId() || id == R.id.imageViewCloseSticker || id == R.id.imageViewCloseText || id == binding.imageViewCloseFilter.getId() || id == binding.imageViewCloseHardmix.getId()) {
             setVisibleSave();
             onBackPressed();
             
@@ -1150,7 +1149,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
             setVisibleSave();
             moduleToolsId = Module.NONE;
             
-        } else if (id == R.id.image_view_save_paint) {
+        } else if (id == binding.imageViewSavePaint.getId()) {
             showLoading(true);
             runOnUiThread(() -> {
                 quShotCustomEditor.setBrushDrawingMode(false);
@@ -1175,7 +1174,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
             setVisibleSave();
             moduleToolsId = Module.NONE;
             
-        } else if (id == R.id.image_view_save_neon) {
+        } else if (id == binding.imageViewSaveNeon.getId()) {
             showLoading(true);
             runOnUiThread(() -> {
                 quShotCustomEditor.setBrushDrawingMode(false);
@@ -1199,7 +1198,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
             setVisibleSave();
             moduleToolsId = Module.NONE;
             
-        } else if (id == R.id.image_view_save_filter) {
+        } else if (id == binding.imageViewSaveFilter.getId()) {
             new SaveFilter().execute();
             binding.imageViewCompareFilter.setVisibility(View.GONE);
             binding.constraintLayoutFilter.setVisibility(View.GONE);
@@ -1214,7 +1213,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
             constraintsete.applyTo(binding.constraintLayoutRootView);
             moduleToolsId = Module.NONE;
            
-        } else if (id == R.id.image_view_save_hardmix) {
+        } else if (id == binding.imageViewSaveHardmix.getId()) {
             new SaveFilter().execute();
             binding.imageViewCompareEffect.setVisibility(View.GONE);
             binding.constraintLayoutEffect.setVisibility(View.GONE);
@@ -1229,7 +1228,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
             constraintsetEffect.applyTo(binding.constraintLayoutRootView);
             setVisibleSave();
             moduleToolsId = Module.NONE;
-        } else if (id == R.id.image_view_save_sticker) {
+        } else if (id == R.id.imageViewSaveSticker) {
             binding.photoEditorView.setHandlingSticker(null);
             binding.photoEditorView.setLocked(true);
             binding.seekbarStickerAlpha.setVisibility(View.GONE);
@@ -1243,7 +1242,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
             setVisibleSave();
             moduleToolsId = Module.NONE;
             
-        } else if (id == R.id.image_view_save_sticker_men) {
+        } else if (id == binding.imageViewSaveStickerMen.getId()) {
             binding.photoEditorView.setHandlingSticker(null);
             binding.photoEditorView.setLocked(true);
             binding.seekbarStickerMenAlpha.setVisibility(View.GONE);
@@ -1257,7 +1256,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
             setVisibleSave();
             moduleToolsId = Module.NONE;
             
-        } else if (id == R.id.image_view_save_sticker_women) {
+        } else if (id == binding.imageViewSaveStickerWomen.getId()) {
             binding.photoEditorView.setHandlingSticker(null);
             binding.photoEditorView.setLocked(true);
             binding.seekbarStickerWomenAlpha.setVisibility(View.GONE);
@@ -1288,11 +1287,11 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
             binding.recyclerViewTools.setVisibility(View.VISIBLE);
             setVisibleSave();
             moduleToolsId = Module.NONE;
-        } else if (id == R.id.image_view_redo_neon || id == R.id.image_view_redo) {
+        } else if (id == R.id.imageViewRedoNeon || id == binding.imageViewRedo.getId()) {
             quShotCustomEditor.redoBrush();
-        } else if (id == R.id.image_view_undo_neon || id == R.id.image_view_undo) {
+        } else if (id == binding.imageViewUndoNeon.getId() || id == binding.imageViewUndo.getId()) {
             quShotCustomEditor.undoBrush();
-        } else if (id == R.id.image_view_clean_neon || id == R.id.image_view_clean) {
+        } else if (id == binding.imageViewCloseNeon.getId() || id == binding.imageViewClean.getId()) {
             quShotCustomEditor.clearBrushAllViews();
         }
     }
@@ -1935,7 +1934,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterBw.setAdapter(new FilterAdapter(listBwFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
+            binding.recyclerViewFilterBW.setAdapter(new FilterAdapter(listBwFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.seekbarFilter.setProgress(100);
             showLoading(false);

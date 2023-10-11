@@ -76,10 +76,9 @@ dependencies {
     implementation("com.github.flipzeus:flipzeus:0.0.1")
 //    implementation("com.google.android.gms:play-services-ads:19.6.0")
 
-    //fixes google("ay revie)l
     implementation("androidx.work:work-runtime:2.8.0-alpha03")
+    implementation("com.github.skydoves:colorpickerview:2.3.0")
 
-//    //firebase ana("ics de)t
 //    implementation(platform("com.google.firebase:firebase-bom:30.0.1"))
 //    implementation("com.google.firebase:firebase-analytics")
 }

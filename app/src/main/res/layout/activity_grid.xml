@@ -9,7 +9,7 @@
 
     <!--TopBar-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraint_save_control"
+        android:id="@+id/constraintSaveControl"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/white"
@@ -66,7 +66,7 @@
 
     <!--Save TopBar-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraint_layout_confirm_save_filter"
+        android:id="@+id/constraintLayoutConfirmSaveFilter"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/theme_gray_bg"
@@ -74,7 +74,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/image_view_close_filter"
+            android:id="@+id/imageViewCloseFilter"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:onClick="onClick"
@@ -85,7 +85,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/image_view_save_filter"
+            android:id="@+id/imageViewSaveFilter"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:onClick="onClick"
@@ -98,7 +98,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraint_layout_confirm_save_neon"
+        android:id="@+id/constraintLayoutConfirmSaveNeon"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/white"
@@ -106,7 +106,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/image_view_close_neon"
+            android:id="@+id/imageViewCloseNeon"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="8dp"
@@ -116,37 +116,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/image_view_save_neon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:onClick="onClick"
-            android:padding="8dp"
-            android:src="@drawable/ic_done"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraint_layout_confirm_save_add_image"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@color/white"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/image_view_close_add_image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:padding="8dp"
-            android:src="@drawable/ic_close"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/image_view_save_add_image"
+            android:id="@+id/imageViewSaveNeon"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:onClick="onClick"
@@ -159,7 +129,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraint_layout_confirm_save_paint"
+        android:id="@+id/constraintLayoutConfirmSaveAddImage"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/white"
@@ -167,7 +137,38 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/image_view_close_paint"
+            android:id="@+id/imageViewCloseAddImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageViewSaveAddImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:onClick="onClick"
+            android:padding="8dp"
+            android:src="@drawable/ic_done"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayoutConfirmSavePaint"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageViewClosePaint"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:onClick="onClick"
@@ -178,7 +179,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/image_view_save_paint"
+            android:id="@+id/imageViewSavePaint"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:onClick="onClick"
@@ -191,7 +192,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
     <!--Main Container-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraint_layout_collage_layout"
+        android:id="@+id/constraintLayoutCollageLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -204,16 +205,18 @@
 
         <!--Editor View-->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_layout_wrapper_collage_view"
+            android:id="@+id/constraintLayoutWrapperCollageView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/theme_gray_bg"
             app:layout_constraintBottom_toTopOf="@id/imageToolContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0">
 
             <com.photo.collagemaker.custom_view.CustomGridView
-                android:id="@+id/collage_view"
+                android:id="@+id/collageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/theme_gray_bg"
@@ -223,6 +226,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:showBorder="true"
                 app:showIcons="true" />
+
+            <com.skydoves.colorpickerview.ColorPickerView
+                android:id="@+id/colorPickerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -235,7 +248,7 @@
 
         <!--Paint-->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_layout_draw"
+            android:id="@+id/constraintLayoutDraw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -265,7 +278,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout_confirm_control"
+                android:id="@+id/constraintLayoutConfirmControl"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginBottom="5dp"
@@ -294,7 +307,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:id="@+id/image_view_undo"
+                        android:id="@+id/imageViewUndo"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:background="@drawable/background_flip"
@@ -305,7 +318,7 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <ImageView
-                        android:id="@+id/image_view_clean"
+                        android:id="@+id/imageViewClean"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_marginStart="20dp"
@@ -315,11 +328,11 @@
                         android:padding="6dp"
                         android:src="@drawable/ic_delete_outline"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/image_view_redo"
-                        app:layout_constraintStart_toEndOf="@id/image_view_undo" />
+                        app:layout_constraintEnd_toStartOf="@+id/imageViewRedo"
+                        app:layout_constraintStart_toEndOf="@id/imageViewUndo" />
 
                     <ImageView
-                        android:id="@+id/image_view_redo"
+                        android:id="@+id/imageViewRedo"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:background="@drawable/background_flip"
@@ -333,7 +346,7 @@
 
 
                 <ImageView
-                    android:id="@+id/image_view_erase"
+                    android:id="@+id/imageViewErase"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_marginStart="10dp"
@@ -439,7 +452,7 @@
                     app:layout_constraintBottom_toBottomOf="parent">
 
                     <ImageView
-                        android:id="@+id/image_view_undo_neon"
+                        android:id="@+id/imageViewUndoNeon"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:background="@drawable/background_flip"
@@ -450,7 +463,7 @@
                         app:layout_constraintStart_toStartOf="parent"/>
 
                     <ImageView
-                        android:id="@+id/image_view_clean_neon"
+                        android:id="@+id/imageViewCleanNeon"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_marginStart="20dp"
@@ -460,11 +473,11 @@
                         android:padding="6dp"
                         android:src="@drawable/ic_delete_outline"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/image_view_undo_neon"
-                        app:layout_constraintEnd_toStartOf="@+id/image_view_redo_neon"/>
+                        app:layout_constraintStart_toEndOf="@id/imageViewUndoNeon"
+                        app:layout_constraintEnd_toStartOf="@+id/imageViewRedoNeon"/>
 
                     <ImageView
-                        android:id="@+id/image_view_redo_neon"
+                        android:id="@+id/imageViewRedoNeon"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:onClick="onClick"
@@ -477,7 +490,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <ImageView
-                    android:id="@+id/image_view_erase_neon"
+                    android:id="@+id/imageViewEraseNeon"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_marginStart="10dp"
@@ -548,7 +561,7 @@
 
         <!--Loading-->
         <RelativeLayout
-            android:id="@+id/relative_layout_loading"
+            android:id="@+id/relativeLayoutLoading"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:background="@android:color/transparent"
@@ -568,7 +581,7 @@
 
         <!--Text-->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_layout_confirm_text"
+            android:id="@+id/constraintLayoutConfirmText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -576,7 +589,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout_confirm_save"
+                android:id="@+id/constraintLayoutConfirmSave"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@color/white"
@@ -595,7 +608,7 @@
                     app:tint="@color/icon_bg_color_dark"/>
 
                 <RelativeLayout
-                    android:id="@+id/relative_layout_add_text"
+                    android:id="@+id/relativeLayoutAddText"
                     android:layout_width="100dp"
                     android:layout_height="40dp"
                     android:background="@drawable/background_card"
@@ -638,7 +651,7 @@
 
         <!--Collage-->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constrant_layout_change_Layout"
+            android:id="@+id/constrantLayoutChangeLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -688,7 +701,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/text_view_collage"
+                            android:id="@+id/textViewCollage"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_medium"
@@ -698,7 +711,7 @@
                             android:textSize="13sp" />
 
                         <View
-                            android:id="@+id/view_collage"
+                            android:id="@+id/viewCollage"
                             android:layout_width="20dp"
                             android:layout_height="4dp"
                             android:layout_marginTop="5dp"
@@ -717,7 +730,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/text_view_border"
+                            android:id="@+id/textViewBorder"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_medium"
@@ -727,7 +740,7 @@
                             android:textSize="13sp" />
 
                         <View
-                            android:id="@+id/view_border"
+                            android:id="@+id/viewBorder"
                             android:layout_width="20dp"
                             android:layout_height="4dp"
                             android:layout_marginTop="5dp"
@@ -746,7 +759,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/text_view_ratio"
+                            android:id="@+id/textViewRatio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_medium"
@@ -756,7 +769,7 @@
                             android:textSize="13sp" />
 
                         <View
-                            android:id="@+id/view_ratio"
+                            android:id="@+id/viewRatio"
                             android:layout_width="20dp"
                             android:layout_height="4dp"
                             android:layout_marginTop="5dp"
@@ -775,7 +788,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/text_view_background"
+                            android:id="@+id/textViewBackground"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_medium"
@@ -785,7 +798,7 @@
                             android:textSize="13sp" />
 
                         <View
-                            android:id="@+id/view_background"
+                            android:id="@+id/viewBackground"
                             android:layout_width="20dp"
                             android:layout_height="4dp"
                             android:layout_marginTop="5dp"
@@ -817,7 +830,7 @@
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view_collage"
+                    android:id="@+id/recyclerViewCollage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -858,7 +871,7 @@
                             android:src="@drawable/img_grid_padding" />
 
                         <SeekBar
-                            android:id="@+id/seekbar_border"
+                            android:id="@+id/seekbarBorder"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -891,7 +904,7 @@
                             android:src="@drawable/img_grid_radius" />
 
                         <SeekBar
-                            android:id="@+id/seekbar_radius"
+                            android:id="@+id/seekbarRadius"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -925,7 +938,7 @@
 
         <!-- Sticker-->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_layout_sticker"
+            android:id="@+id/constraintLayoutSticker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -951,7 +964,7 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/image_view_close_sticker"
+                        android:id="@+id/imageViewCloseSticker"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:onClick="onClick"
@@ -962,7 +975,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <FrameLayout
-                        android:id="@+id/frame_layout_wrapper_horizontal"
+                        android:id="@+id/frameLayoutWrapperHorizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -970,7 +983,7 @@
                         app:layout_scrollFlags="enterAlways|scroll">
 
                         <com.photo.collagemaker.adapters.RecyclerTabLayout
-                            android:id="@+id/recycler_tab_layout"
+                            android:id="@+id/recyclerTabLayout"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:background="@color/white" />
@@ -978,7 +991,7 @@
                     </FrameLayout>
 
                     <ImageView
-                        android:id="@+id/image_view_save_sticker"
+                        android:id="@+id/imageViewSaveSticker"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:onClick="onClick"
@@ -997,7 +1010,7 @@
 
 
                     <ImageView
-                        android:id="@+id/relative_layout_add_sticker"
+                        android:id="@+id/relativeLayoutAddSticker"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:background="@drawable/icon_bg_theme"
@@ -1022,17 +1035,17 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/relative_layout_add_sticker" />
+                        app:layout_constraintTop_toBottomOf="@+id/relativeLayoutAddSticker" />
 
 
                     <LinearLayout
-                        android:id="@+id/linear_layout_wrapper_sticker_list"
+                        android:id="@+id/linearLayoutWrapperStickerList"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
                         <androidx.viewpager.widget.ViewPager
-                            android:id="@+id/sticker_viewpaper"
+                            android:id="@+id/stickerViewpaper"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@color/theme_gray_bg"
@@ -1054,7 +1067,7 @@
 
         <!--Filter-->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_layout_filter_layout"
+            android:id="@+id/constraintLayoutFilterLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -1064,18 +1077,18 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout_confirm_compare"
+                android:id="@+id/constraintLayoutConfirmCompare"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraint_layout_confirm_filter"
+                    android:id="@+id/constraintLayoutConfirmFilter"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginBottom="10dp"
-                    app:layout_constraintBottom_toTopOf="@+id/constraint_layout_filters">
+                    app:layout_constraintBottom_toTopOf="@+id/constraintLayoutFilters">
 
                     <HorizontalScrollView
                         android:layout_width="0dp"
@@ -1102,7 +1115,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/text_view_list_all"
+                                    android:id="@+id/textViewListAll"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
@@ -1112,7 +1125,7 @@
                                     android:textSize="13sp" />
 
                                 <View
-                                    android:id="@+id/view_all"
+                                    android:id="@+id/viewAll"
                                     android:layout_width="20dp"
                                     android:layout_height="4dp"
                                     android:layout_marginTop="5dp"
@@ -1130,7 +1143,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/text_view_list_smooth"
+                                    android:id="@+id/textViewListSmooth"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
@@ -1140,7 +1153,7 @@
                                     android:textSize="13sp" />
 
                                 <View
-                                    android:id="@+id/view_smooth"
+                                    android:id="@+id/viewSmooth"
                                     android:layout_width="20dp"
                                     android:layout_height="4dp"
                                     android:layout_marginTop="5dp"
@@ -1158,7 +1171,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/text_view_list_bw"
+                                    android:id="@+id/textViewListBw"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
@@ -1168,7 +1181,7 @@
                                     android:textSize="13sp" />
 
                                 <View
-                                    android:id="@+id/view_bw"
+                                    android:id="@+id/viewBW"
                                     android:layout_width="20dp"
                                     android:layout_height="4dp"
                                     android:layout_marginTop="5dp"
@@ -1186,7 +1199,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/text_view_list_vintage"
+                                    android:id="@+id/textViewListVintage"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
@@ -1196,7 +1209,7 @@
                                     android:textSize="13sp" />
 
                                 <View
-                                    android:id="@+id/view_vintage"
+                                    android:id="@+id/viewVintage"
                                     android:layout_width="20dp"
                                     android:layout_height="4dp"
                                     android:layout_marginTop="5dp"
@@ -1214,7 +1227,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/text_view_list_cold"
+                                    android:id="@+id/textViewListCold"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
@@ -1224,7 +1237,7 @@
                                     android:textSize="13sp" />
 
                                 <View
-                                    android:id="@+id/view_cold"
+                                    android:id="@+id/viewCold"
                                     android:layout_width="20dp"
                                     android:layout_height="4dp"
                                     android:layout_marginTop="5dp"
@@ -1242,7 +1255,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/text_view_list_warm"
+                                    android:id="@+id/textViewListWarm"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
@@ -1252,7 +1265,7 @@
                                     android:textSize="13sp" />
 
                                 <View
-                                    android:id="@+id/view_warm"
+                                    android:id="@+id/viewWarm"
                                     android:layout_width="20dp"
                                     android:layout_height="4dp"
                                     android:layout_marginTop="5dp"
@@ -1270,7 +1283,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/text_view_list_legacy"
+                                    android:id="@+id/textViewListLegacy"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
@@ -1280,7 +1293,7 @@
                                     android:textSize="13sp" />
 
                                 <View
-                                    android:id="@+id/view_legacy"
+                                    android:id="@+id/viewLegacy"
                                     android:layout_width="20dp"
                                     android:layout_height="4dp"
                                     android:layout_marginTop="5dp"
@@ -1295,14 +1308,14 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraint_layout_filters"
+                    android:id="@+id/constraintLayoutFilters"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:background="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent">
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_view_filter_all"
+                        android:id="@+id/recyclerViewFilterAll"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:orientation="horizontal"
@@ -1310,7 +1323,7 @@
                         app:layout_constraintBottom_toBottomOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_view_filter_bw"
+                        android:id="@+id/recyclerViewFilterBW"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:orientation="horizontal"
@@ -1318,7 +1331,7 @@
                         app:layout_constraintBottom_toBottomOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_view_filter_vintage"
+                        android:id="@+id/recyclerViewFilterVintage"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:orientation="horizontal"
@@ -1326,7 +1339,7 @@
                         app:layout_constraintBottom_toBottomOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_view_filter_smooth"
+                        android:id="@+id/recyclerViewFilterSmooth"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:orientation="horizontal"
@@ -1334,7 +1347,7 @@
                         app:layout_constraintBottom_toBottomOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_view_filter_cold"
+                        android:id="@+id/recyclerViewFilterCold"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:orientation="horizontal"
@@ -1342,7 +1355,7 @@
                         app:layout_constraintBottom_toBottomOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_view_filter_warm"
+                        android:id="@+id/recyclerViewFilterWarm"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:orientation="horizontal"
@@ -1350,7 +1363,7 @@
                         app:layout_constraintBottom_toBottomOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_view_filter_legacy"
+                        android:id="@+id/recyclerViewFilterLegacy"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:orientation="horizontal"

@@ -25,6 +25,9 @@ dependencyResolutionManagement {
                 // Will be uploaded to maven central later.
                 url = uri("https://maven.wysaid.org/")
             }
+            maven {
+                url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+            }
         }
     }
 }

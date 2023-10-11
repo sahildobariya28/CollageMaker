@@ -780,6 +780,10 @@ public class CustomGridView extends StickerView {
         }
     }
 
+    public int getBackgroundColor(){
+        return this.queShotLayout.getColor();
+    }
+
 
     public float getCollagePadding() {
         return this.collagePadding;

@@ -12,6 +12,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.photo.collagemaker.R;
+import com.photo.collagemaker.databinding.ItemTabStickerBinding;
 
 
 public class StickerTabAdapter extends RecyclerTabLayout.Adapter<StickerTabAdapter.ViewHolder> {
@@ -25,22 +26,23 @@ public class StickerTabAdapter extends RecyclerTabLayout.Adapter<StickerTabAdapt
 
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_tab_sticker, viewGroup, false));
+        ItemTabStickerBinding binding = ItemTabStickerBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         switch (i) {
             case 0:
-                viewHolder.imageView.setImageDrawable(context.getDrawable(R.drawable.img_smily));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.img_smily));
                 break;
             case 1:
-                viewHolder.imageView.setImageDrawable(context.getDrawable(R.drawable.img_india));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.img_india));
                 break;
             case 2:
-                viewHolder.imageView.setImageDrawable(context.getDrawable(R.drawable.img_boom));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.img_boom));
                 break;
         }
-        viewHolder.imageView.setSelected(i == getCurrentIndicatorPosition());
+        viewHolder.binding.image.setSelected(i == getCurrentIndicatorPosition());
     }
 
     public int getItemCount() {
@@ -48,12 +50,12 @@ public class StickerTabAdapter extends RecyclerTabLayout.Adapter<StickerTabAdapt
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
+        ItemTabStickerBinding binding;
+        public ViewHolder(ItemTabStickerBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-        public ViewHolder(View view) {
-            super(view);
-            imageView = view.findViewById(R.id.image);
-            view.setOnClickListener(view1 -> getViewPager().setCurrentItem(getAdapterPosition()));
+            binding.getRoot().setOnClickListener(view1 -> getViewPager().setCurrentItem(getAdapterPosition()));
         }
     }
 }

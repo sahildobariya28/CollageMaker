@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,7 +18,6 @@ import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -26,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -55,7 +54,6 @@ import com.photo.collagemaker.adapters.StickerTabAdapter;
 import com.photo.collagemaker.assets.EffectCodeAsset;
 import com.photo.collagemaker.assets.FilterCodeAsset;
 import com.photo.collagemaker.assets.StickersAsset;
-import com.photo.collagemaker.custom_view.CustomEditor;
 import com.photo.collagemaker.custom_view.CustomEditorGrid;
 import com.photo.collagemaker.custom_view.CustomText;
 import com.photo.collagemaker.databinding.ActivityGridBinding;
@@ -91,6 +89,7 @@ import com.photo.collagemaker.utils.CollageUtils;
 import com.photo.collagemaker.utils.FilterUtils;
 import com.photo.collagemaker.utils.SaveFileUtils;
 import com.photo.collagemaker.utils.SystemUtil;
+import com.skydoves.colorpickerview.listeners.ColorListener;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.steelkiwi.cropiwa.AspectRatio;
@@ -320,7 +319,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         binding.backgroundContainer.btnColor.setOnClickListener(view -> setBackgroundColor());
         binding.backgroundContainer.btnGradient.setOnClickListener(view -> setBackgroundGradient());
         binding.backgroundContainer.btnBlur.setOnClickListener(view -> selectBackgroundBlur());
-        binding.backgroundContainer.btnSelect.setOnClickListener(view -> selectBackgroundBlur());
+        binding.backgroundContainer.btnSelect.setOnClickListener(view -> selectColorPicker());
         binding.backgroundContainer.btnWhite.setOnClickListener(view -> binding.collageView.setBackgroundColor(ContextCompat.getColor(this, R.color.white)));
         binding.backgroundContainer.btnBlack.setOnClickListener(view -> binding.collageView.setBackgroundColor(ContextCompat.getColor(this, R.color.black)));
 
@@ -340,12 +339,14 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
             binding.collageView.setTouchEnable(true);
             aspectRatio = binding.collageView.getAspectRatio();
             moduleToolsId = Module.NONE;
+            binding.collageView.setBackgroundColor(binding.colorPickerView.getColor());
 
             binding.backgroundContainer.backgroundTools.setVisibility(View.VISIBLE);
             binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
             binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
             binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
             binding.backgroundContainer.constrantLayoutChangeBackground.setVisibility(View.GONE);
+            binding.colorPickerView.setVisibility(View.GONE);
             if (binding.collageView.getBackgroundResourceMode() == 0) {
                 currentBackgroundState.isColor = true;
                 currentBackgroundState.isBitmap = false;
@@ -363,6 +364,8 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         });
 
         binding.imageViewCloseLayer.setOnClickListener(view -> {
+            binding.backgroundContainer.selectedColorPreview.getBackground().setTint( binding.collageView.getBackgroundColor());
+            binding.colorPickerView.setVisibility(View.GONE);
             setVisibleSave();
             onBackPressed();
         });
@@ -420,11 +423,15 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         });
 
         binding.imageViewCloseFilter.setOnClickListener(view -> {
+            binding.constraintLayoutFilterLayout.setVisibility(View.GONE);
+            binding.constraintLayoutConfirmSaveFilter.setVisibility(View.GONE);
+            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
+            binding.imageToolContainer.setVisibility(View.GONE);
             setVisibleSave();
             onBackPressed();
         });
 
-        binding.recyclerViewFilterBw.setVisibility(View.GONE);
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
         binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
@@ -867,9 +874,9 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
         public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
             int id = seekBar.getId();
-            if (id == R.id.seekbar_border) {
+            if (id == R.id.seekbarBorder) {
                 binding.collageView.setCollagePadding((float) i);
-            } else if (id == R.id.seekbar_radius) {
+            } else if (id == R.id.seekbarRadius) {
                 binding.collageView.setCollageRadian((float) i);
             }
             binding.collageView.invalidate();
@@ -958,7 +965,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
     public void setAllFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.VISIBLE);
-        binding.recyclerViewFilterBw.setVisibility(View.GONE);
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
         binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
@@ -967,7 +974,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
         binding.viewAll.setVisibility(View.VISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewBW.setVisibility(View.INVISIBLE);
         binding.viewVintage.setVisibility(View.INVISIBLE);
         binding.viewSmooth.setVisibility(View.INVISIBLE);
         binding.viewWarm.setVisibility(View.INVISIBLE);
@@ -976,7 +983,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
     public void setBwFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBw.setVisibility(View.VISIBLE);
+        binding.recyclerViewFilterBW.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
         binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
@@ -984,7 +991,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBw.setVisibility(View.VISIBLE);
+        binding.viewBW.setVisibility(View.VISIBLE);
         binding.viewVintage.setVisibility(View.INVISIBLE);
         binding.viewSmooth.setVisibility(View.INVISIBLE);
         binding.viewWarm.setVisibility(View.INVISIBLE);
@@ -993,7 +1000,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
     public void setVintageFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBw.setVisibility(View.GONE);
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
@@ -1001,7 +1008,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewBW.setVisibility(View.INVISIBLE);
         binding.viewVintage.setVisibility(View.VISIBLE);
         binding.viewSmooth.setVisibility(View.INVISIBLE);
         binding.viewWarm.setVisibility(View.INVISIBLE);
@@ -1010,7 +1017,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
     public void setSmoothFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBw.setVisibility(View.GONE);
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
         binding.recyclerViewFilterSmooth.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
@@ -1018,7 +1025,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewBW.setVisibility(View.INVISIBLE);
         binding.viewVintage.setVisibility(View.INVISIBLE);
         binding.viewSmooth.setVisibility(View.VISIBLE);
         binding.viewWarm.setVisibility(View.INVISIBLE);
@@ -1027,7 +1034,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
     public void setColdFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBw.setVisibility(View.GONE);
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
         binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.VISIBLE);
@@ -1035,7 +1042,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.VISIBLE);
-        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewBW.setVisibility(View.INVISIBLE);
         binding.viewVintage.setVisibility(View.INVISIBLE);
         binding.viewSmooth.setVisibility(View.INVISIBLE);
         binding.viewWarm.setVisibility(View.INVISIBLE);
@@ -1044,7 +1051,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
     public void setWarmFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBw.setVisibility(View.GONE);
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
         binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
@@ -1052,7 +1059,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewBW.setVisibility(View.INVISIBLE);
         binding.viewVintage.setVisibility(View.INVISIBLE);
         binding.viewSmooth.setVisibility(View.INVISIBLE);
         binding.viewWarm.setVisibility(View.VISIBLE);
@@ -1061,7 +1068,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
     public void setLegacyFilter() {
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBw.setVisibility(View.GONE);
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
         binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
@@ -1069,7 +1076,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         binding.recyclerViewFilterLegacy.setVisibility(View.VISIBLE);
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBw.setVisibility(View.INVISIBLE);
+        binding.viewBW.setVisibility(View.INVISIBLE);
         binding.viewVintage.setVisibility(View.INVISIBLE);
         binding.viewSmooth.setVisibility(View.INVISIBLE);
         binding.viewWarm.setVisibility(View.INVISIBLE);
@@ -1111,6 +1118,23 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewBlur.setVisibility(View.VISIBLE);
+    }
+
+    public void selectColorPicker(){
+
+        binding.colorPickerView.setVisibility(View.VISIBLE);
+
+        int viewX = binding.colorPickerView.getLeft() + (binding.colorPickerView.getRight() - binding.colorPickerView.getLeft()) / 2;
+        int viewY = binding.colorPickerView.getTop() + (binding.colorPickerView.getBottom() - binding.colorPickerView.getTop()) / 2;
+        binding.colorPickerView.setSelectorPoint(viewX, viewY);
+
+
+        binding.colorPickerView.setPaletteDrawable(new BitmapDrawable(getResources(), binding.collageView.createBitmap()));
+        binding.colorPickerView.setColorListener((ColorListener) (color, fromUser) -> {
+            binding.backgroundContainer.selectedColorPreview.setCardBackgroundColor(ColorStateList.valueOf(color));
+            binding.backgroundContainer.selectedColorPreview.getBackground().setTint(color);
+        });
+
     }
 
 
@@ -1792,7 +1816,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterBw.setAdapter(new FilterAdapter(listFilterBW, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
+            binding.recyclerViewFilterBW.setAdapter(new FilterAdapter(listFilterBW, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);

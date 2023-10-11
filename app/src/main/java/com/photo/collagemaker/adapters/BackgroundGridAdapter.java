@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.assets.BrushColorAsset;
+import com.photo.collagemaker.databinding.ItemSquareGridBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,24 +122,25 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
 
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_square_grid, viewGroup, false));
+        ItemSquareGridBinding binding = ItemSquareGridBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         SquareView squareView = squareViewList.get(i);
         if (squareView.isColor) {
-            viewHolder.squareView.setBackgroundColor(squareView.drawableId);
+            viewHolder.binding.squareView.setBackgroundColor(squareView.drawableId);
         } else if (squareView.drawable != null) {
-            viewHolder.squareView.setVisibility(View.GONE);
-            viewHolder.imageViewSquare.setVisibility(View.VISIBLE);
-            viewHolder.imageViewSquare.setImageDrawable(squareView.drawable);
+            viewHolder.binding.squareView.setVisibility(View.GONE);
+            viewHolder.binding.imageViewSquare.setVisibility(View.VISIBLE);
+            viewHolder.binding.imageViewSquare.setImageDrawable(squareView.drawable);
         } else {
-            viewHolder.squareView.setBackgroundResource(squareView.drawableId);
+            viewHolder.binding.squareView.setBackgroundResource(squareView.drawableId);
         }
         if (selectedIndex == i) {
-            viewHolder.constraint_layout_wrapper_square_view.setBackground(context.getDrawable(R.drawable.border_view));
+            viewHolder.binding.constraintLayoutWrapperSquareView.setBackground(context.getDrawable(R.drawable.border_view));
         } else {
-            viewHolder.constraint_layout_wrapper_square_view.setBackground(context.getDrawable(R.drawable.border_transparent_view));
+            viewHolder.binding.constraintLayoutWrapperSquareView.setBackground(context.getDrawable(R.drawable.border_transparent_view));
         }
     }
 
@@ -152,23 +154,21 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public ImageView imageViewSquare;
-        public View squareView;
-        public ConstraintLayout constraint_layout_wrapper_square_view;
+        ItemSquareGridBinding binding;
+        public ViewHolder(ItemSquareGridBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-        public ViewHolder(View view) {
-            super(view);
-            squareView = view.findViewById(R.id.square_view);
-            constraint_layout_wrapper_square_view = view.findViewById(R.id.constraint_layout_wrapper_square_view);
-            imageViewSquare = view.findViewById(R.id.image_view_square);
-            imageViewSquare.setVisibility(View.GONE);
-            view.setOnClickListener(this);
+            binding.imageViewSquare.setVisibility(View.GONE);
+            binding.getRoot().setOnClickListener(view -> {
+                selectedIndex = getAdapterPosition();
+                backgroundListener.onBackgroundSelected((SquareView) squareViewList.get(selectedIndex));
+                notifyDataSetChanged();
+            });
         }
 
         public void onClick(View view) {
-            selectedIndex = getAdapterPosition();
-            backgroundListener.onBackgroundSelected((SquareView) squareViewList.get(selectedIndex));
-            notifyDataSetChanged();
+
         }
     }
 

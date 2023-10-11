@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.constants.Constants;
+import com.photo.collagemaker.databinding.ItemColoredBinding;
 import com.photo.collagemaker.utils.SystemUtil;
 
 import java.util.ArrayList;
@@ -72,41 +73,41 @@ public class ColoredAdapter extends RecyclerView.Adapter<ColoredAdapter.ViewHold
     }
 
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_colored, viewGroup, false));
+        ItemColoredBinding binding = ItemColoredBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Glide.with(context).load(Integer.valueOf(coloredItems.get(i).frameId)).into(viewHolder.mosaic);
+        Glide.with(context).load(Integer.valueOf(coloredItems.get(i).frameId)).into(viewHolder.binding.roundImageViewMosaicItem);
         if (selectedSquareIndex == i) {
-            viewHolder.mosaic.setBorderColor(ContextCompat.getColor(context, R.color.mainColor));
-            viewHolder.mosaic.setBorderWidth(borderWidth);
+            viewHolder.binding.roundImageViewMosaicItem.setBorderColor(ContextCompat.getColor(context, R.color.mainColor));
+            viewHolder.binding.roundImageViewMosaicItem.setBorderWidth(borderWidth);
             return;
         }
-        viewHolder.mosaic.setBorderColor(0);
-        viewHolder.mosaic.setBorderWidth(borderWidth);
+        viewHolder.binding.roundImageViewMosaicItem.setBorderColor(0);
+        viewHolder.binding.roundImageViewMosaicItem.setBorderWidth(borderWidth);
     }
 
     public int getItemCount() {
         return coloredItems.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-        public RoundedImageView mosaic;
-
-        public ViewHolder(View view) {
-            super(view);
-            mosaic = view.findViewById(R.id.round_image_view_mosaic_item);
-            view.setOnClickListener(this);
+        ItemColoredBinding binding;
+        public ViewHolder(ItemColoredBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            binding.getRoot().setOnClickListener(view -> {
+                selectedSquareIndex = getAdapterPosition();
+                if (selectedSquareIndex < coloredItems.size()) {
+                    mosaicChangeListener.onSelected(coloredItems.get(selectedSquareIndex));
+                }
+                notifyDataSetChanged();
+            });
         }
 
-        public void onClick(View view) {
-            selectedSquareIndex = getAdapterPosition();
-            if (selectedSquareIndex < coloredItems.size()) {
-                mosaicChangeListener.onSelected(coloredItems.get(selectedSquareIndex));
-            }
-            notifyDataSetChanged();
-        }
+
     }
 
     public static class ColoredItems {

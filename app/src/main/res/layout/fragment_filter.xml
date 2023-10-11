@@ -31,7 +31,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout_filters"
+                android:id="@+id/constraintLayoutFilters"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -42,7 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="5dp"
-                    app:layout_constraintBottom_toTopOf="@+id/recycler_view_filter_all">
+                    app:layout_constraintBottom_toTopOf="@+id/recyclerViewFilterAll">
 
                     <ImageView
                         android:id="@+id/imageViewCloseFilter"
@@ -85,7 +85,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view_filter_all"
+                    android:id="@+id/recyclerViewFilterAll"
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
                     android:orientation="horizontal"

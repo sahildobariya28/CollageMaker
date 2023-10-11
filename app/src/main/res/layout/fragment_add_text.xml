@@ -211,7 +211,7 @@
                                 android:textSize="14sp" />
 
                             <SeekBar
-                                android:id="@+id/seekbar_radius"
+                                android:id="@+id/seekbarRadius"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="-6dp"

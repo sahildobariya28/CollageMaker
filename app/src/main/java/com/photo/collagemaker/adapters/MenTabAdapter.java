@@ -12,6 +12,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.photo.collagemaker.R;
+import com.photo.collagemaker.databinding.ItemTabStickerBinding;
 
 public class MenTabAdapter extends RecyclerTabLayout.Adapter<MenTabAdapter.ViewHolder> {
     private Context context;
@@ -24,37 +25,38 @@ public class MenTabAdapter extends RecyclerTabLayout.Adapter<MenTabAdapter.ViewH
 
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_tab_sticker, viewGroup, false));
+        ItemTabStickerBinding binding = ItemTabStickerBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         switch (i) {
             case 0:
-                viewHolder.imageView.setImageDrawable(context.getDrawable(R.drawable.ic_hair));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_hair));
                 break;
             case 1:
-                viewHolder.imageView.setImageDrawable(context.getDrawable(R.drawable.ic_glasses));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_glasses));
                 break;
             case 2:
-                viewHolder.imageView.setImageDrawable(context.getDrawable(R.drawable.ic_moustache));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_moustache));
                 break;
             case 3:
-                viewHolder.imageView.setImageDrawable(context.getDrawable(R.drawable.ic_lhya));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_lhya));
                 break;
             case 4:
-                viewHolder.imageView.setImageDrawable(context.getDrawable(R.drawable.ic_scarf));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_scarf));
                 break;
             case 5:
-                viewHolder.imageView.setImageDrawable(context.getDrawable(R.drawable.ic_tie));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_tie));
                 break;
             case 6:
-                viewHolder.imageView.setImageDrawable(context.getDrawable(R.drawable.ic_tatoo));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_tatoo));
                 break;
             case 7:
-                viewHolder.imageView.setImageDrawable(context.getDrawable(R.drawable.ic_chain));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_chain));
                 break;
         }
-        viewHolder.imageView.setSelected(i == getCurrentIndicatorPosition());
+        viewHolder.binding.image.setSelected(i == getCurrentIndicatorPosition());
     }
 
     public int getItemCount() {
@@ -62,12 +64,12 @@ public class MenTabAdapter extends RecyclerTabLayout.Adapter<MenTabAdapter.ViewH
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
+        ItemTabStickerBinding binding;
+        public ViewHolder(ItemTabStickerBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-        public ViewHolder(View view) {
-            super(view);
-            imageView = view.findViewById(R.id.image);
-            view.setOnClickListener(view1 -> getViewPager().setCurrentItem(getAdapterPosition()));
+            binding.getRoot().setOnClickListener(view1 -> getViewPager().setCurrentItem(getAdapterPosition()));
         }
     }
 }

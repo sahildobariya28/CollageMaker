@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
+import com.photo.collagemaker.databinding.ItemGridToolsBinding;
 import com.photo.collagemaker.module.Module;
 
 import java.util.ArrayList;
@@ -56,13 +57,15 @@ public class GridToolsAdapter extends RecyclerView.Adapter<GridToolsAdapter.View
 
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_grid_tools, viewGroup, false));
+
+        ItemGridToolsBinding binding = ItemGridToolsBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         ToolModel toolModel = mToolList.get(i);
-        viewHolder.text_view_tool_name.setText(toolModel.mToolName);
-        viewHolder.image_view_tool_icon.setImageResource(toolModel.mToolIcon);
+        viewHolder.binding.textViewToolName.setText(toolModel.mToolName);
+        viewHolder.binding.imageViewToolIcon.setImageResource(toolModel.mToolIcon);
     }
 
     public int getItemCount() {
@@ -70,16 +73,12 @@ public class GridToolsAdapter extends RecyclerView.Adapter<GridToolsAdapter.View
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image_view_tool_icon;
-        TextView text_view_tool_name;
-        RelativeLayout relative_layout_wrapper_tool;
 
-        ViewHolder(View view) {
-            super(view);
-            image_view_tool_icon = view.findViewById(R.id.image_view_tool_icon);
-            text_view_tool_name = view.findViewById(R.id.text_view_tool_name);
-            relative_layout_wrapper_tool = view.findViewById(R.id.relative_layout_wrapper_tool);
-            relative_layout_wrapper_tool.setOnClickListener(view1 -> mOnItemSelected.onToolSelected((mToolList.get(getLayoutPosition())).mToolType));
+        ItemGridToolsBinding binding;
+        ViewHolder(ItemGridToolsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            binding.getRoot().setOnClickListener(view1 -> mOnItemSelected.onToolSelected((mToolList.get(getLayoutPosition())).mToolType));
         }
     }
 }
