@@ -10,17 +10,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
-import com.photo.collagemaker.adapters.AspectAdapter;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.AspectAdapter;
 import com.isseiaoki.simplecropview.CropImageView;
 import com.photo.collagemaker.databinding.FragmentCropBinding;
 import com.steelkiwi.cropiwa.AspectRatio;

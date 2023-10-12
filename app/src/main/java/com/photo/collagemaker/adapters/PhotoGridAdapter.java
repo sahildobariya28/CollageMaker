@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.photo.collagemaker.R;
+import com.photo.collagemaker.databinding.ItemPhotoBinding;
 import com.photo.collagemaker.entity.Photo;
 import com.photo.collagemaker.entity.PhotoDirectory;
 import com.photo.collagemaker.event.OnItemCheckListener;
@@ -65,11 +66,12 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
     }
 
     public PhotoViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        PhotoViewHolder photoViewHolder = new PhotoViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_photo, viewGroup, false));
+        ItemPhotoBinding binding = ItemPhotoBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        PhotoViewHolder photoViewHolder = new PhotoViewHolder(binding);
         if (i == 100) {
-            photoViewHolder.image_view_selected.setVisibility(View.GONE);
-            photoViewHolder.image_view_picker.setScaleType(ImageView.ScaleType.CENTER);
-            photoViewHolder.image_view_picker.setOnClickListener(view -> {
+            photoViewHolder.binding.imageViewSelected.setVisibility(View.GONE);
+            photoViewHolder.binding.imageViewPicker.setScaleType(ImageView.ScaleType.CENTER);
+            photoViewHolder.binding.imageViewPicker.setOnClickListener(view -> {
                 if (onClickListener != null) {
                     onClickListener.onClick(view);
                 }
@@ -87,18 +89,18 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
             } else {
                 photo = currentPhotos.get(i);
             }
-            if (AndroidLifecycleUtils.canLoadImage(photoViewHolder.image_view_picker.getContext())) {
+            if (AndroidLifecycleUtils.canLoadImage(photoViewHolder.binding.imageViewPicker.getContext())) {
                 RequestOptions requestOptions = new RequestOptions();
                 requestOptions.centerCrop().dontAnimate().override(imageSize, imageSize).placeholder(R.drawable.background_gray);
-                glide.setDefaultRequestOptions(requestOptions).load(new File(photo.getPath())).thumbnail(0.5f).into(photoViewHolder.image_view_picker);
+                glide.setDefaultRequestOptions(requestOptions).load(new File(photo.getPath())).thumbnail(0.5f).into(photoViewHolder.binding.imageViewPicker);
             }
             boolean isSelected = isSelected(photo);
-            photoViewHolder.image_view_selected.setSelected(isSelected);
-            photoViewHolder.image_view_picker.setSelected(isSelected);
-            photoViewHolder.image_view_picker.setOnClickListener(view -> onItemCheckListener.onItemCheck(photoViewHolder.getAdapterPosition(), photo, getSelectedPhotos().size() + (isSelected(photo) ? -1 : 1)));
+            photoViewHolder.binding.imageViewSelected.setSelected(isSelected);
+            photoViewHolder.binding.imageViewPicker.setSelected(isSelected);
+            photoViewHolder.binding.imageViewPicker.setOnClickListener(view -> onItemCheckListener.onItemCheck(photoViewHolder.getAdapterPosition(), photo, getSelectedPhotos().size() + (isSelected(photo) ? -1 : 1)));
             return;
         }
-        photoViewHolder.image_view_picker.setImageResource(R.drawable.black_border);
+        photoViewHolder.binding.imageViewPicker.setImageResource(R.drawable.black_border);
     }
 
     public int getItemCount() {
@@ -108,15 +110,12 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
 
     public static class PhotoViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView image_view_picker;
+        ItemPhotoBinding binding;
+        public PhotoViewHolder(ItemPhotoBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-        public View image_view_selected;
-
-        public PhotoViewHolder(View view) {
-            super(view);
-            image_view_picker = view.findViewById(R.id.image_view_picker);
-            image_view_selected = view.findViewById(R.id.image_view_selected);
-            image_view_selected.setVisibility(View.GONE);
+            binding.imageViewSelected.setVisibility(View.GONE);
         }
     }
 
@@ -149,7 +148,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
     }
 
     public void onViewRecycled(PhotoViewHolder photoViewHolder) {
-        glide.clear(photoViewHolder.image_view_picker);
+        glide.clear(photoViewHolder.binding.imageViewPicker);
         super.onViewRecycled(photoViewHolder);
     }
 }

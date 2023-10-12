@@ -8,7 +8,12 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.photo.collagemaker.activities.editor.single_editor.SingleEditorActivity;
+import com.photo.collagemaker.activities.picker.MultipleImagePickerActivity;
+import com.photo.collagemaker.activities.picker.NewSingleImagePickerActivity;
+import com.photo.collagemaker.activities.picker.SingleImagePickerActivity;
 import com.photo.collagemaker.databinding.ActivityHomeBinding;
 import com.photo.collagemaker.dialog.DetailsDialog;
 import com.photo.collagemaker.picker.ImageCaptureManager;
@@ -22,7 +27,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import java.io.IOException;
 import java.util.List;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends AppCompatActivity {
     private ImageCaptureManager imageCaptureManager;
     ActivityHomeBinding binding;
 
@@ -63,13 +68,7 @@ public class HomeActivity extends BaseActivity {
                         @Override
                         public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
                             if (multiplePermissionsReport.areAllPermissionsGranted()) {
-                                Intent intent = new Intent(HomeActivity.this, SingleImagePickerActivity.class);
-                                Bundle optionsBundle = new Bundle();
-                                optionsBundle.putInt("MAX_COUNT", 1);
-                                optionsBundle.putBoolean("PREVIEW_ENABLED", false);
-                                optionsBundle.putBoolean("SHOW_CAMERA", false);
-                                intent.putExtras(optionsBundle);
-                                startActivityForResult(intent, 233);
+                                startActivityForResult(new Intent(HomeActivity.this, NewSingleImagePickerActivity.class), 233);
                             }
                             if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied()) {
                                 DetailsDialog.showDetailsDialog(HomeActivity.this);
@@ -104,7 +103,7 @@ public class HomeActivity extends BaseActivity {
                 imageCaptureManager = new ImageCaptureManager(this);
             }
             new Handler().post(() -> imageCaptureManager.galleryAddPic());
-            startActivity(new Intent(getApplicationContext(), EditorActivity.class).putExtra("SELECTED_PHOTOS", imageCaptureManager.getCurrentPhotoPath()));
+            startActivity(new Intent(getApplicationContext(), SingleEditorActivity.class).putExtra("SELECTED_PHOTOS", imageCaptureManager.getCurrentPhotoPath()));
         }
     }
 

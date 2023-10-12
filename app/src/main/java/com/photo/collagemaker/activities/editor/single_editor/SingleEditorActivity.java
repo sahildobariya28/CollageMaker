@@ -1,4 +1,4 @@
-package com.photo.collagemaker.activities;
+package com.photo.collagemaker.activities.editor.single_editor;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.core.internal.view.SupportMenu;
@@ -39,19 +40,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.photo.collagemaker.R;
-import com.photo.collagemaker.adapters.AdjustAdapter;
-import com.photo.collagemaker.adapters.ColorAdapter;
-import com.photo.collagemaker.adapters.HardmixAdapter;
-import com.photo.collagemaker.adapters.MenBeautyAdapter;
-import com.photo.collagemaker.adapters.MenTabAdapter;
-import com.photo.collagemaker.adapters.QueShotDrawToolsAdapter;
-import com.photo.collagemaker.adapters.QueShotStickersToolsAdapter;
-import com.photo.collagemaker.adapters.RecyclerTabLayout;
-import com.photo.collagemaker.adapters.StickerAdapter;
-import com.photo.collagemaker.adapters.QueShotToolsAdapter;
-import com.photo.collagemaker.adapters.StickerTabAdapter;
-import com.photo.collagemaker.adapters.WomenBeautyAdapter;
-import com.photo.collagemaker.adapters.WomenTabAdapter;
+import com.photo.collagemaker.activities.PhotoShareActivity;
+import com.photo.collagemaker.activities.editor.single_editor.adapter.AdjustAdapter;
+import com.photo.collagemaker.activities.editor.single_editor.adapter.HardmixAdapter;
+import com.photo.collagemaker.activities.editor.single_editor.adapter.MenBeautyAdapter;
+import com.photo.collagemaker.activities.editor.single_editor.adapter.MenTabAdapter;
+import com.photo.collagemaker.activities.editor.single_editor.adapter.QueShotStickersToolsAdapter;
+import com.photo.collagemaker.activities.editor.single_editor.adapter.RecyclerTabLayout;
+import com.photo.collagemaker.activities.editor.single_editor.adapter.QueShotToolsAdapter;
+import com.photo.collagemaker.activities.editor.single_editor.adapter.WomenBeautyAdapter;
+import com.photo.collagemaker.activities.editor.single_editor.adapter.WomenTabAdapter;
+import com.photo.collagemaker.activities.editor.single_editor.adapter.ColorAdapter;
+import com.photo.collagemaker.activities.editor.single_editor.adapter.QueShotDrawToolsAdapter;
+import com.photo.collagemaker.activities.editor.single_editor.adapter.StickerAdapter;
+import com.photo.collagemaker.activities.editor.single_editor.adapter.StickerTabAdapter;
 import com.photo.collagemaker.assets.MenBeautyAssets;
 import com.photo.collagemaker.assets.StickersAsset;
 import com.photo.collagemaker.databinding.ActivityEditorBinding;
@@ -72,7 +74,7 @@ import com.photo.collagemaker.fragment.FrameFragment;
 import com.photo.collagemaker.fragment.SplashBlurSquareFragment;
 import com.photo.collagemaker.preference.Preference;
 import com.photo.collagemaker.utils.FilterUtils;
-import com.photo.collagemaker.adapters.FilterAdapter;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.FilterAdapter;
 import com.photo.collagemaker.fragment.TextFragment;
 import com.photo.collagemaker.fragment.ColorSplashFragment;
 import com.photo.collagemaker.fragment.CropFragment;
@@ -111,7 +113,7 @@ import java.util.List;
 import java.util.Locale;
 
 @SuppressLint("StaticFieldLeak")
-public class EditorActivity extends BaseActivity implements OnQuShotEditorListener,
+public class SingleEditorActivity extends AppCompatActivity implements OnQuShotEditorListener,
         View.OnClickListener, StickerAdapter.OnClickSplashListener, KeyboardHeightObserver,
         MenBeautyAdapter.OnClickBeautyItemListener, WomenBeautyAdapter.OnClickBeautyItemListener,
         CropFragment.OnCropPhoto, RotateFragment.OnCropPhoto, BrushColorListener,
@@ -254,7 +256,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
     }
 
     private void setOnBackPressDialog() {
-        final Dialog dialogOnBackPressed = new Dialog(EditorActivity.this, R.style.UploadDialog);
+        final Dialog dialogOnBackPressed = new Dialog(SingleEditorActivity.this, R.style.UploadDialog);
         dialogOnBackPressed.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogOnBackPressed.setContentView(R.layout.dialog_exit);
         dialogOnBackPressed.setCancelable(true);
@@ -341,37 +343,37 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
                 recycler_view_sticker.setLayoutManager(new GridLayoutManager(getApplicationContext(), 7));
                 switch (i) {
                     case 0:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListCrown(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListCrown(), i, SingleEditorActivity.this));
                         break;
                     case 1:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListSnsla(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListSnsla(), i, SingleEditorActivity.this));
                         break;
                     case 2:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHalat(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHalat(), i, SingleEditorActivity.this));
                         break;
                     case 3:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListFlower(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListFlower(), i, SingleEditorActivity.this));
                         break;
                     case 4:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListGlass(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListGlass(), i, SingleEditorActivity.this));
                         break;
                     case 5:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListChap(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListChap(), i, SingleEditorActivity.this));
                         break;
                     case 6:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHairs(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHairs(), i, SingleEditorActivity.this));
                         break;
                     case 7:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListSmile(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListSmile(), i, SingleEditorActivity.this));
                         break;
                     case 8:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHjban(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHjban(), i, SingleEditorActivity.this));
                         break;
                     case 9:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListChfer(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListChfer(), i, SingleEditorActivity.this));
                         break;
                     case 10:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListZwaq(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListZwaq(), i, SingleEditorActivity.this));
                         break;
 
                 }
@@ -407,13 +409,13 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
                 recycler_view_sticker.setLayoutManager(new GridLayoutManager(getApplicationContext(), 6));
                 switch (i) {
                     case 0:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListEmojy(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListEmojy(), i, SingleEditorActivity.this));
                         break;
                     case 1:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListFlag(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListFlag(), i, SingleEditorActivity.this));
                         break;
                     case 2:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListBoom(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListBoom(), i, SingleEditorActivity.this));
                         break;
 
                 }
@@ -449,28 +451,28 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
                 recycler_view_sticker.setLayoutManager(new GridLayoutManager(getApplicationContext(), 6));
                 switch (i) {
                     case 0:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListhair(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListhair(), i, SingleEditorActivity.this));
                         break;
                     case 1:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListGlasses(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListGlasses(), i, SingleEditorActivity.this));
                         break;
                     case 2:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListMostach(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListMostach(), i, SingleEditorActivity.this));
                         break;
                     case 3:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListLhya(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListLhya(), i, SingleEditorActivity.this));
                         break;
                     case 4:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListScarf(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListScarf(), i, SingleEditorActivity.this));
                         break;
                     case 5:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListTie(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListTie(), i, SingleEditorActivity.this));
                         break;
                     case 6:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListTatoo(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListTatoo(), i, SingleEditorActivity.this));
                         break;
                     case 7:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListChain(), i, EditorActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListChain(), i, SingleEditorActivity.this));
                         break;
 
                 }
@@ -515,7 +517,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
     private void  onClickListener(){
         binding.textViewSave.setOnClickListener(view -> {
-            if (PermissionsUtils.checkWriteStoragePermission(EditorActivity.this)) {
+            if (PermissionsUtils.checkWriteStoragePermission(SingleEditorActivity.this)) {
                 new SaveEditingBitmap().execute();
             }
         });
@@ -737,11 +739,11 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
                 if (sticker instanceof CustomTextView) {
                     sticker.setShow(false);
                     binding.photoEditorView.setHandlingSticker( (Sticker) null);
-                    addTextFragment = TextFragment.show(EditorActivity.this, ((CustomTextView) sticker).getQuShotText());
+                    addTextFragment = TextFragment.show(SingleEditorActivity.this, ((CustomTextView) sticker).getQuShotText());
                     textEditor = new TextFragment.TextEditor() {
                         public void onDone(CustomText addTextProperties) {
                             binding.photoEditorView.getStickers().remove(binding.photoEditorView.getLastHandlingSticker());
-                            binding.photoEditorView.addSticker(new CustomTextView(EditorActivity.this, addTextProperties));
+                            binding.photoEditorView.addSticker(new CustomTextView(SingleEditorActivity.this, addTextProperties));
                         }
 
                         public void onBackButton() {
@@ -1897,7 +1899,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterAll.setAdapter(new FilterAdapter(listAllFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.ALL_FILTERS)));
+            binding.recyclerViewFilterAll.setAdapter(new FilterAdapter(listAllFilter, SingleEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.ALL_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.constraintLayoutFilter.setVisibility(View.VISIBLE);
             binding.constraintLayoutConfirmSaveFilter.setVisibility(View.VISIBLE);
@@ -1934,7 +1936,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterBW.setAdapter(new FilterAdapter(listBwFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
+            binding.recyclerViewFilterBW.setAdapter(new FilterAdapter(listBwFilter, SingleEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.seekbarFilter.setProgress(100);
             showLoading(false);
@@ -1956,7 +1958,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterVintage.setAdapter(new FilterAdapter(listVintageFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.VINTAGE_FILTERS)));
+            binding.recyclerViewFilterVintage.setAdapter(new FilterAdapter(listVintageFilter, SingleEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.VINTAGE_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.seekbarFilter.setProgress(100);
             showLoading(false);
@@ -1978,7 +1980,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterSmooth.setAdapter(new FilterAdapter(listSmoothFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.SMOOTH_FILTERS)));
+            binding.recyclerViewFilterSmooth.setAdapter(new FilterAdapter(listSmoothFilter, SingleEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.SMOOTH_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.seekbarFilter.setProgress(100);
             showLoading(false);
@@ -2000,7 +2002,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterCold.setAdapter(new FilterAdapter(listColdFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.COLD_FILTERS)));
+            binding.recyclerViewFilterCold.setAdapter(new FilterAdapter(listColdFilter, SingleEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.COLD_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.seekbarFilter.setProgress(100);
             showLoading(false);
@@ -2022,7 +2024,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterWarm.setAdapter(new FilterAdapter(listWarmFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.WARM_FILTERS)));
+            binding.recyclerViewFilterWarm.setAdapter(new FilterAdapter(listWarmFilter, SingleEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.WARM_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.seekbarFilter.setProgress(100);
             showLoading(false);
@@ -2043,7 +2045,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewFilterLegacy.setAdapter(new FilterAdapter(listLegacyFilter, EditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.LEGACY_FILTERS)));
+            binding.recyclerViewFilterLegacy.setAdapter(new FilterAdapter(listLegacyFilter, SingleEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.LEGACY_FILTERS)));
             binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
             binding.seekbarFilter.setProgress(100);
             showLoading(false);
@@ -2063,7 +2065,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
         public void onPostExecute(Bitmap bitmap) {
             showLoading(false);
-            RatioFragment.show(EditorActivity.this, EditorActivity.this, binding.photoEditorView.getCurrentBitmap(), bitmap);
+            RatioFragment.show(SingleEditorActivity.this, SingleEditorActivity.this, binding.photoEditorView.getCurrentBitmap(), bitmap);
         }
     }
 
@@ -2080,7 +2082,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
         public void onPostExecute(Bitmap bitmap) {
             showLoading(false);
-            FrameFragment.show(EditorActivity.this, EditorActivity.this, binding.photoEditorView.getCurrentBitmap(), bitmap);
+            FrameFragment.show(SingleEditorActivity.this, SingleEditorActivity.this, binding.photoEditorView.getCurrentBitmap(), bitmap);
         }
     }
 
@@ -2100,7 +2102,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
         public void onPostExecute(List<Bitmap> list) {
             showLoading(false);
-            MosaicFragment.show(EditorActivity.this, list.get(0), list.get(1), EditorActivity.this);
+            MosaicFragment.show(SingleEditorActivity.this, list.get(0), list.get(1), SingleEditorActivity.this);
         }
     }
 
@@ -2120,7 +2122,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
         public void onPostExecute(List<Bitmap> list) {
             showLoading(false);
-            ColoredFragment.show(EditorActivity.this, list.get(0), list.get(1), EditorActivity.this);
+            ColoredFragment.show(SingleEditorActivity.this, list.get(0), list.get(1), SingleEditorActivity.this);
         }
     }
 
@@ -2138,7 +2140,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewDodge.setAdapter(new HardmixAdapter(listDodge, EditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.DODGE_EFFECTS)));
+            binding.recyclerViewDodge.setAdapter(new HardmixAdapter(listDodge, SingleEditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.DODGE_EFFECTS)));
             binding.imageViewCompareEffect.setVisibility(View.VISIBLE);
             binding.seekbarEffect.setProgress(100);
         }
@@ -2158,7 +2160,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewDivide.setAdapter(new HardmixAdapter(listDivide, EditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.DIVIDE_EFFECTS)));
+            binding.recyclerViewDivide.setAdapter(new HardmixAdapter(listDivide, SingleEditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.DIVIDE_EFFECTS)));
             binding.imageViewCompareEffect.setVisibility(View.VISIBLE);
             binding.seekbarEffect.setProgress(100);
         }
@@ -2178,7 +2180,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewHardmix.setAdapter(new HardmixAdapter(listHardmix, EditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.HARDMIX_EFFECTS)));
+            binding.recyclerViewHardmix.setAdapter(new HardmixAdapter(listHardmix, SingleEditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.HARDMIX_EFFECTS)));
             binding.imageViewCompareEffect.setVisibility(View.VISIBLE);
             binding.seekbarEffect.setProgress(100);
         }
@@ -2198,7 +2200,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewOverlay.setAdapter(new HardmixAdapter(listOverlay, EditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.OVERLAY_EFFECTS)));
+            binding.recyclerViewOverlay.setAdapter(new HardmixAdapter(listOverlay, SingleEditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.OVERLAY_EFFECTS)));
             binding.constraintLayoutEffect.setVisibility(View.VISIBLE);
             binding.constraintLayoutConfirmSaveHardmix.setVisibility(View.VISIBLE);
             binding.recyclerViewTools.setVisibility(View.GONE);
@@ -2229,7 +2231,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         }
 
         public void onPostExecute(Void voids) {
-            binding.recyclerViewBurn.setAdapter(new HardmixAdapter(listBurn, EditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.COLOR_EFFECTS)));
+            binding.recyclerViewBurn.setAdapter(new HardmixAdapter(listBurn, SingleEditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.COLOR_EFFECTS)));
             binding.imageViewCompareEffect.setVisibility(View.VISIBLE);
             binding.seekbarEffect.setProgress(100);
         }
@@ -2259,9 +2261,9 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
         public void onPostExecute(List<Bitmap> list) {
             if (isSplashBrush) {
-                SplashFragment.show(EditorActivity.this, list.get(0), null, list.get(1), EditorActivity.this, true);
+                SplashFragment.show(SingleEditorActivity.this, list.get(0), null, list.get(1), SingleEditorActivity.this, true);
             } else {
-                SplashFragment.show(EditorActivity.this, list.get(0), list.get(1), null, EditorActivity.this, false);
+                SplashFragment.show(SingleEditorActivity.this, list.get(0), list.get(1), null, SingleEditorActivity.this, false);
             }
             showLoading(false);
         }
@@ -2291,9 +2293,9 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
         public void onPostExecute(List<Bitmap> list) {
             if (isSplashSquared) {
-                SplashBlurSquareFragment.show(EditorActivity.this, list.get(0), null, list.get(1), EditorActivity.this, true);
+                SplashBlurSquareFragment.show(SingleEditorActivity.this, list.get(0), null, list.get(1), SingleEditorActivity.this, true);
             } else {
-                SplashBlurSquareFragment.show(EditorActivity.this, list.get(0), list.get(1), null, EditorActivity.this, false);
+                SplashBlurSquareFragment.show(SingleEditorActivity.this, list.get(0), list.get(1), null, SingleEditorActivity.this, false);
             }
             showLoading(false);
         }
@@ -2400,14 +2402,14 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
         public Bitmap doInBackground(String... string) {
             try {
                 Uri fromFile = Uri.fromFile(new File(string[0]));
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(EditorActivity.this.getContentResolver(), fromFile);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(SingleEditorActivity.this.getContentResolver(), fromFile);
                 float width = (float) bitmap.getWidth();
                 float height = (float) bitmap.getHeight();
                 float max = Math.max(width / 1280.0f, height / 1280.0f);
                 if (max > 1.0f) {
                     bitmap = Bitmap.createScaledBitmap(bitmap, (int) (width / max), (int) (height / max), false);
                 }
-                Bitmap bitmap1 = SystemUtil.rotateBitmap(bitmap, new ExifInterface(EditorActivity.this.getContentResolver().openInputStream(fromFile)).getAttributeInt(ExifInterface.TAG_ORIENTATION, 1));
+                Bitmap bitmap1 = SystemUtil.rotateBitmap(bitmap, new ExifInterface(SingleEditorActivity.this.getContentResolver().openInputStream(fromFile)).getAttributeInt(ExifInterface.TAG_ORIENTATION, 1));
                 if (bitmap1 != bitmap) {
                     bitmap.recycle();
                 }
@@ -2463,7 +2465,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
 
         public String doInBackground(Void... voids) {
             try {
-                return SaveFileUtils.saveBitmapFileEditor(EditorActivity.this, binding.photoEditorView.getCurrentBitmap(), new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date())).getAbsolutePath();
+                return SaveFileUtils.saveBitmapFileEditor(SingleEditorActivity.this, binding.photoEditorView.getCurrentBitmap(), new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date())).getAbsolutePath();
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
@@ -2476,7 +2478,7 @@ public class EditorActivity extends BaseActivity implements OnQuShotEditorListen
                 Toast.makeText(getApplicationContext(), "Oop! Something went wrong", Toast.LENGTH_LONG).show();
                 return;
             }
-            Intent i = new Intent(EditorActivity.this, PhotoShareActivity.class);
+            Intent i = new Intent(SingleEditorActivity.this, PhotoShareActivity.class);
             i.putExtra("path", string);
             startActivity(i);
         }

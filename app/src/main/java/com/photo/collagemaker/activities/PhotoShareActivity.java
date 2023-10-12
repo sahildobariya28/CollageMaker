@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
@@ -20,7 +21,7 @@ import com.photo.collagemaker.databinding.ActivitySharePhotoBinding;
 
 import java.io.File;
 
-public class PhotoShareActivity extends BaseActivity implements View.OnClickListener {
+public class PhotoShareActivity extends AppCompatActivity implements View.OnClickListener {
     private File file;
 
     ActivitySharePhotoBinding binding;

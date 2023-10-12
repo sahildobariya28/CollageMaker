@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import com.photo.collagemaker.R;
-import com.photo.collagemaker.adapters.FilterAdapter;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.FilterAdapter;
 import com.photo.collagemaker.assets.FilterCodeAsset;
 import com.photo.collagemaker.databinding.FragmentFilterBinding;
 import com.photo.collagemaker.listener.FilterListener;

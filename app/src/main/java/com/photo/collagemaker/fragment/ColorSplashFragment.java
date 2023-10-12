@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
-import com.photo.collagemaker.adapters.ColorAdapter;
+import com.photo.collagemaker.activities.editor.single_editor.adapter.ColorAdapter;
 import com.photo.collagemaker.databinding.LayoutSplashBinding;
 import com.photo.collagemaker.listener.BrushColorListener;
 

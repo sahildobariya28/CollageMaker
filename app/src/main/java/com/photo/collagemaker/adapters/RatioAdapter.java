@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.assets.BrushColorAsset;
+import com.photo.collagemaker.databinding.ItemSquareBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,20 +38,21 @@ public class RatioAdapter extends RecyclerView.Adapter<RatioAdapter.ViewHolder> 
 
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_square, viewGroup, false));
+        ItemSquareBinding binding = ItemSquareBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         SquareView squareView = squareViews.get(i);
         if (squareView.isColor) {
-            viewHolder.squareView.setBackgroundColor(squareView.drawableId);
+            viewHolder.binding.squareView.setBackgroundColor(squareView.drawableId);
         } else {
-            viewHolder.squareView.setBackgroundResource(squareView.drawableId);
+            viewHolder.binding.squareView.setBackgroundResource(squareView.drawableId);
         }
         if (selectedIndex == i) {
-            viewHolder.wrapSquareView.setBackground(context.getDrawable(R.drawable.border_view));
+            viewHolder.binding.constraintLayoutWrapperSquareView.setBackground(context.getDrawable(R.drawable.border_view));
         } else {
-            viewHolder.wrapSquareView.setBackground(context.getDrawable(R.drawable.border_transparent_view));
+            viewHolder.binding.constraintLayoutWrapperSquareView.setBackground(context.getDrawable(R.drawable.border_transparent_view));
         }
     }
 
@@ -60,15 +62,13 @@ public class RatioAdapter extends RecyclerView.Adapter<RatioAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public View squareView;
+        ItemSquareBinding binding;
+        public ViewHolder(ItemSquareBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-        public ConstraintLayout wrapSquareView;
 
-        public ViewHolder(View view) {
-            super(view);
-            squareView = view.findViewById(R.id.square_view);
-            wrapSquareView = view.findViewById(R.id.constraint_layout_wrapper_square_view);
-            view.setOnClickListener(this);
+            binding.getRoot().setOnClickListener(this);
         }
 
         public void onClick(View view) {

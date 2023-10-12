@@ -1,4 +1,4 @@
-package com.photo.collagemaker.activities;
+package com.photo.collagemaker.activities.editor.collage_editor;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
@@ -31,26 +31,31 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.exifinterface.media.ExifInterface;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.photo.collagemaker.R;
-import com.photo.collagemaker.adapters.AspectAdapter;
-import com.photo.collagemaker.adapters.BackgroundGridAdapter;
-import com.photo.collagemaker.adapters.ColorAdapter;
-import com.photo.collagemaker.adapters.FilterAdapter;
-import com.photo.collagemaker.adapters.GridAdapter;
-import com.photo.collagemaker.adapters.GridItemToolsAdapter;
-import com.photo.collagemaker.adapters.GridToolsAdapter;
-import com.photo.collagemaker.adapters.QueShotDrawToolsAdapter;
-import com.photo.collagemaker.adapters.StickerAdapter;
-import com.photo.collagemaker.adapters.StickerTabAdapter;
+import com.photo.collagemaker.activities.picker.MultipleImagePickerActivity;
+import com.photo.collagemaker.activities.PhotoShareActivity;
+import com.photo.collagemaker.activities.picker.SingleImagePickerActivity;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.AspectAdapter;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.BackgroundGridAdapter;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.FilterAdapter;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.GridAdapter;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.GridItemToolsAdapter;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.GridToolsAdapter;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.ColorAdapter;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.QueShotDrawToolsAdapter;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.StickerAdapter;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.StickerTabAdapter;
 import com.photo.collagemaker.assets.EffectCodeAsset;
 import com.photo.collagemaker.assets.FilterCodeAsset;
 import com.photo.collagemaker.assets.StickersAsset;
@@ -107,7 +112,7 @@ import java.util.List;
 import java.util.Locale;
 
 @SuppressLint("StaticFieldLeak")
-public class GridActivity extends BaseActivity implements GridToolsAdapter.OnItemSelected,
+public class CollageEditorActivity extends AppCompatActivity implements GridToolsAdapter.OnItemSelected,
         AspectAdapter.OnNewSelectedListener, StickerAdapter.OnClickSplashListener,
         BackgroundGridAdapter.BackgroundGridListener, FilterListener, CropFragment.OnCropPhoto,
         RotateFragment.OnCropPhoto, FilterFragment.OnFilterSavePhoto, DodgeFragment.OnFilterSavePhoto,
@@ -124,7 +129,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
     public float BorderRadius;
     public float Padding;
 
-    public static GridActivity gridActivity;
+    public static CollageEditorActivity gridActivity;
 
     // ArrayList
     public ArrayList listFilterAll = new ArrayList<>();
@@ -141,10 +146,11 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
     public CustomEditorGrid quShotCustomEditor;
 
     ActivityGridBinding binding;
-
+    CollageEditorViewModel viewModel;
     public void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         binding = ActivityGridBinding.inflate(getLayoutInflater());
+        viewModel = new ViewModelProvider(this, new CollageEditorViewModelFactory(this, binding)).get(CollageEditorViewModel.class);
         setContentView(binding.getRoot());
 
         gridActivity = this;
@@ -184,16 +190,12 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         binding.collageView.setAnimateDuration(300);
 
         binding.collageView.setOnQueShotSelectedListener((collage, i) -> {
-            binding.rvPrimaryTool.setVisibility(View.GONE);
-            binding.imageToolContainer.setVisibility(View.VISIBLE);
+            viewModel.rvSecondaryToolShow();
             slideUp(binding.rvSecondaryTool);
-            setGoneSave();
             moduleToolsId = Module.COLLAGE;
         });
         binding.collageView.setOnQueShotUnSelectedListener(() -> {
-            binding.imageToolContainer.setVisibility(View.GONE);
-            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-            setVisibleSave();
+            viewModel.rvPrimaryToolShow();
             moduleToolsId = Module.NONE;
         });
         binding.collageView.post(this::loadPhoto);
@@ -252,7 +254,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         binding.btnBack.setOnClickListener(view -> onBackPressed());
 
         binding.btnSave.setOnClickListener(view -> {
-            if (PermissionsUtils.checkWriteStoragePermission(GridActivity.this)) {
+            if (PermissionsUtils.checkWriteStoragePermission(CollageEditorActivity.this)) {
                 Bitmap createBitmap = SaveFileUtils.createBitmap(binding.collageView, 1920);
                 Bitmap createBitmap2 = binding.collageView.createBitmap();
                 new SaveCollageAsFile().execute(createBitmap, createBitmap2);
@@ -276,7 +278,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
     public void initSecondaryView() {
         binding.btnDownArrow.setOnClickListener(view -> {
             onBackPressed();
-            binding.imageToolContainer.setVisibility(View.GONE);
+            binding.rvSecondaryToolContainer.setVisibility(View.GONE);
             binding.rvPrimaryTool.setVisibility(View.VISIBLE);
         });
 
@@ -311,10 +313,10 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         binding.backgroundContainer.recyclerViewBlur.setAdapter(new BackgroundGridAdapter(getApplicationContext(), this, true));
 
 
-        binding.linearLayoutCollage.setOnClickListener(view -> setLayer());
-        binding.linearLayoutBorder.setOnClickListener(view -> setBorder());
-        binding.linearLayoutRatio.setOnClickListener(view -> setRatio());
-        binding.linearLayoutBackground.setOnClickListener(view -> setBackground());
+        binding.linearLayoutCollage.setOnClickListener(view -> viewModel.collageShow());
+        binding.linearLayoutBorder.setOnClickListener(view -> viewModel.borderShow());
+        binding.linearLayoutRatio.setOnClickListener(view -> viewModel.ratioShow());
+        binding.linearLayoutBackground.setOnClickListener(view -> viewModel.bgShow());
 
         binding.backgroundContainer.btnColor.setOnClickListener(view -> setBackgroundColor());
         binding.backgroundContainer.btnGradient.setOnClickListener(view -> setBackgroundGradient());
@@ -328,10 +330,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
         binding.imageViewSaveLayer.setOnClickListener(view -> {
             setGuideLineTools();
-            binding.constrantLayoutChangeLayout.setVisibility(View.GONE);
-            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-            setVisibleSave();
-            binding.imageToolContainer.setVisibility(View.GONE);
+            viewModel.rvPrimaryToolShow();
             queShotLayout = binding.collageView.getQueShotLayout();
             BorderRadius = binding.collageView.getCollageRadian();
             Padding = binding.collageView.getCollagePadding();
@@ -345,7 +344,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
             binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
             binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
             binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
-            binding.backgroundContainer.constrantLayoutChangeBackground.setVisibility(View.GONE);
+            binding.backgroundContainer.getRoot().setVisibility(View.GONE);
             binding.colorPickerView.setVisibility(View.GONE);
             if (binding.collageView.getBackgroundResourceMode() == 0) {
                 currentBackgroundState.isColor = true;
@@ -365,8 +364,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
         binding.imageViewCloseLayer.setOnClickListener(view -> {
             binding.backgroundContainer.selectedColorPreview.getBackground().setTint( binding.collageView.getBackgroundColor());
-            binding.colorPickerView.setVisibility(View.GONE);
-            setVisibleSave();
+            viewModel.rvPrimaryToolShow();
             onBackPressed();
         });
 
@@ -389,7 +387,9 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         });
 
         binding.imageViewCloseText.setOnClickListener(view -> {
-            setVisibleSave();
+            binding.constraintLayoutConfirmText.setVisibility(View.GONE);
+            binding.relativeLayoutAddText.setVisibility(View.GONE);
+            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
             onBackPressed();
         });
         binding.imageViewSaveText.setOnClickListener(view -> {
@@ -406,8 +406,9 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
             constraintsetText.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineTool.getId(), 3, 0);
             constraintsetText.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
             constraintsetText.applyTo(binding.constraintLayoutCollageLayout);
+            binding.constraintLayoutConfirmText.setVisibility(View.GONE);
+            binding.relativeLayoutAddText.setVisibility(View.GONE);
             binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-            setVisibleSave();
             moduleToolsId = Module.NONE;
         });
     }
@@ -418,16 +419,12 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
             binding.constraintLayoutFilterLayout.setVisibility(View.GONE);
             binding.constraintLayoutConfirmSaveFilter.setVisibility(View.GONE);
             binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-            binding.imageToolContainer.setVisibility(View.GONE);
+            binding.rvSecondaryToolContainer.setVisibility(View.GONE);
             moduleToolsId = Module.NONE;
         });
 
         binding.imageViewCloseFilter.setOnClickListener(view -> {
-            binding.constraintLayoutFilterLayout.setVisibility(View.GONE);
-            binding.constraintLayoutConfirmSaveFilter.setVisibility(View.GONE);
-            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-            binding.imageToolContainer.setVisibility(View.GONE);
-            setVisibleSave();
+            viewModel.rvPrimaryToolShow();
             onBackPressed();
         });
 
@@ -438,13 +435,13 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
         binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
 
-        binding.linearLayoutAll.setOnClickListener(view -> setAllFilter());
-        binding.linearLayoutSmooth.setOnClickListener(view -> setSmoothFilter());
-        binding.linearLayoutBW.setOnClickListener(view -> setBwFilter());
-        binding.linearLayoutVintage.setOnClickListener(view -> setVintageFilter());
-        binding.linearLayoutCold.setOnClickListener(view -> setColdFilter());
-        binding.linearLayoutWarm.setOnClickListener(view -> setWarmFilter());
-        binding.linearLayoutLegacy.setOnClickListener(view -> setLegacyFilter());
+        binding.linearLayoutAll.setOnClickListener(view -> viewModel.filterAllShow());
+        binding.linearLayoutSmooth.setOnClickListener(view -> viewModel.filterSmoothShow());
+        binding.linearLayoutBW.setOnClickListener(view -> viewModel.filterBWShow());
+        binding.linearLayoutVintage.setOnClickListener(view -> viewModel.filterVintageShow());
+        binding.linearLayoutCold.setOnClickListener(view -> viewModel.filterColdShow());
+        binding.linearLayoutWarm.setOnClickListener(view -> viewModel.filterWarmShow());
+        binding.linearLayoutLegacy.setOnClickListener(view -> viewModel.filterLegacyShow());
     }
 
     public void initStickerView() {
@@ -458,13 +455,9 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         binding.imageViewSaveSticker.setOnClickListener(view -> {
             setGuideLineTools();
             binding.collageView.setHandlingSticker(null);
-            binding.relativeLayoutAddSticker.setVisibility(View.GONE);
-            binding.constraintLayoutSticker.setVisibility(View.GONE);
             binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-            binding.imageToolContainer.setVisibility(View.GONE);
+            viewModel.rvPrimaryToolShow();
 
-            setVisibleSave();
             binding.collageView.setLocked(true);
             binding.collageView.setTouchEnable(true);
             moduleToolsId = Module.NONE;
@@ -472,7 +465,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         });
 
         binding.imageViewCloseSticker.setOnClickListener(view -> {
-            setVisibleSave();
+            viewModel.rvPrimaryToolShow();
             onBackPressed();
         });
 
@@ -499,13 +492,13 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                 recycler_view_sticker.setLayoutManager(new GridLayoutManager(getApplicationContext(), 7));
                 switch (i) {
                     case 0:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListEmojy(), i, GridActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListEmojy(), i, CollageEditorActivity.this));
                         break;
                     case 1:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListFlag(), i, GridActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListFlag(), i, CollageEditorActivity.this));
                         break;
                     case 2:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListBoom(), i, GridActivity.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListBoom(), i, CollageEditorActivity.this));
                         break;
 
                 }
@@ -615,15 +608,9 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                 case PAINT:
                     setColorPaint();
                     quShotCustomEditor.setBrushDrawingMode(true);
-                    binding.constraintLayoutPaint.setVisibility(View.VISIBLE);
-                    binding.rvPrimaryTool.setVisibility(View.GONE);
-                    binding.constraintLayoutDraw.setVisibility(View.GONE);
-                    binding.constraintLayoutConfirmSavePaint.setVisibility(View.VISIBLE);
-                    binding.relativeLayoutAddText.setVisibility(View.GONE);
-                    binding.constraintLayoutConfirmText.setVisibility(View.GONE);
+                    viewModel.paintShow();
                     quShotCustomEditor.setBrushDrawingMode(false);
-                    setGoneSave();
-                    setBottomToolbar(true);
+
                     constraintSet = new ConstraintSet();
                     constraintSet.clone(binding.constraintLayoutCollageLayout);
                     constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
@@ -635,22 +622,16 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                     break;
                 case COLORED:
                     new openColoredFragment().execute();
-                    binding.constraintLayoutDraw.setVisibility(View.GONE);
-                    setVisibleSave();
+                    viewModel.rvPrimaryToolShow();
+
                     break;
                 case NEON:
                     setColorNeon();
                     quShotCustomEditor.setBrushDrawingMode(true);
-                    binding.rvPrimaryTool.setVisibility(View.GONE);
-                    binding.constraintLayoutConfirmSaveNeon.setVisibility(View.VISIBLE);
-                    binding.constraintLayoutDraw.setVisibility(View.GONE);
-                    binding.constraintLayoutNeon.setVisibility(View.VISIBLE);
-                    binding.constraintLayoutPaint.setVisibility(View.GONE);
-                    binding.relativeLayoutAddText.setVisibility(View.GONE);
-                    binding.constraintLayoutConfirmText.setVisibility(View.GONE);
+
                     quShotCustomEditor.setBrushDrawingMode(false);
-                    setGoneSave();
-                    setBottomToolbar(true);
+                    viewModel.neonShow();
+
                     constraintSet = new ConstraintSet();
                     constraintSet.clone(binding.constraintLayoutCollageLayout);
                     constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
@@ -662,8 +643,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                     break;
                 case MOSAIC:
                     new openShapeFragment().execute();
-                    binding.constraintLayoutDraw.setVisibility(View.GONE);
-                    setVisibleSave();
+                    viewModel.rvPrimaryToolShow();
                     break;
             }
             binding.collageView.setHandlingSticker(null);
@@ -725,20 +705,6 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
             }
             setLoading(false);
         }, 300);
-    }
-
-    private void setBottomToolbar(boolean z) {
-        int mVisibility = !z ? View.GONE : View.VISIBLE;
-        binding.imageViewBrush.setVisibility(mVisibility);
-        binding.imageViewErase.setVisibility(mVisibility);
-        binding.imageViewUndo.setVisibility(mVisibility);
-        binding.imageViewRedo.setVisibility(mVisibility);
-        binding.imageViewClean.setVisibility(mVisibility);
-        binding.imageViewCleanNeon.setVisibility(mVisibility);
-        binding.imageViewNeon.setVisibility(mVisibility);
-        binding.imageViewEraseNeon.setVisibility(mVisibility);
-        binding.imageViewUndoNeon.setVisibility(mVisibility);
-        binding.imageViewRedoNeon.setVisibility(mVisibility);
     }
 
     public ColorAdapter colorAdapter;
@@ -809,7 +775,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
         public void onPostExecute(List<Bitmap> list) {
             setLoading(false);
-            MosaicFragment.show(GridActivity.this, list.get(0), list.get(1), GridActivity.this);
+            MosaicFragment.show(CollageEditorActivity.this, list.get(0), list.get(1), CollageEditorActivity.this);
         }
     }
 
@@ -832,7 +798,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
         public void onPostExecute(List<Bitmap> list) {
             setLoading(false);
-            ColoredFragment.show(GridActivity.this, list.get(0), list.get(1), GridActivity.this);
+            ColoredFragment.show(CollageEditorActivity.this, list.get(0), list.get(1), CollageEditorActivity.this);
         }
     }
 
@@ -924,11 +890,11 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
             if (sticker instanceof CustomTextView) {
                 sticker.setShow(false);
                 binding.collageView.setHandlingSticker(null);
-                addTextFragment = TextFragment.show(GridActivity.this, ((CustomTextView) sticker).getQuShotText());
+                addTextFragment = TextFragment.show(CollageEditorActivity.this, ((CustomTextView) sticker).getQuShotText());
                 textEditor = new TextFragment.TextEditor() {
                     public void onDone(CustomText addTextProperties) {
                         binding.collageView.getStickers().remove(binding.collageView.getLastHandlingSticker());
-                        binding.collageView.addSticker(new CustomTextView(GridActivity.this, addTextProperties));
+                        binding.collageView.addSticker(new CustomTextView(CollageEditorActivity.this, addTextProperties));
                     }
 
                     public void onBackButton() {
@@ -945,7 +911,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
     };
 
 
-    public static GridActivity getQueShotGridActivityInstance() {
+    public static CollageEditorActivity getQueShotGridActivityInstance() {
         return gridActivity;
     }
 
@@ -963,125 +929,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         }
     };
 
-    public void setAllFilter() {
-        binding.recyclerViewFilterAll.setVisibility(View.VISIBLE);
-        binding.recyclerViewFilterBW.setVisibility(View.GONE);
-        binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
-        binding.recyclerViewFilterCold.setVisibility(View.GONE);
-        binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
 
-        binding.viewAll.setVisibility(View.VISIBLE);
-        binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBW.setVisibility(View.INVISIBLE);
-        binding.viewVintage.setVisibility(View.INVISIBLE);
-        binding.viewSmooth.setVisibility(View.INVISIBLE);
-        binding.viewWarm.setVisibility(View.INVISIBLE);
-        binding.viewLegacy.setVisibility(View.INVISIBLE);
-    }
-
-    public void setBwFilter() {
-        binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBW.setVisibility(View.VISIBLE);
-        binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
-        binding.recyclerViewFilterCold.setVisibility(View.GONE);
-        binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.viewAll.setVisibility(View.INVISIBLE);
-        binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBW.setVisibility(View.VISIBLE);
-        binding.viewVintage.setVisibility(View.INVISIBLE);
-        binding.viewSmooth.setVisibility(View.INVISIBLE);
-        binding.viewWarm.setVisibility(View.INVISIBLE);
-        binding.viewLegacy.setVisibility(View.INVISIBLE);
-    }
-
-    public void setVintageFilter() {
-        binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBW.setVisibility(View.GONE);
-        binding.recyclerViewFilterVintage.setVisibility(View.VISIBLE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
-        binding.recyclerViewFilterCold.setVisibility(View.GONE);
-        binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.viewAll.setVisibility(View.INVISIBLE);
-        binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBW.setVisibility(View.INVISIBLE);
-        binding.viewVintage.setVisibility(View.VISIBLE);
-        binding.viewSmooth.setVisibility(View.INVISIBLE);
-        binding.viewWarm.setVisibility(View.INVISIBLE);
-        binding.viewLegacy.setVisibility(View.INVISIBLE);
-    }
-
-    public void setSmoothFilter() {
-        binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBW.setVisibility(View.GONE);
-        binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.VISIBLE);
-        binding.recyclerViewFilterCold.setVisibility(View.GONE);
-        binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.viewAll.setVisibility(View.INVISIBLE);
-        binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBW.setVisibility(View.INVISIBLE);
-        binding.viewVintage.setVisibility(View.INVISIBLE);
-        binding.viewSmooth.setVisibility(View.VISIBLE);
-        binding.viewWarm.setVisibility(View.INVISIBLE);
-        binding.viewLegacy.setVisibility(View.INVISIBLE);
-    }
-
-    public void setColdFilter() {
-        binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBW.setVisibility(View.GONE);
-        binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
-        binding.recyclerViewFilterCold.setVisibility(View.VISIBLE);
-        binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.viewAll.setVisibility(View.INVISIBLE);
-        binding.viewCold.setVisibility(View.VISIBLE);
-        binding.viewBW.setVisibility(View.INVISIBLE);
-        binding.viewVintage.setVisibility(View.INVISIBLE);
-        binding.viewSmooth.setVisibility(View.INVISIBLE);
-        binding.viewWarm.setVisibility(View.INVISIBLE);
-        binding.viewLegacy.setVisibility(View.INVISIBLE);
-    }
-
-    public void setWarmFilter() {
-        binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBW.setVisibility(View.GONE);
-        binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
-        binding.recyclerViewFilterCold.setVisibility(View.GONE);
-        binding.recyclerViewFilterWarm.setVisibility(View.VISIBLE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.viewAll.setVisibility(View.INVISIBLE);
-        binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBW.setVisibility(View.INVISIBLE);
-        binding.viewVintage.setVisibility(View.INVISIBLE);
-        binding.viewSmooth.setVisibility(View.INVISIBLE);
-        binding.viewWarm.setVisibility(View.VISIBLE);
-        binding.viewLegacy.setVisibility(View.INVISIBLE);
-    }
-
-    public void setLegacyFilter() {
-        binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBW.setVisibility(View.GONE);
-        binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
-        binding.recyclerViewFilterCold.setVisibility(View.GONE);
-        binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.VISIBLE);
-        binding.viewAll.setVisibility(View.INVISIBLE);
-        binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBW.setVisibility(View.INVISIBLE);
-        binding.viewVintage.setVisibility(View.INVISIBLE);
-        binding.viewSmooth.setVisibility(View.INVISIBLE);
-        binding.viewWarm.setVisibility(View.INVISIBLE);
-        binding.viewLegacy.setVisibility(View.VISIBLE);
-    }
 
     public void setBackgroundColor() {
         binding.backgroundContainer.backgroundTools.setVisibility(View.GONE);
@@ -1137,66 +985,6 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
     }
 
-
-    public void setDown() {
-        ConstraintSet constraintSet = new ConstraintSet();
-        constraintSet.clone(binding.constrantLayoutChangeLayout);
-        constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constrantLayoutChangeLayout.getId(), 1, 0);
-        constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineTool.getId(), 3, 0);
-        constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constrantLayoutChangeLayout.getId(), 2, 0);
-        constraintSet.applyTo(binding.constrantLayoutChangeLayout);
-    }
-
-    public void setLayer() {
-        binding.recyclerViewCollage.setVisibility(View.VISIBLE);
-        binding.recyclerViewRatio.setVisibility(View.GONE);
-        binding.linearLayoutPadding.setVisibility(View.GONE);
-        binding.backgroundContainer.constrantLayoutChangeBackground.setVisibility(View.GONE);
-        binding.viewCollage.setVisibility(View.VISIBLE);
-        binding.viewBorder.setVisibility(View.INVISIBLE);
-        binding.viewRatio.setVisibility(View.INVISIBLE);
-        binding.viewBackground.setVisibility(View.INVISIBLE);
-    }
-
-    public void setBorder() {
-        binding.recyclerViewCollage.setVisibility(View.GONE);
-        binding.recyclerViewRatio.setVisibility(View.GONE);
-        binding.linearLayoutPadding.setVisibility(View.VISIBLE);
-        binding.backgroundContainer.constrantLayoutChangeBackground.setVisibility(View.GONE);
-        binding.viewCollage.setVisibility(View.INVISIBLE);
-        binding.viewBorder.setVisibility(View.VISIBLE);
-        binding.viewRatio.setVisibility(View.INVISIBLE);
-        binding.viewBackground.setVisibility(View.INVISIBLE);
-        binding.seekbarBorder.setProgress((int) binding.collageView.getCollagePadding());
-        binding.seekbarRadius.setProgress((int) binding.collageView.getCollageRadian());
-    }
-
-    public void setRatio() {
-        binding.recyclerViewCollage.setVisibility(View.GONE);
-        binding.recyclerViewRatio.setVisibility(View.VISIBLE);
-        binding.linearLayoutPadding.setVisibility(View.GONE);
-        binding.backgroundContainer.constrantLayoutChangeBackground.setVisibility(View.GONE);
-        binding.viewCollage.setVisibility(View.INVISIBLE);
-        binding.viewBorder.setVisibility(View.INVISIBLE);
-        binding.viewRatio.setVisibility(View.VISIBLE);
-        binding.viewBackground.setVisibility(View.INVISIBLE);
-    }
-
-    public void setBackground() {
-        binding.recyclerViewCollage.setVisibility(View.GONE);
-        binding.recyclerViewRatio.setVisibility(View.GONE);
-        binding.linearLayoutPadding.setVisibility(View.GONE);
-        binding.backgroundContainer.constrantLayoutChangeBackground.setVisibility(View.VISIBLE);
-        binding.backgroundContainer.backgroundTools.setVisibility(View.VISIBLE);
-        binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
-        binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
-        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
-        binding.viewCollage.setVisibility(View.INVISIBLE);
-        binding.viewBorder.setVisibility(View.INVISIBLE);
-        binding.viewRatio.setVisibility(View.INVISIBLE);
-        binding.viewBackground.setVisibility(View.VISIBLE);
-    }
-
     public void setGuideLineTools() {
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(binding.constrantLayoutChangeLayout);
@@ -1219,45 +1007,26 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         moduleToolsId = module;
         switch (module) {
             case LAYER:
-                setLayer();
+//                setLayer();
                 setGuideLine();
-                binding.constrantLayoutChangeLayout.setVisibility(View.VISIBLE);
-                binding.rvPrimaryTool.setVisibility(View.GONE);
-                binding.imageToolContainer.setVisibility(View.GONE);
+                viewModel.collageShow();
                 queShotLayout = binding.collageView.getQueShotLayout();
                 aspectRatio = binding.collageView.getAspectRatio();
                 BorderRadius = binding.collageView.getCollageRadian();
                 Padding = binding.collageView.getCollagePadding();
-                binding.recyclerViewCollage.scrollToPosition(0);
-                ((GridAdapter) binding.recyclerViewCollage.getAdapter()).setSelectedIndex(-1);
-                binding.recyclerViewCollage.getAdapter().notifyDataSetChanged();
-                binding.recyclerViewRatio.scrollToPosition(0);
-                ((AspectAdapter) binding.recyclerViewRatio.getAdapter()).setLastSelectedView(-1);
-                binding.recyclerViewRatio.getAdapter().notifyDataSetChanged();
                 binding.collageView.setLocked(false);
                 binding.collageView.setTouchEnable(false);
-                setGoneSave();
-
+                break;
             case PADDING:
-                setBorder();
                 setGuideLine();
-                binding.constrantLayoutChangeLayout.setVisibility(View.VISIBLE);
-                binding.rvPrimaryTool.setVisibility(View.GONE);
-                binding.imageToolContainer.setVisibility(View.GONE);
+                viewModel.borderShow();
                 queShotLayout = binding.collageView.getQueShotLayout();
                 aspectRatio = binding.collageView.getAspectRatio();
                 BorderRadius = binding.collageView.getCollageRadian();
                 Padding = binding.collageView.getCollagePadding();
-                binding.recyclerViewCollage.scrollToPosition(0);
-                ((GridAdapter) binding.recyclerViewCollage.getAdapter()).setSelectedIndex(-1);
-                binding.recyclerViewCollage.getAdapter().notifyDataSetChanged();
-                binding.recyclerViewRatio.scrollToPosition(0);
-                ((AspectAdapter) binding.recyclerViewRatio.getAdapter()).setLastSelectedView(-1);
-                binding.recyclerViewRatio.getAdapter().notifyDataSetChanged();
                 binding.collageView.setLocked(false);
                 binding.collageView.setTouchEnable(false);
-                setGoneSave();
-                return;
+                break;
             case DRAW:
                 binding.constraintLayoutDraw.setVisibility(View.VISIBLE);
                 break;
@@ -1278,19 +1047,15 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                 intent.putExtras(optionsBundle);
                 startActivityForResult(intent, 266);
                 break;
-
             case TEXT:
-                setGoneSave();
+                viewModel.textShow();
                 textFragment();
-                binding.rvPrimaryTool.setVisibility(View.GONE);
                 ConstraintSet constraintsetEffect = new ConstraintSet();
                 constraintsetEffect.clone(binding.constraintLayoutCollageLayout);
                 constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
                 constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineTool.getId(), 3, 0);
                 constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
                 constraintsetEffect.applyTo(binding.constraintLayoutCollageLayout);
-                binding.constraintLayoutConfirmText.setVisibility(View.VISIBLE);
-                binding.relativeLayoutAddText.setVisibility(View.VISIBLE);
                 binding.collageView.setLocked(false);
                 binding.collageView.setTouchEnable(false);
                 break;
@@ -1300,7 +1065,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                         drawableList.add(drawable.getDrawable());
                     }
                 }
-                setAllFilter();
+                viewModel.filterAllShow();
                 new allFilters().execute();
                 new bwFilters().execute();
                 new vintageFilters().execute();
@@ -1308,16 +1073,19 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                 new coldFilters().execute();
                 new warmFilters().execute();
                 new legacyFilters().execute();
-                setGoneSave();
-                return;
+                break;
             case STICKER:
                 setGuideLine();
-                binding.constrantLayoutChangeLayout.setVisibility(View.GONE);
-                binding.constraintLayoutFilterLayout.setVisibility(View.GONE);
-                binding.backgroundContainer.constrantLayoutChangeBackground.setVisibility(View.GONE);
-                binding.rvPrimaryTool.setVisibility(View.GONE);
-                binding.imageToolContainer.setVisibility(View.GONE);
-                binding.constraintLayoutSticker.setVisibility(View.VISIBLE);
+//                binding.constrantLayoutChangeLayout.setVisibility(View.GONE);
+//                binding.constraintLayoutFilterLayout.setVisibility(View.GONE);
+//                binding.backgroundContainer.getRoot().setVisibility(View.GONE);
+//                binding.rvPrimaryTool.setVisibility(View.GONE);
+//                binding.rvSecondaryToolContainer.setVisibility(View.GONE);
+//                binding.constraintLayoutSticker.setVisibility(View.VISIBLE);
+//                binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
+
+                viewModel.stickerShow();
+
                 binding.collageView.updateLayout(queShotLayout);
                 binding.collageView.setCollagePadding(Padding);
                 binding.collageView.setCollageRadian(BorderRadius);
@@ -1339,29 +1107,18 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                         binding.collageView.setBackgroundResource(currentBackgroundState.drawableId);
                     }
                 }
-                setGoneSave();
+
                 binding.collageView.setLocked(false);
                 binding.collageView.setTouchEnable(false);
-                binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-                return;
+                break;
             case GRADIENT:
-                setBackground();
-                binding.constrantLayoutChangeLayout.setVisibility(View.VISIBLE);
-                binding.rvPrimaryTool.setVisibility(View.GONE);
-                binding.imageToolContainer.setVisibility(View.GONE);
+                viewModel.bgShow();
                 queShotLayout = binding.collageView.getQueShotLayout();
                 aspectRatio = binding.collageView.getAspectRatio();
                 BorderRadius = binding.collageView.getCollageRadian();
                 Padding = binding.collageView.getCollagePadding();
-                binding.recyclerViewCollage.scrollToPosition(0);
-                ((GridAdapter) binding.recyclerViewCollage.getAdapter()).setSelectedIndex(-1);
-                binding.recyclerViewCollage.getAdapter().notifyDataSetChanged();
-                binding.recyclerViewRatio.scrollToPosition(0);
-                ((AspectAdapter) binding.recyclerViewRatio.getAdapter()).setLastSelectedView(-1);
-                binding.recyclerViewRatio.getAdapter().notifyDataSetChanged();
                 binding.collageView.setLocked(false);
                 binding.collageView.setTouchEnable(false);
-                setGoneSave();
 
             default:
         }
@@ -1425,7 +1182,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
     private void setOnBackPressDialog() {
         TextView textViewCancel, textViewDiscard;
-        final Dialog dialogOnBackPressed = new Dialog(GridActivity.this, R.style.UploadDialog);
+        final Dialog dialogOnBackPressed = new Dialog(CollageEditorActivity.this, R.style.UploadDialog);
         dialogOnBackPressed.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogOnBackPressed.setContentView(R.layout.dialog_exit);
         dialogOnBackPressed.setCancelable(true);
@@ -1444,13 +1201,6 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         });
     }
 
-    public void setGoneSave() {
-        binding.constraintSaveControl.setVisibility(View.GONE);
-    }
-
-    public void setVisibleSave() {
-        binding.constraintSaveControl.setVisibility(View.VISIBLE);
-    }
 
     public void onBackPressed() {
         if (moduleToolsId == null) {
@@ -1463,9 +1213,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                 case RATIO:
                 case LAYER:
                     setGuideLineTools();
-                    binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-                    binding.constrantLayoutChangeLayout.setVisibility(View.GONE);
-                    binding.imageToolContainer.setVisibility(View.GONE);
+                    viewModel.rvPrimaryToolShow();
                     binding.collageView.updateLayout(queShotLayout);
                     binding.collageView.setCollagePadding(Padding);
                     binding.collageView.setCollageRadian(BorderRadius);
@@ -1475,10 +1223,6 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                     binding.collageView.setLocked(true);
                     binding.collageView.setTouchEnable(true);
 
-                    binding.backgroundContainer.backgroundTools.setVisibility(View.VISIBLE);
-                    binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
-                    binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
-                    binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
                     if (currentBackgroundState.isColor) {
                         binding.collageView.setBackgroundResourceMode(0);
                         binding.collageView.setBackgroundColor(currentBackgroundState.drawableId);
@@ -1493,7 +1237,6 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                             binding.collageView.setBackgroundResource(currentBackgroundState.drawableId);
                         }
                     }
-                    setVisibleSave();
                     moduleToolsId = Module.NONE;
                     return;
 
@@ -1514,9 +1257,8 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                         binding.collageView.getStickers().clear();
                         binding.collageView.setHandlingSticker(null);
                     }
-                    binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-                    binding.relativeLayoutAddText.setVisibility(View.GONE);
-                    binding.constraintLayoutConfirmText.setVisibility(View.GONE);
+                    viewModel.rvPrimaryToolShow();
+
                     binding.collageView.setHandlingSticker(null);
                     binding.collageView.setLocked(true);
                     ConstraintSet constraintsetEffect = new ConstraintSet();
@@ -1525,19 +1267,14 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                     constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineTool.getId(), 3, 0);
                     constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
                     constraintsetEffect.applyTo(binding.constraintLayoutCollageLayout);
-                    setVisibleSave();
+
                     moduleToolsId = Module.NONE;
                     return;
                 case COLLAGE:
-                    binding.backgroundContainer.backgroundTools.setVisibility(View.VISIBLE);
-                    binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
-                    binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
-                    binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
-
-                    setVisibleSave();
+                    viewModel.bgShow();
                     setGuideLineTools();
                     binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-                    binding.imageToolContainer.setVisibility(View.GONE);
+                    binding.rvSecondaryToolContainer.setVisibility(View.GONE);
                     moduleToolsId = Module.NONE;
                     binding.collageView.setQueShotGrid(null);
                     binding.collageView.setPrevHandlingQueShotGrid(null);
@@ -1547,16 +1284,14 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
                 case FILTER:
                     setGuideLineTools();
-                    binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-                    binding.constraintLayoutFilterLayout.setVisibility(View.GONE);
-                    binding.imageToolContainer.setVisibility(View.GONE);
+                    viewModel.rvPrimaryToolShow();
+
                     binding.collageView.setLocked(true);
                     binding.collageView.setTouchEnable(true);
                     for (int i = 0; i < drawableList.size(); i++) {
                         binding.collageView.getQueShotGrids().get(i).setDrawable(drawableList.get(i));
                     }
                     binding.collageView.invalidate();
-                    setVisibleSave();
                     moduleToolsId = Module.NONE;
                     return;
                 case STICKER:
@@ -1568,7 +1303,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                         binding.collageView.setHandlingSticker(null);
                         binding.rvPrimaryTool.setVisibility(View.VISIBLE);
                         binding.constraintLayoutSticker.setVisibility(View.GONE);
-                        binding.imageToolContainer.setVisibility(View.GONE);
+                        binding.rvSecondaryToolContainer.setVisibility(View.GONE);
                         binding.collageView.setLocked(true);
                         moduleToolsId = Module.NONE;
                     } else if (binding.relativeLayoutAddSticker.getVisibility() == View.VISIBLE) {
@@ -1576,7 +1311,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                         binding.relativeLayoutAddSticker.setVisibility(View.GONE);
                         binding.collageView.setHandlingSticker(null);
                         binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-                        binding.imageToolContainer.setVisibility(View.GONE);
+                        binding.rvSecondaryToolContainer.setVisibility(View.GONE);
                         binding.rvPrimaryTool.setVisibility(View.VISIBLE);
                         binding.constraintLayoutSticker.setVisibility(View.GONE);
                         binding.collageView.setLocked(true);
@@ -1585,22 +1320,15 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                     } else {
                         binding.linearLayoutWrapperStickerList.setVisibility(View.GONE);
                         binding.relativeLayoutAddSticker.setVisibility(View.VISIBLE);
-                        binding.imageToolContainer.setVisibility(View.GONE);
+                        binding.rvSecondaryToolContainer.setVisibility(View.GONE);
                         binding.rvPrimaryTool.setVisibility(View.VISIBLE);
                     }
-                    binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-                    binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-                    binding.constraintLayoutSticker.setVisibility(View.GONE);
-                    setVisibleSave();
+                    viewModel.rvPrimaryToolShow();
                     return;
                 case GRADIENT:
                     setGuideLineTools();
-                    binding.constrantLayoutChangeLayout.setVisibility(View.GONE);
-                    binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
-                    binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
-                    binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
-                    binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-                    binding.imageToolContainer.setVisibility(View.GONE);
+                    viewModel.rvPrimaryToolShow();
+
                     binding.collageView.setLocked(true);
                     binding.collageView.setTouchEnable(true);
                     if (currentBackgroundState.isColor) {
@@ -1617,7 +1345,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
                             binding.collageView.setBackgroundResource(currentBackgroundState.drawableId);
                         }
                     }
-                    setVisibleSave();
+
                     moduleToolsId = Module.NONE;
                     return;
 
@@ -1661,13 +1389,23 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
 
     public void resultAddImage(String str) {
 
-        try {
-            Uri fromFile = Uri.fromFile(new File(str));
-            Bitmap bitmap = SystemUtil.rotateBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), fromFile), new ExifInterface(getContentResolver().openInputStream(fromFile)).getAttributeInt(ExifInterface.TAG_ORIENTATION, 1));
-            binding.collageView.addSticker(new DrawableSticker(new BitmapDrawable(getResources(), bitmap)));
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!str.isEmpty()){
+            try {
+                Uri fromFile = Uri.fromFile(new File(str));
+                Bitmap bitmap = SystemUtil.rotateBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), fromFile), new ExifInterface(getContentResolver().openInputStream(fromFile)).getAttributeInt(ExifInterface.TAG_ORIENTATION, 1));
+                binding.collageView.addSticker(new DrawableSticker(new BitmapDrawable(getResources(), bitmap)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            binding.constraintSaveControl.setVisibility(View.VISIBLE);
+            binding.collageView.removeCurrentSticker();
+            binding.collageView.setLocked(true);
+            binding.collageView.setTouchEnable(true);
+            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
+            binding.constraintLayoutConfirmSaveAddImage.setVisibility(View.GONE);
         }
+
     }
 
     private int[] calculateWidthAndHeight(AspectRatio aspectRatio, Point point) {
@@ -1788,11 +1526,11 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterAll.setAdapter(new FilterAdapter(listFilterAll, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.ALL_FILTERS)));
+            binding.recyclerViewFilterAll.setAdapter(new FilterAdapter(listFilterAll, CollageEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.ALL_FILTERS)));
             binding.constraintLayoutFilterLayout.setVisibility(View.VISIBLE);
             binding.constraintLayoutConfirmSaveFilter.setVisibility(View.VISIBLE);
             binding.rvPrimaryTool.setVisibility(View.GONE);
-            binding.imageToolContainer.setVisibility(View.GONE);
+            binding.rvSecondaryToolContainer.setVisibility(View.GONE);
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);
@@ -1816,7 +1554,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterBW.setAdapter(new FilterAdapter(listFilterBW, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
+            binding.recyclerViewFilterBW.setAdapter(new FilterAdapter(listFilterBW, CollageEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);
@@ -1839,7 +1577,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterVintage.setAdapter(new FilterAdapter(listFilterVintage, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.VINTAGE_FILTERS)));
+            binding.recyclerViewFilterVintage.setAdapter(new FilterAdapter(listFilterVintage, CollageEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.VINTAGE_FILTERS)));
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);
@@ -1862,7 +1600,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterSmooth.setAdapter(new FilterAdapter(listFilterSmooth, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.SMOOTH_FILTERS)));
+            binding.recyclerViewFilterSmooth.setAdapter(new FilterAdapter(listFilterSmooth, CollageEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.SMOOTH_FILTERS)));
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);
@@ -1885,7 +1623,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterCold.setAdapter(new FilterAdapter(listFilterCold, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.COLD_FILTERS)));
+            binding.recyclerViewFilterCold.setAdapter(new FilterAdapter(listFilterCold, CollageEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.COLD_FILTERS)));
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);
@@ -1908,7 +1646,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterWarm.setAdapter(new FilterAdapter(listFilterWarm, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.WARM_FILTERS)));
+            binding.recyclerViewFilterWarm.setAdapter(new FilterAdapter(listFilterWarm, CollageEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.WARM_FILTERS)));
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);
@@ -1931,7 +1669,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterLegacy.setAdapter(new FilterAdapter(listFilterLegacy, GridActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.LEGACY_FILTERS)));
+            binding.recyclerViewFilterLegacy.setAdapter(new FilterAdapter(listFilterLegacy, CollageEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.LEGACY_FILTERS)));
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);
@@ -1954,7 +1692,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         public void onPostExecute(List<Bitmap> list) {
             setLoading(false);
             if (binding.collageView.getQueShotGrid() != null) {
-                FilterFragment.show(GridActivity.this, GridActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
+                FilterFragment.show(CollageEditorActivity.this, CollageEditorActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
             }
         }
     }
@@ -1975,7 +1713,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         public void onPostExecute(List<Bitmap> list) {
             setLoading(false);
             if (binding.collageView.getQueShotGrid() != null) {
-                DodgeFragment.show(GridActivity.this, GridActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
+                DodgeFragment.show(CollageEditorActivity.this, CollageEditorActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
             }
         }
     }
@@ -1996,7 +1734,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         public void onPostExecute(List<Bitmap> list) {
             setLoading(false);
             if (binding.collageView.getQueShotGrid() != null) {
-                DivideFragment.show(GridActivity.this, GridActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
+                DivideFragment.show(CollageEditorActivity.this, CollageEditorActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
             }
         }
     }
@@ -2017,7 +1755,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         public void onPostExecute(List<Bitmap> list) {
             setLoading(false);
             if (binding.collageView.getQueShotGrid() != null) {
-                BurnFragment.show(GridActivity.this, GridActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
+                BurnFragment.show(CollageEditorActivity.this, CollageEditorActivity.this, ((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), list);
             }
         }
     }
@@ -2104,7 +1842,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
             bitmap.recycle();
             bitmap2.recycle();
             try {
-                File image = SaveFileUtils.saveBitmapFileCollage(GridActivity.this, createBitmap, new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date()));
+                File image = SaveFileUtils.saveBitmapFileCollage(CollageEditorActivity.this, createBitmap, new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date()));
                 createBitmap.recycle();
                 return image.getAbsolutePath();
             } catch (IOException e) {
@@ -2116,7 +1854,7 @@ public class GridActivity extends BaseActivity implements GridToolsAdapter.OnIte
         @Override
         public void onPostExecute(String str) {
             setLoading(false);
-            Intent intent = new Intent(GridActivity.this, PhotoShareActivity.class);
+            Intent intent = new Intent(CollageEditorActivity.this, PhotoShareActivity.class);
             intent.putExtra("path", str);
             startActivity(intent);
         }

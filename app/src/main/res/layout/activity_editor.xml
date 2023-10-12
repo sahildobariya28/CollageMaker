@@ -1075,7 +1075,7 @@
                     android:background="#0B0B0B"
                     app:layout_scrollFlags="enterAlways|scroll">
 
-                    <com.photo.collagemaker.adapters.RecyclerTabLayout
+                    <com.photo.collagemaker.activities.editor.single_editor.adapter.RecyclerTabLayout
                         android:id="@+id/recyclerTabLayoutWomen"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"/>
@@ -1194,7 +1194,7 @@
                     android:background="#0B0B0B"
                     app:layout_scrollFlags="enterAlways|scroll">
 
-                    <com.photo.collagemaker.adapters.RecyclerTabLayout
+                    <com.photo.collagemaker.activities.editor.single_editor.adapter.RecyclerTabLayout
                         android:id="@+id/recyclerTabLayout"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"/>
@@ -1313,7 +1313,7 @@
                     android:background="#0B0B0B"
                     app:layout_scrollFlags="enterAlways|scroll">
 
-                    <com.photo.collagemaker.adapters.RecyclerTabLayout
+                    <com.photo.collagemaker.activities.editor.single_editor.adapter.RecyclerTabLayout
                         android:id="@+id/recyclerTabLayoutMen"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"/>

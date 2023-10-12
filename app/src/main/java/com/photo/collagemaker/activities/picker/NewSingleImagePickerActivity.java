@@ -1,4 +1,9 @@
-package com.photo.collagemaker.activities;
+package com.photo.collagemaker.activities.picker;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,71 +14,39 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.photo.collagemaker.R;
-import com.photo.collagemaker.adapters.SelectedPhotoAdapter;
-import com.photo.collagemaker.constants.Constants;
+import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
+import com.photo.collagemaker.activities.editor.single_editor.SingleEditorActivity;
 import com.photo.collagemaker.adapters.AlbumAdapter;
 import com.photo.collagemaker.adapters.PhotoAdapter;
-import com.photo.collagemaker.databinding.ActivityMultiImagePickerBinding;
-import com.photo.collagemaker.interfac.OnSelectedPhoto;
-import com.photo.collagemaker.model.ImageModel;
+import com.photo.collagemaker.adapters.SelectedPhotoAdapter;
+import com.photo.collagemaker.constants.Constants;
+import com.photo.collagemaker.databinding.ActivityNewSingleImagePickerBinding;
 import com.photo.collagemaker.interfac.OnAlbum;
 import com.photo.collagemaker.interfac.OnPhoto;
+import com.photo.collagemaker.interfac.OnSelectedPhoto;
+import com.photo.collagemaker.model.ImageModel;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class MultipleImagePickerActivity extends AppCompatActivity
-        implements OnAlbum, OnPhoto, OnSelectedPhoto {
-    public static final String KEY_DATA_RESULT = "KEY_DATA_RESULT";
-    public static final String KEY_LIMIT_MAX_IMAGE = "KEY_LIMIT_MAX_IMAGE";
-    public static final String KEY_LIMIT_MIN_IMAGE = "KEY_LIMIT_MIN_IMAGE";
+public class NewSingleImagePickerActivity extends AppCompatActivity implements OnAlbum, OnPhoto, OnSelectedPhoto {
+
 
     AlbumAdapter albumAdapter;
+    PhotoAdapter photoAdapter;
     ArrayList<ImageModel> listAlbums = new ArrayList<>();
     ArrayList<ImageModel> listPhotos = new ArrayList<>();
-    int limitImageMax = 9;
-    int limitImageMin = 2;
-    PhotoAdapter photoAdapter;
-    SelectedPhotoAdapter selectedPhotoAdapter;
-    ArrayList<ImageModel> listItemSelect = new ArrayList<>();
     ArrayList<String> stringArrayListPath = new ArrayList<>();
 
-    ActivityMultiImagePickerBinding binding;
-
+    ActivityNewSingleImagePickerBinding binding;
 
     @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        binding = ActivityMultiImagePickerBinding.inflate(getLayoutInflater());
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityNewSingleImagePickerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            limitImageMax = extras.getInt(KEY_LIMIT_MAX_IMAGE, 9);
-            limitImageMin = extras.getInt(KEY_LIMIT_MIN_IMAGE, 2);
-            if (limitImageMin > limitImageMax || limitImageMin < 1) {
-                finish();
-            }
-        }
-
-        binding.textViewDone.setOnClickListener(view -> {
-            ArrayList<String> imageList = getListString(listItemSelect);
-            if (imageList.size() >= limitImageMin) {
-                Intent intent = new Intent(this, GridActivity.class);
-                intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
-                startActivity(intent);
-            } else {
-                Toast.makeText(this, "Please select at least " + limitImageMin + " images", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         binding.dropdownMenu.setOnClickListener(view -> {
             if (binding.gridViewAlbum.getVisibility() == View.VISIBLE) {
@@ -84,10 +57,6 @@ public class MultipleImagePickerActivity extends AppCompatActivity
         });
 
         binding.btnBack.setOnClickListener(view -> onBackPressed());
-
-        selectedPhotoAdapter = new SelectedPhotoAdapter(this, listItemSelect, this);
-        binding.recyclerSelectedItem.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        binding.recyclerSelectedItem.setAdapter(selectedPhotoAdapter);
 
         try {
             listAlbums.sort((imageModel, imageModel2) -> imageModel.getName().compareToIgnoreCase(imageModel2.getName()));
@@ -208,46 +177,14 @@ public class MultipleImagePickerActivity extends AppCompatActivity
         return !arrayList.isEmpty() && arrayList.contains(string);
     }
 
-    public void itemSelect(final ImageModel imageModel) {
-        imageModel.setId(listItemSelect.size());
-        listItemSelect.add(imageModel);
-        photoAdapter = new PhotoAdapter(this, R.layout.item_list_album, listPhotos);
-        photoAdapter.setOnListAlbum(this);
-        photoAdapter.updateSelectionList(listItemSelect);
-        binding.gridViewPhotos.setAdapter(photoAdapter);
-
-
-        if (!listItemSelect.isEmpty()) {
-            binding.selectCountContainer.setVisibility(View.VISIBLE);
-            binding.recyclerSelectedItem.setVisibility(View.VISIBLE);
-
-            binding.textSelectCount.setText("Select 1 - 9 photos    (" + listItemSelect.size() + ")");
-        } else {
-            binding.selectCountContainer.setVisibility(View.GONE);
-            binding.recyclerSelectedItem.setVisibility(View.GONE);
-        }
-
-        selectedPhotoAdapter.notifyDataSetChanged();
-    }
-
     public void setListAlbum(String str) {
         binding.textTitle.setText(new File(str).getName());
         photoAdapter = new PhotoAdapter(this, R.layout.item_list_album, listPhotos);
         photoAdapter.setOnListAlbum(this);
-        photoAdapter.updateSelectionList(listItemSelect);
         binding.gridViewPhotos.setAdapter(photoAdapter);
         binding.gridViewPhotos.setVisibility(View.GONE);
         binding.gridViewPhotos.setVisibility(View.VISIBLE);
         new GetItemListAlbum(str).execute();
-    }
-
-
-    public ArrayList<String> getListString(ArrayList<ImageModel> arrayList) {
-        ArrayList<String> arrayList2 = new ArrayList<>();
-        for (int i = 0; i < arrayList.size(); i++) {
-            arrayList2.add(arrayList.get(i).getPathFile());
-        }
-        return arrayList2;
     }
 
     public boolean checkFile(File file) {
@@ -278,29 +215,15 @@ public class MultipleImagePickerActivity extends AppCompatActivity
 
     @Override
     public void OnSelectedItemDelete(ImageModel imageModel) {
-        listItemSelect.remove(imageModel);
-        photoAdapter = new PhotoAdapter(this, R.layout.item_list_album, listPhotos);
-        photoAdapter.setOnListAlbum(this);
-        photoAdapter.updateSelectionList(listItemSelect);
-        binding.gridViewPhotos.setAdapter(photoAdapter);
 
-
-        binding.textSelectCount.setText("Select 1 - 9 photos    (" + listItemSelect.size() + ")");
-        if (listItemSelect.isEmpty()) {
-            binding.selectCountContainer.setVisibility(View.GONE);
-            binding.recyclerSelectedItem.setVisibility(View.GONE);
-        }
-        selectedPhotoAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void OnItemListPhotoClick(ImageModel imageModel) {
-        if (listItemSelect.size() < limitImageMax) {
-            itemSelect(imageModel);
-
-        } else {
-            Toast.makeText(this, "Limit " + limitImageMax + " images", Toast.LENGTH_SHORT).show();
-        }
+        Intent intent = new Intent(this, SingleEditorActivity.class);
+        intent.putExtra("SELECTED_PHOTOS", imageModel.getPathFile());
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -326,4 +249,3 @@ public class MultipleImagePickerActivity extends AppCompatActivity
         }
     }
 }
-

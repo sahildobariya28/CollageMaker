@@ -75,6 +75,10 @@ public class PhotoPickerFragment extends Fragment {
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         binding = FragmentPhotoPickerBinding.inflate(layoutInflater, viewGroup, false);
 
+        binding.btnBack.setOnClickListener(view -> {
+            getActivity().onBackPressed();
+        });
+
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(column, 1);
         staggeredGridLayoutManager.setGapStrategy(2);
         binding.recyclerViewPhotos.setLayoutManager(staggeredGridLayoutManager);

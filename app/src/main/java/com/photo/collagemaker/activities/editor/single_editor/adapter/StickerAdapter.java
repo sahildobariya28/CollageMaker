@@ -1,4 +1,4 @@
-package com.photo.collagemaker.adapters;
+package com.photo.collagemaker.activities.editor.single_editor.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;

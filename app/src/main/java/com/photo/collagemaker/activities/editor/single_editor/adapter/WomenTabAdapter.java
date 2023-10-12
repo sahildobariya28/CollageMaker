@@ -1,10 +1,8 @@
-package com.photo.collagemaker.adapters;
+package com.photo.collagemaker.activities.editor.single_editor.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,11 +12,12 @@ import androidx.viewpager.widget.ViewPager;
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.databinding.ItemTabStickerBinding;
 
-public class MenTabAdapter extends RecyclerTabLayout.Adapter<MenTabAdapter.ViewHolder> {
+
+public class WomenTabAdapter extends RecyclerTabLayout.Adapter<WomenTabAdapter.ViewHolder> {
     private Context context;
     private PagerAdapter mAdapater = mViewPager.getAdapter();
 
-    public MenTabAdapter(ViewPager viewPager, Context context2) {
+    public WomenTabAdapter(ViewPager viewPager, Context context2) {
         super(viewPager);
         this.context = context2;
     }
@@ -32,28 +31,37 @@ public class MenTabAdapter extends RecyclerTabLayout.Adapter<MenTabAdapter.ViewH
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         switch (i) {
             case 0:
-                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_hair));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_crowns));
                 break;
             case 1:
-                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_glasses));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_snsla));
                 break;
             case 2:
-                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_moustache));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_hala9at));
                 break;
             case 3:
-                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_lhya));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_flow));
                 break;
             case 4:
-                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_scarf));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_glasses));
                 break;
             case 5:
-                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_tie));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_chap));
                 break;
             case 6:
-                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_tatoo));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_hairs));
                 break;
             case 7:
-                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_chain));
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_smil));
+                break;
+            case 8:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_hjban));
+                break;
+            case 9:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_chfer));
+                break;
+            case 10:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_zwaq));
                 break;
         }
         viewHolder.binding.image.setSelected(i == getCurrentIndicatorPosition());
@@ -68,8 +76,7 @@ public class MenTabAdapter extends RecyclerTabLayout.Adapter<MenTabAdapter.ViewH
         public ViewHolder(ItemTabStickerBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-
-            binding.getRoot().setOnClickListener(view1 -> getViewPager().setCurrentItem(getAdapterPosition()));
+            binding.getRoot().setOnClickListener(view -> getViewPager().setCurrentItem(getAdapterPosition()));
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.photo.collagemaker.adapters;
+package com.photo.collagemaker.activities.editor.single_editor.adapter;
 
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;

@@ -1,12 +1,9 @@
-package com.photo.collagemaker.adapters;
+package com.photo.collagemaker.activities.editor.single_editor.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -14,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.databinding.ItemAdjustBinding;
-import com.photo.collagemaker.databinding.ItemCropBinding;
 import com.photo.collagemaker.listener.AdjustListener;
 import com.photo.collagemaker.custom_view.CustomEditor;
 

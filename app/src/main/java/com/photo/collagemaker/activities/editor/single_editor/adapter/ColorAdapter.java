@@ -1,16 +1,15 @@
-package com.photo.collagemaker.adapters;
+package com.photo.collagemaker.activities.editor.single_editor.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
+import com.photo.collagemaker.databinding.ItemColorBinding;
 import com.photo.collagemaker.listener.BrushColorListener;
 import com.photo.collagemaker.assets.BrushColorAsset;
 
@@ -29,15 +28,16 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> 
 
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_color, viewGroup, false));
+        ItemColorBinding binding = ItemColorBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.squareView.setBackgroundColor(Color.parseColor(colors.get(i)));
+        viewHolder.binding.squareView.setBackgroundColor(Color.parseColor(colors.get(i)));
         if (selectedColorIndex == i) {
-            viewHolder.constraint_layout_wrapper_square_view.setBackground(context.getDrawable(R.drawable.border_view));
+            viewHolder.binding.constraintLayoutWrapperSquareView.setBackground(context.getDrawable(R.drawable.border_view));
         } else {
-            viewHolder.constraint_layout_wrapper_square_view.setBackground(context.getDrawable(R.drawable.border_transparent_view));
+            viewHolder.binding.constraintLayoutWrapperSquareView.setBackground(context.getDrawable(R.drawable.border_transparent_view));
         }
     }
 
@@ -46,19 +46,15 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> 
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        View squareView;
-        public ConstraintLayout constraint_layout_wrapper_square_view;
+        ItemColorBinding binding;
+        ViewHolder(ItemColorBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-        ViewHolder(View view) {
-            super(view);
-            squareView = view.findViewById(R.id.square_view);
-            constraint_layout_wrapper_square_view = view.findViewById(R.id.constraint_layout_wrapper_square_view);
-            squareView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    selectedColorIndex = getLayoutPosition();
-                    brushColorListener.onColorChanged(colors.get(selectedColorIndex));
-                    notifyDataSetChanged();
-                }
+            binding.squareView.setOnClickListener(view -> {
+                selectedColorIndex = getLayoutPosition();
+                brushColorListener.onColorChanged(colors.get(selectedColorIndex));
+                notifyDataSetChanged();
             });
 
         }

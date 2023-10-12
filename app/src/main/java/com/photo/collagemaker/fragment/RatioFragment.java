@@ -14,8 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
@@ -25,10 +23,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
-import com.photo.collagemaker.adapters.AspectAdapter;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.AspectAdapter;
 import com.photo.collagemaker.adapters.RatioAdapter;
 import com.photo.collagemaker.databinding.FragmentRatioBinding;
 import com.photo.collagemaker.listener.BrushColorListener;

@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.constants.Constants;
+import com.photo.collagemaker.databinding.ItemMosaicBinding;
 import com.photo.collagemaker.utils.SystemUtil;
 
 import java.util.ArrayList;
@@ -68,54 +69,52 @@ public class MosaicAdapter extends RecyclerView.Adapter<MosaicAdapter.ViewHolder
     }
 
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_mosaic, viewGroup, false));
+        ItemMosaicBinding binding = ItemMosaicBinding.inflate(LayoutInflater.from(viewGroup.getContext()),viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Glide.with(context).load(Integer.valueOf(mosaicItems.get(i).frameId)).into(viewHolder.mosaic);
+        Glide.with(context).load(Integer.valueOf(mosaicItems.get(i).frameId)).into(viewHolder.binding.roundImageViewMosaicItem);
         if (selectedSquareIndex == i) {
-            viewHolder.mosaic.setBorderColor(ContextCompat.getColor(context, R.color.mainColor));
-            viewHolder.mosaic.setBorderWidth(borderWidth);
+            viewHolder.binding.roundImageViewMosaicItem.setBorderColor(ContextCompat.getColor(context, R.color.mainColor));
+            viewHolder.binding.roundImageViewMosaicItem.setBorderWidth(borderWidth);
             return;
         }
-        viewHolder.mosaic.setBorderColor(0);
-        viewHolder.mosaic.setBorderWidth(borderWidth);
+        viewHolder.binding.roundImageViewMosaicItem.setBorderColor(0);
+        viewHolder.binding.roundImageViewMosaicItem.setBorderWidth(borderWidth);
     }
 
     public int getItemCount() {
         return mosaicItems.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-        public RoundedImageView mosaic;
-        public ConstraintLayout constraintLayout;
+        ItemMosaicBinding binding;
 
-        public ViewHolder(View view) {
-            super(view);
-            mosaic = view.findViewById(R.id.round_image_view_mosaic_item);
-            constraintLayout = view.findViewById(R.id.constraintLayoutMosaic);
-            view.setOnClickListener(this);
-        }
+        public ViewHolder(ItemMosaicBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-        public void onClick(View view) {
-            selectedSquareIndex = getAdapterPosition();
-            if (selectedSquareIndex < mosaicItems.size()) {
-                mosaicChangeListener.onSelected(mosaicItems.get(selectedSquareIndex));
-            }
-            notifyDataSetChanged();
+            binding.getRoot().setOnClickListener(view -> {
+                selectedSquareIndex = getAdapterPosition();
+                if (selectedSquareIndex < mosaicItems.size()) {
+                    mosaicChangeListener.onSelected(mosaicItems.get(selectedSquareIndex));
+                }
+                notifyDataSetChanged();
+            });
         }
     }
 
     public static class MosaicItem {
         int frameId;
-        public BLUR mode;
         public int shaderId;
+        public BLUR mode;
 
-        public MosaicItem(int i, int i2, BLUR mode2) {
-            this.frameId = i;
+        public MosaicItem(int frameId, int shaderId, BLUR mode2) {
+            this.frameId = frameId;
+            this.shaderId = shaderId;
             this.mode = mode2;
-            this.shaderId = i2;
         }
     }
 }

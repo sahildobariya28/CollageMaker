@@ -1,4 +1,4 @@
-package com.photo.collagemaker.adapters;
+package com.photo.collagemaker.activities.editor.collage_editor.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -6,10 +6,8 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;

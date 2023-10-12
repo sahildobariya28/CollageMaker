@@ -1,16 +1,14 @@
-package com.photo.collagemaker.adapters;
+package com.photo.collagemaker.activities.editor.collage_editor.adapter;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.photo.collagemaker.R;
+import com.photo.collagemaker.databinding.ItemGridBinding;
 import com.photo.collagemaker.grid.QueShotLayout;
-import com.photo.collagemaker.custom_view.SquareView;
 import com.photo.collagemaker.layer.slant.NumberSlantLayout;
 import com.photo.collagemaker.layer.straight.NumberStraightLayout;
 
@@ -30,26 +28,27 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
     }
 
     public GridViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return new GridViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_grid, viewGroup, false));
+        ItemGridBinding binding = ItemGridBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new GridViewHolder(binding);
     }
 
     public void setSelectedIndex(int i) {
         selectedIndex = i;
     }
 
-    public void onBindViewHolder(GridViewHolder collageViewHolder, final int i) {
+    public void onBindViewHolder(GridViewHolder holder, int i) {
         final QueShotLayout collageLayout = layoutData.get(i);
-        collageViewHolder.square_collage_view.setNeedDrawLine(true);
-        collageViewHolder.square_collage_view.setNeedDrawOuterLine(true);
-        collageViewHolder.square_collage_view.setTouchEnable(false);
-        collageViewHolder.square_collage_view.setLineSize(6);
-        collageViewHolder.square_collage_view.setQueShotLayout(collageLayout);
+        holder.binding.squareCollageView.setNeedDrawLine(true);
+        holder.binding.squareCollageView.setNeedDrawOuterLine(true);
+        holder.binding.squareCollageView.setTouchEnable(false);
+        holder.binding.squareCollageView.setLineSize(6);
+        holder.binding.squareCollageView.setQueShotLayout(collageLayout);
         if (selectedIndex == i) {
-            collageViewHolder.square_collage_view.setBackgroundColor(Color.parseColor("#333333"));
+            holder.binding.squareCollageView.setBackgroundColor(Color.parseColor("#333333"));
         } else {
-            collageViewHolder.square_collage_view.setBackgroundColor(Color.parseColor("#9F9F9F"));
+            holder.binding.squareCollageView.setBackgroundColor(Color.parseColor("#9F9F9F"));
         }
-        collageViewHolder.itemView.setOnClickListener(view -> {
+        holder.itemView.setOnClickListener(view -> {
             if (onItemClickListener != null) {
                 int i1 = 0;
                 if (collageLayout instanceof NumberSlantLayout) {
@@ -59,18 +58,18 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
                 }
                 onItemClickListener.onItemClick(collageLayout, i1);
             }
-            selectedIndex = i;
+            selectedIndex = holder.getLayoutPosition();
             notifyDataSetChanged();
         });
         if (bitmapData != null) {
             int size = bitmapData.size();
             if (collageLayout.getAreaCount() > size) {
                 for (int i2 = 0; i2 < collageLayout.getAreaCount(); i2++) {
-                    collageViewHolder.square_collage_view.addQuShotCollage(bitmapData.get(i2 % size));
+                    holder.binding.squareCollageView.addQuShotCollage(bitmapData.get(i2 % size));
                 }
                 return;
             }
-            collageViewHolder.square_collage_view.addPieces(bitmapData);
+            holder.binding.squareCollageView.addPieces(bitmapData);
         }
     }
 
@@ -92,11 +91,10 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
     }
 
     public static class GridViewHolder extends RecyclerView.ViewHolder {
-        SquareView square_collage_view;
-
-        public GridViewHolder(View view) {
-            super(view);
-            square_collage_view = view.findViewById(R.id.squareCollageView);
+        ItemGridBinding binding;
+        public GridViewHolder(ItemGridBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.assets.BrushColorAsset;
+import com.photo.collagemaker.databinding.ItemFilterBinding;
+import com.photo.collagemaker.databinding.ItemFrameBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,20 +105,21 @@ public class FrameAdapter extends RecyclerView.Adapter<FrameAdapter.ViewHolder> 
 
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_frame, viewGroup, false));
+        ItemFrameBinding binding = ItemFrameBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         SquareView squareView = squareViewList.get(i);
         if (squareView.isColor) {
-            viewHolder.squareView.setBackgroundColor(squareView.drawableId);
+            viewHolder.binding.squareView.setBackgroundColor(squareView.drawableId);
         } else {
-            viewHolder.squareView.setBackgroundResource(squareView.drawableId);
+            viewHolder.binding.squareView.setBackgroundResource(squareView.drawableId);
         }
         if (selectedSquareIndex == i) {
-            viewHolder.viewSelected.setVisibility(View.VISIBLE);
+            viewHolder.binding.viewSelected.setVisibility(View.VISIBLE);
         } else {
-            viewHolder.viewSelected.setVisibility(View.GONE);
+            viewHolder.binding.viewSelected.setVisibility(View.GONE);
         }
     }
 
@@ -126,16 +129,12 @@ public class FrameAdapter extends RecyclerView.Adapter<FrameAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public View squareView;
-        View viewSelected;
-        public ConstraintLayout wrapSquareView;
+        ItemFrameBinding binding;
+        public ViewHolder(ItemFrameBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-        public ViewHolder(View view) {
-            super(view);
-            squareView = view.findViewById(R.id.square_view);
-            viewSelected = view.findViewById(R.id.view_selected);
-            wrapSquareView = view.findViewById(R.id.constraint_layout_wrapper_square_view);
-            view.setOnClickListener(this);
+            binding.getRoot().setOnClickListener(this);
         }
 
         public void onClick(View view) {

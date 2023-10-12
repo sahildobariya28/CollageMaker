@@ -1,19 +1,18 @@
-package com.photo.collagemaker.adapters;
+package com.photo.collagemaker.activities.editor.single_editor.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.assets.EffectCodeAsset;
+import com.photo.collagemaker.databinding.ItemOverlayBinding;
 import com.photo.collagemaker.listener.HardmixListener;
 
 import java.util.List;
@@ -34,7 +33,8 @@ public class HardmixAdapter extends RecyclerView.Adapter<HardmixAdapter.ViewHold
 
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_overlay, viewGroup, false));
+        ItemOverlayBinding binding = ItemOverlayBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void reset() {
@@ -43,16 +43,16 @@ public class HardmixAdapter extends RecyclerView.Adapter<HardmixAdapter.ViewHold
     }
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.text_view_filter_name.setText(effectsCodeList.get(i).getName());
-        viewHolder.text_view_filter_name.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
-        viewHolder.round_image_view_filter_item.setImageBitmap(bitmaps.get(i));
+        viewHolder.binding.textViewFilterName.setText(effectsCodeList.get(i).getName());
+        viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
+        viewHolder.binding.roundImageViewFilterItem.setImageBitmap(bitmaps.get(i));
         if (selectIndex == i) {
-            viewHolder.text_view_filter_name.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
-            viewHolder.viewSelected.setVisibility(View.VISIBLE);
+            viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
+            viewHolder.binding.viewSelected.setVisibility(View.VISIBLE);
             return;
         }
-        viewHolder.text_view_filter_name.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
-        viewHolder.viewSelected.setVisibility(View.GONE);
+        viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
+        viewHolder.binding.viewSelected.setVisibility(View.GONE);
 
     }
 
@@ -61,16 +61,14 @@ public class HardmixAdapter extends RecyclerView.Adapter<HardmixAdapter.ViewHold
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        RoundedImageView round_image_view_filter_item;
-        TextView text_view_filter_name;
-        View viewSelected;
 
-        ViewHolder(View view) {
-            super(view);
-            round_image_view_filter_item = view.findViewById(R.id.round_image_view_filter_item);
-            text_view_filter_name = view.findViewById(R.id.text_view_filter_name);
-            viewSelected = view.findViewById(R.id.view_selected);
-            view.setOnClickListener(view1 -> {
+        ItemOverlayBinding binding;
+        ViewHolder(ItemOverlayBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+
+
+            binding.getRoot().setOnClickListener(view1 -> {
                 selectIndex = getLayoutPosition();
                 hardmixListener.onFilterSelected(effectsCodeList.get(selectIndex).getImage());
                 notifyDataSetChanged();

@@ -1,12 +1,9 @@
-package com.photo.collagemaker.adapters;
+package com.photo.collagemaker.activities.editor.collage_editor.adapter;
 
 import android.app.Activity;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;

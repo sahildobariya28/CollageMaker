@@ -13,6 +13,7 @@ import com.photo.collagemaker.R;
 import com.photo.collagemaker.constants.Constants;
 import com.photo.collagemaker.custom_view.SplashSticker;
 import com.photo.collagemaker.assets.StickersAsset;
+import com.photo.collagemaker.databinding.ItemSplashBinding;
 import com.photo.collagemaker.utils.SystemUtil;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 
@@ -115,45 +116,45 @@ public class SplashSquareAdapter extends RecyclerView.Adapter<SplashSquareAdapte
 
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_splash, viewGroup, false));
+        ItemSplashBinding binding  = ItemSplashBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false);
+        return new ViewHolder(binding);
     }
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.splash.setImageResource(splashList.get(i).drawableId);
+        viewHolder.binding.roundImageViewSplashItem.setImageResource(splashList.get(i).drawableId);
         if (selectedSquareIndex == i) {
-            viewHolder.splash.setBorderColor(ContextCompat.getColor(context, R.color.colorAccent));
-            viewHolder.splash.setBorderWidth(borderWidth);
+            viewHolder.binding.roundImageViewSplashItem.setBorderColor(ContextCompat.getColor(context, R.color.colorAccent));
+            viewHolder.binding.roundImageViewSplashItem.setBorderWidth(borderWidth);
             return;
         }
-        viewHolder.splash.setBorderColor(0);
-        viewHolder.splash.setBorderWidth(0);
+        viewHolder.binding.roundImageViewSplashItem.setBorderColor(0);
+        viewHolder.binding.roundImageViewSplashItem.setBorderWidth(0);
     }
 
     public int getItemCount() {
         return splashList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-        public RoundedImageView splash;
+        ItemSplashBinding binding;
+        public ViewHolder(ItemSplashBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-        public ViewHolder(View view) {
-            super(view);
-            splash = view.findViewById(R.id.round_image_view_splash_item);
-            view.setOnClickListener(this);
+            binding.getRoot().setOnClickListener(view -> {
+                selectedSquareIndex = getAdapterPosition();
+                if (selectedSquareIndex < 0) {
+                    selectedSquareIndex = 0;
+                }
+                if (selectedSquareIndex >= splashList.size()) {
+                    selectedSquareIndex = splashList.size() - 1;
+                }
+                splashChangeListener.onSelected((splashList.get(selectedSquareIndex)).splashSticker);
+                notifyDataSetChanged();
+            });
         }
 
-        public void onClick(View view) {
-            selectedSquareIndex = getAdapterPosition();
-            if (selectedSquareIndex < 0) {
-                selectedSquareIndex = 0;
-            }
-            if (selectedSquareIndex >= splashList.size()) {
-                selectedSquareIndex = splashList.size() - 1;
-            }
-            splashChangeListener.onSelected((splashList.get(selectedSquareIndex)).splashSticker);
-            notifyDataSetChanged();
-        }
     }
 
     class SplashItem {
