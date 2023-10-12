@@ -91,18 +91,19 @@ public class CollageEditorViewModel extends ViewModel {
 
     public void drawShow() {
         hideAllView();
-        binding.rvPrimaryTool.setVisibility(View.VISIBLE);
         binding.constraintLayoutDraw.setVisibility(View.VISIBLE);
     }
 
     public void paintShow() {
         hideAllView();
+        binding.constraintLayoutDraw.setVisibility(View.VISIBLE);
         binding.constraintLayoutPaint.setVisibility(View.VISIBLE);
         binding.constraintLayoutConfirmSavePaint.setVisibility(View.VISIBLE);
     }
 
     public void neonShow() {
         hideAllView();
+        binding.constraintLayoutDraw.setVisibility(View.VISIBLE);
         binding.constraintLayoutNeon.setVisibility(View.VISIBLE);
         binding.constraintLayoutConfirmSaveNeon.setVisibility(View.VISIBLE);
     }

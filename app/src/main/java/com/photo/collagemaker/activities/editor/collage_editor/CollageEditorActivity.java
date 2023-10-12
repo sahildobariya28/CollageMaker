@@ -278,8 +278,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     public void initSecondaryView() {
         binding.btnDownArrow.setOnClickListener(view -> {
             onBackPressed();
-            binding.rvSecondaryToolContainer.setVisibility(View.GONE);
-            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
+            viewModel.rvPrimaryToolShow();
         });
 
         binding.rvSecondaryTool.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
@@ -338,7 +337,9 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             binding.collageView.setTouchEnable(true);
             aspectRatio = binding.collageView.getAspectRatio();
             moduleToolsId = Module.NONE;
-            binding.collageView.setBackgroundColor(binding.colorPickerView.getColor());
+            if (binding.colorPickerView.isSelected()) {
+                binding.collageView.setBackgroundColor(binding.colorPickerView.getColor());
+            }
 
             binding.backgroundContainer.backgroundTools.setVisibility(View.VISIBLE);
             binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
@@ -360,12 +361,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                 currentBackgroundState.isBitmap = true;
                 currentBackgroundState.drawable = binding.collageView.getBackground();
             }
-        });
-
-        binding.imageViewCloseLayer.setOnClickListener(view -> {
-            binding.backgroundContainer.selectedColorPreview.getBackground().setTint( binding.collageView.getBackgroundColor());
-            viewModel.rvPrimaryToolShow();
-            onBackPressed();
         });
 
         Display defaultDisplay = getWindowManager().getDefaultDisplay();
@@ -513,17 +508,16 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     }
 
     public void initDrawView() {
-        binding.imageViewRedoNeon.setOnClickListener(view -> quShotCustomEditor.redoBrush());
+//        binding.imageViewRedoNeon.setOnClickListener(view -> quShotCustomEditor.redoBrush());
         binding.imageViewRedo.setOnClickListener(view -> quShotCustomEditor.redoBrush());
-        binding.imageViewUndoNeon.setOnClickListener(view -> quShotCustomEditor.undoBrush());
+//        binding.imageViewUndoNeon.setOnClickListener(view -> quShotCustomEditor.undoBrush());
         binding.imageViewUndo.setOnClickListener(view -> quShotCustomEditor.undoBrush());
-        binding.imageViewCleanNeon.setOnClickListener(view -> quShotCustomEditor.clearBrushAllViews());
-        binding.imageViewClean.setOnClickListener(view -> quShotCustomEditor.clearBrushAllViews());
-        binding.imageViewNeon.setOnClickListener(view -> setColorNeon());
-        binding.imageViewBrush.setOnClickListener(view -> setColorPaint());
-
-        binding.imageViewEraseNeon.setOnClickListener(view -> setImageEraseNeon());
-        binding.imageViewErase.setOnClickListener(view -> setImageErasePaint());
+//        binding.imageViewCleanNeon.setOnClickListener(view -> quShotCustomEditor.clearBrushAllViews());
+//        binding.imageViewNeon.setOnClickListener(view -> setColorNeon());
+//        binding.imageViewBrush.setOnClickListener(view -> setColorPaint());
+//
+//        binding.imageViewEraseNeon.setOnClickListener(view -> setImageEraseNeon());
+//        binding.imageViewErase.setOnClickListener(view -> setImageErasePaint());
 
         binding.seekbarBrushSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -555,102 +549,100 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         binding.recyclerViewColorNeon.setHasFixedSize(true);
         binding.recyclerViewColorNeon.setAdapter(new ColorAdapter(getApplicationContext(), this));
 
-        binding.imageViewClosePaint.setOnClickListener(view -> {
+        binding.btnSaveDraw.setOnClickListener(view -> {
             binding.constraintSaveControl.setVisibility(View.VISIBLE);
+            binding.constraintLayoutDraw.setVisibility(View.GONE);
             binding.constraintLayoutConfirmSaveFilter.setVisibility(View.GONE);
             binding.constraintLayoutConfirmSavePaint.setVisibility(View.GONE);
             binding.constraintLayoutConfirmSaveNeon.setVisibility(View.GONE);
             binding.constraintLayoutNeon.setVisibility(View.GONE);
-            binding.constraintLayoutPaint.setVisibility(View.GONE);
-            binding.constraintLayoutDraw.setVisibility(View.GONE);
             binding.rvPrimaryTool.setVisibility(View.VISIBLE);
             quShotCustomEditor.setBrushDrawingMode(false);
-
         });
-        binding.imageViewSavePaint.setOnClickListener(view -> {
+        binding.btnCloseDraw.setOnClickListener(view -> {
             binding.constraintSaveControl.setVisibility(View.VISIBLE);
+            binding.constraintLayoutDraw.setVisibility(View.GONE);
             binding.constraintLayoutConfirmSaveFilter.setVisibility(View.GONE);
             binding.constraintLayoutConfirmSavePaint.setVisibility(View.GONE);
             binding.constraintLayoutConfirmSaveNeon.setVisibility(View.GONE);
             binding.constraintLayoutNeon.setVisibility(View.GONE);
-            binding.constraintLayoutPaint.setVisibility(View.GONE);
-            binding.constraintLayoutDraw.setVisibility(View.GONE);
             binding.rvPrimaryTool.setVisibility(View.VISIBLE);
             quShotCustomEditor.setBrushDrawingMode(false);
         });
-        binding.imageViewCloseNeon.setOnClickListener(view -> {
-            binding.constraintSaveControl.setVisibility(View.VISIBLE);
-            binding.constraintLayoutConfirmSaveFilter.setVisibility(View.GONE);
-            binding.constraintLayoutConfirmSavePaint.setVisibility(View.GONE);
-            binding.constraintLayoutConfirmSaveNeon.setVisibility(View.GONE);
-            binding.constraintLayoutNeon.setVisibility(View.GONE);
-            binding.constraintLayoutPaint.setVisibility(View.GONE);
-            binding.constraintLayoutDraw.setVisibility(View.GONE);
-            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-            quShotCustomEditor.setBrushDrawingMode(false);
-        });
-        binding.imageViewSaveNeon.setOnClickListener(view -> {
-            binding.constraintSaveControl.setVisibility(View.VISIBLE);
-            binding.constraintLayoutConfirmSaveFilter.setVisibility(View.GONE);
-            binding.constraintLayoutConfirmSavePaint.setVisibility(View.GONE);
-            binding.constraintLayoutConfirmSaveNeon.setVisibility(View.GONE);
-            binding.constraintLayoutNeon.setVisibility(View.GONE);
-            binding.constraintLayoutPaint.setVisibility(View.GONE);
-            binding.constraintLayoutDraw.setVisibility(View.GONE);
-            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-            quShotCustomEditor.setBrushDrawingMode(false);
-        });
-
-        QueShotDrawToolsAdapter mEditingEffectToolsAdapter = new QueShotDrawToolsAdapter(module -> {
-            moduleToolsId = module;
+        binding.btnBrush.setOnClickListener(view -> {
+            moduleToolsId = Module.NEON;
             ConstraintSet constraintSet;
-            switch (module) {
-                case PAINT:
-                    setColorPaint();
-                    quShotCustomEditor.setBrushDrawingMode(true);
-                    viewModel.paintShow();
-                    quShotCustomEditor.setBrushDrawingMode(false);
+            setColorNeon();
+            quShotCustomEditor.setBrushDrawingMode(true);
 
-                    constraintSet = new ConstraintSet();
-                    constraintSet.clone(binding.constraintLayoutCollageLayout);
-                    constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
-                    constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineLayout.getId(), 3, 0);
-                    constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
-                    constraintSet.applyTo(binding.constraintLayoutCollageLayout);
-                    quShotCustomEditor.setBrushMode(1);
-                    reloadingLayout();
-                    break;
-                case COLORED:
-                    new openColoredFragment().execute();
-                    viewModel.rvPrimaryToolShow();
+            quShotCustomEditor.setBrushDrawingMode(false);
+            viewModel.neonShow();
 
-                    break;
-                case NEON:
-                    setColorNeon();
-                    quShotCustomEditor.setBrushDrawingMode(true);
-
-                    quShotCustomEditor.setBrushDrawingMode(false);
-                    viewModel.neonShow();
-
-                    constraintSet = new ConstraintSet();
-                    constraintSet.clone(binding.constraintLayoutCollageLayout);
-                    constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
-                    constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.constraintLayoutNeon.getId(), 3, 0);
-                    constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
-                    constraintSet.applyTo(binding.constraintLayoutCollageLayout);
-                    quShotCustomEditor.setBrushMode(2);
-                    reloadingLayout();
-                    break;
-                case MOSAIC:
-                    new openShapeFragment().execute();
-                    viewModel.rvPrimaryToolShow();
-                    break;
-            }
-            binding.collageView.setHandlingSticker(null);
+            constraintSet = new ConstraintSet();
+            constraintSet.clone(binding.constraintLayoutCollageLayout);
+            constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
+            constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.constraintLayoutNeon.getId(), 3, 0);
+            constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
+            constraintSet.applyTo(binding.constraintLayoutCollageLayout);
+            quShotCustomEditor.setBrushMode(2);
+            reloadingLayout();
         });
-        binding.recyclerViewDraw.setLayoutManager(new GridLayoutManager(getApplicationContext(), 4));
-        binding.recyclerViewDraw.setAdapter(mEditingEffectToolsAdapter);
-        binding.recyclerViewDraw.setHasFixedSize(true);
+        binding.btnColor.setOnClickListener(view -> {
+            moduleToolsId = Module.PAINT;
+            ConstraintSet constraintSet;
+            setColorPaint();
+            quShotCustomEditor.setBrushDrawingMode(true);
+            viewModel.paintShow();
+            quShotCustomEditor.setBrushDrawingMode(false);
+
+            constraintSet = new ConstraintSet();
+            constraintSet.clone(binding.constraintLayoutCollageLayout);
+            constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
+            constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineLayout.getId(), 3, 0);
+            constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
+            constraintSet.applyTo(binding.constraintLayoutCollageLayout);
+            quShotCustomEditor.setBrushMode(1);
+            reloadingLayout();
+        });
+
+//        QueShotDrawToolsAdapter mEditingEffectToolsAdapter = new QueShotDrawToolsAdapter(module -> {
+//            moduleToolsId = module;
+//            ConstraintSet constraintSet;
+//            switch (module) {
+//                case PAINT:
+//
+//                    break;
+//                case COLORED:
+//                    new openColoredFragment().execute();
+//                    viewModel.rvPrimaryToolShow();
+//
+//                    break;
+//                case NEON:
+//                    setColorNeon();
+//                    quShotCustomEditor.setBrushDrawingMode(true);
+//
+//                    quShotCustomEditor.setBrushDrawingMode(false);
+//                    viewModel.neonShow();
+//
+//                    constraintSet = new ConstraintSet();
+//                    constraintSet.clone(binding.constraintLayoutCollageLayout);
+//                    constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
+//                    constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.constraintLayoutNeon.getId(), 3, 0);
+//                    constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
+//                    constraintSet.applyTo(binding.constraintLayoutCollageLayout);
+//                    quShotCustomEditor.setBrushMode(2);
+//                    reloadingLayout();
+//                    break;
+//                case MOSAIC:
+//                    new openShapeFragment().execute();
+//                    viewModel.rvPrimaryToolShow();
+//                    break;
+//            }
+//            binding.collageView.setHandlingSticker(null);
+//        });
+//        binding.recyclerViewDraw.setLayoutManager(new GridLayoutManager(getApplicationContext(), 4));
+//        binding.recyclerViewDraw.setAdapter(mEditingEffectToolsAdapter);
+//        binding.recyclerViewDraw.setHasFixedSize(true);
     }
 
     public void initAddImageView(){
@@ -670,23 +662,23 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             binding.constraintLayoutConfirmSaveAddImage.setVisibility(View.GONE);
         });
     }
-    public void setImageEraseNeon() {
-        binding.seekbarBrushSizeNeon.setVisibility(View.GONE);
-        binding.recyclerViewColorNeon.setVisibility(View.GONE);
-        binding.seekbarEraseSizeNeon.setVisibility(View.VISIBLE);
-        binding.imageViewEraseNeon.setImageResource(R.drawable.ic_erase_selected);
-        quShotCustomEditor.brushEraser();
-        binding.seekbarEraseSizeNeon.setProgress(20);
-    }
-
-    public void setImageErasePaint() {
-        binding.seekbarBrushSize.setVisibility(View.GONE);
-        binding.recyclerViewColorPaint.setVisibility(View.GONE);
-        binding.seekbarEraseSize.setVisibility(View.VISIBLE);
-        binding.imageViewErase.setImageResource(R.drawable.ic_erase_selected);
-        quShotCustomEditor.brushEraser();
-        binding.seekbarEraseSize.setProgress(20);
-    }
+//    public void setImageEraseNeon() {
+//        binding.seekbarBrushSizeNeon.setVisibility(View.GONE);
+//        binding.recyclerViewColorNeon.setVisibility(View.GONE);
+//        binding.seekbarEraseSizeNeon.setVisibility(View.VISIBLE);
+//        binding.imageViewEraseNeon.setImageResource(R.drawable.ic_erase_selected);
+//        quShotCustomEditor.brushEraser();
+//        binding.seekbarEraseSizeNeon.setProgress(20);
+//    }
+//
+//    public void setImageErasePaint() {
+//        binding.seekbarBrushSize.setVisibility(View.GONE);
+//        binding.recyclerViewColorPaint.setVisibility(View.GONE);
+//        binding.seekbarEraseSize.setVisibility(View.VISIBLE);
+//        binding.imageViewErase.setImageResource(R.drawable.ic_erase_selected);
+//        quShotCustomEditor.brushEraser();
+//        binding.seekbarEraseSize.setProgress(20);
+//    }
 
     public void reloadingLayout() {
         binding.collageView.postDelayed(() -> {
@@ -720,8 +712,8 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         if (colorAdapter != null) {
             colorAdapter.notifyDataSetChanged();
         }
-        binding.seekbarEraseSizeNeon.setVisibility(View.GONE);
-        binding.imageViewEraseNeon.setImageResource(R.drawable.ic_erase);
+//        binding.seekbarEraseSizeNeon.setVisibility(View.GONE);
+//        binding.imageViewEraseNeon.setImageResource(R.drawable.ic_erase);
         quShotCustomEditor.setBrushMode(2);
         quShotCustomEditor.setBrushDrawingMode(true);
         binding.seekbarBrushSizeNeon.setProgress(20);
@@ -739,7 +731,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             colorAdapter.notifyDataSetChanged();
         }
         binding.seekbarEraseSize.setVisibility(View.GONE);
-        binding.imageViewErase.setImageResource(R.drawable.ic_erase);
+//        binding.imageViewErase.setImageResource(R.drawable.ic_erase);
         quShotCustomEditor.setBrushMode(1);
         quShotCustomEditor.setBrushDrawingMode(true);
         binding.seekbarBrushSize.setProgress(20);
@@ -1028,6 +1020,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                 binding.collageView.setTouchEnable(false);
                 break;
             case DRAW:
+                binding.rvPrimaryTool.setVisibility(View.GONE);
                 binding.constraintLayoutDraw.setVisibility(View.VISIBLE);
                 break;
             case ADDIMAGE:
@@ -1271,7 +1264,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                     moduleToolsId = Module.NONE;
                     return;
                 case COLLAGE:
-                    viewModel.bgShow();
+
                     setGuideLineTools();
                     binding.rvPrimaryTool.setVisibility(View.VISIBLE);
                     binding.rvSecondaryToolContainer.setVisibility(View.GONE);

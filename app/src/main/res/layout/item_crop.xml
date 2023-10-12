@@ -1,33 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="60dp"
-    android:layout_height="wrap_content"
+    android:layout_height="100dp"
     android:orientation="vertical"
     android:layout_marginStart="5dp"
-    android:paddingVertical="10dp"
-    android:gravity="center">
+    android:padding="10dp"
+    android:gravity="bottom">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/relativeLayoutCropper"
-        android:layout_width="30dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/icon_bg_light"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:maxHeight="60dp"
+        android:maxWidth="60dp"
+        android:minWidth="40dp"
+        android:minHeight="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/textAspectName"
+        app:layout_constraintEnd_toEndOf="@+id/textAspectName"
+        app:layout_constraintStart_toStartOf="@+id/textAspectName">
 
         <ImageView
             android:id="@+id/image_view_aspect_ratio"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:scaleType="center"
-            android:src="@drawable/ic_crop_9_16"
+            android:padding="4dp"
+            android:src="@drawable/ratio_border_dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="9:16"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/icon_color_dark" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -35,12 +44,14 @@
         android:id="@+id/textAspectName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:fontFamily="@font/roboto_medium"
         android:gravity="center"
         android:text="Select"
         android:textColor="@color/black"
-        android:textSize="10sp" />
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

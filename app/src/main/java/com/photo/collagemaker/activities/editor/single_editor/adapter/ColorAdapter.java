@@ -35,9 +35,9 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.binding.squareView.setBackgroundColor(Color.parseColor(colors.get(i)));
         if (selectedColorIndex == i) {
-            viewHolder.binding.constraintLayoutWrapperSquareView.setBackground(context.getDrawable(R.drawable.border_view));
+            viewHolder.binding.imageViewSquare.setBackground(context.getDrawable(R.drawable.border_view));
         } else {
-            viewHolder.binding.constraintLayoutWrapperSquareView.setBackground(context.getDrawable(R.drawable.border_transparent_view));
+            viewHolder.binding.imageViewSquare.setBackground(context.getDrawable(R.drawable.border_transparent_view));
         }
     }
 
@@ -51,7 +51,7 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> 
             super(binding.getRoot());
             this.binding = binding;
 
-            binding.squareView.setOnClickListener(view -> {
+            binding.getRoot().setOnClickListener(view -> {
                 selectedColorIndex = getLayoutPosition();
                 brushColorListener.onColorChanged(colors.get(selectedColorIndex));
                 notifyDataSetChanged();
