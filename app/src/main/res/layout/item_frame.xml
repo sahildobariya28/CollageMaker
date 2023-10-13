@@ -13,7 +13,7 @@
 
         <View
             android:id="@+id/square_view"
-            android:background="@color/mainColor"
+            android:background="@color/theme_color"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

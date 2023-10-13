@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.photo.collagemaker.activities.editor.single_editor.SingleEditorActivity;
 import com.photo.collagemaker.activities.picker.MultipleImagePickerActivity;
 import com.photo.collagemaker.activities.picker.NewSingleImagePickerActivity;
-import com.photo.collagemaker.activities.picker.SingleImagePickerActivity;
 import com.photo.collagemaker.databinding.ActivityHomeBinding;
 import com.photo.collagemaker.dialog.DetailsDialog;
 import com.photo.collagemaker.picker.ImageCaptureManager;

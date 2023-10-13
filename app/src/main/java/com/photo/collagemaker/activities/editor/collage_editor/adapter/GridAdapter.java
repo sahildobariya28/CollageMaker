@@ -32,9 +32,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
         return new GridViewHolder(binding);
     }
 
-    public void setSelectedIndex(int i) {
-        selectedIndex = i;
-    }
 
     public void onBindViewHolder(GridViewHolder holder, int i) {
         final QueShotLayout collageLayout = layoutData.get(i);

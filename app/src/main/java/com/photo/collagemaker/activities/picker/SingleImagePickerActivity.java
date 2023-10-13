@@ -16,17 +16,12 @@ import java.util.ArrayList;
 
 public class SingleImagePickerActivity extends AppCompatActivity {
     private boolean forwardMain;
-    private ImagePagerFragment imagePagerFragment;
     private int maxCount = 9;
     private ArrayList<String> originalPhotos = null;
     private PhotoPickerFragment pickerFragment;
-    private boolean showGif = false;
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
 
     ActivitySingleImagePickerBinding binding;
+
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         binding = ActivitySingleImagePickerBinding.inflate(getLayoutInflater());
@@ -37,7 +32,6 @@ public class SingleImagePickerActivity extends AppCompatActivity {
         boolean booleanExtra3 = getIntent().getBooleanExtra("PREVIEW_ENABLED", true);
         boolean isAddImage = getIntent().getBooleanExtra("ADD_IMAGE", true);
         forwardMain = getIntent().getBooleanExtra("MAIN_ACTIVITY", false);
-        setShowGif(booleanExtra2);
 
         maxCount = getIntent().getIntExtra("MAX_COUNT", 9);
         int intExtra = getIntent().getIntExtra("column", 3);
@@ -50,39 +44,17 @@ public class SingleImagePickerActivity extends AppCompatActivity {
         }
         pickerFragment.getPhotoGridAdapter().setOnItemCheckListener((i, photo, i2) -> {
             if (!forwardMain) {
-                Intent intent = new Intent(SingleImagePickerActivity.this, SingleEditorActivity.class);
-                intent.putExtra("SELECTED_PHOTOS", photo.getPath());
-                startActivity(intent);
+                startActivity(new Intent(SingleImagePickerActivity.this, SingleEditorActivity.class).putExtra("SELECTED_PHOTOS", photo.getPath()));
                 finish();
                 return true;
             }
-            if (isAddImage){
+            if (isAddImage) {
                 CollageEditorActivity.getQueShotGridActivityInstance().resultAddImage(photo.getPath());
-            }else {
+            } else {
                 CollageEditorActivity.getQueShotGridActivityInstance().replaceCurrentPiece(photo.getPath());
             }
-
-
             finish();
             return true;
         });
-    }
-
-
-    public void onBackPressed() {
-        if (imagePagerFragment == null || !imagePagerFragment.isVisible()) {
-            super.onBackPressed();
-        } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStack();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    public void setShowGif(boolean z) {
-        showGif = z;
     }
 }

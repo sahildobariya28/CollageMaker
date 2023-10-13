@@ -341,7 +341,7 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
     }
 
     public static TextFragment show(@NonNull AppCompatActivity appCompatActivity) {
-        return show(appCompatActivity, "Test", ContextCompat.getColor(appCompatActivity, R.color.itemColorWhite));
+        return show(appCompatActivity, "Test", ContextCompat.getColor(appCompatActivity, R.color.text_color_dark));
     }
 
     public void setQuShotText(CustomText addTextProperties2) {
@@ -419,7 +419,7 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
         binding.addTextEditText.requestFocus();
         binding.addTextEditText.setTextSize(20.0f);
         binding.addTextEditText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        binding.addTextEditText.setTextColor(Color.parseColor("#333333"));
+        binding.addTextEditText.setTextColor(getContext().getColor(R.color.text_color_dark));
     }
 
     private void initAddTextLayout() {

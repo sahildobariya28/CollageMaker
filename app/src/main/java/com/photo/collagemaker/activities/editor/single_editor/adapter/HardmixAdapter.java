@@ -44,14 +44,14 @@ public class HardmixAdapter extends RecyclerView.Adapter<HardmixAdapter.ViewHold
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.binding.textViewFilterName.setText(effectsCodeList.get(i).getName());
-        viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
+        viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.text_color_dark));
         viewHolder.binding.roundImageViewFilterItem.setImageBitmap(bitmaps.get(i));
         if (selectIndex == i) {
-            viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
+            viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.text_color_dark));
             viewHolder.binding.viewSelected.setVisibility(View.VISIBLE);
             return;
         }
-        viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
+        viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.text_color_dark));
         viewHolder.binding.viewSelected.setVisibility(View.GONE);
 
     }

@@ -128,7 +128,7 @@
                     android:layout_height="30dp"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/img_rotate"
-                    app:tint="@color/itemColorBlack" />
+                    app:tint="@color/theme_color_dark" />
 
                 <TextView
                     android:id="@+id/text_view_tool_name"

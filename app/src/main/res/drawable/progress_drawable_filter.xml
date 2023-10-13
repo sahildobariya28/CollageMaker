@@ -13,7 +13,7 @@
             <shape android:shape="line">
                 <stroke
                     android:width="5dp"
-                    android:color="@color/itemColorBlack" />
+                    android:color="@color/theme_color_dark" />
                 <corners android:radius="20dp"/>
             </shape>
         </clip>
@@ -22,7 +22,7 @@
         <clip>
             <shape android:shape="line">
                 <stroke android:width="5dp"
-                    android:color="@color/itemColorBlack" />
+                    android:color="@color/theme_color_dark" />
                 <corners android:radius="20dp"/>
             </shape>
         </clip>

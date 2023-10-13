@@ -14,7 +14,7 @@
         android:layout_height="21dp"
         android:src="@drawable/icon_filter"
         android:layout_centerHorizontal="true"
-        app:tint="@color/itemColorBlack" />
+        app:tint="@color/theme_color_dark" />
 
     <TextView
         android:id="@+id/text_view_tool_name"
@@ -26,6 +26,6 @@
         android:textSize="11sp"
         android:text="editing"
         android:textStyle="bold"
-        android:textColor="@color/tintCol"/>
+        android:textColor="@color/text_color_dark"/>
 
 </RelativeLayout>

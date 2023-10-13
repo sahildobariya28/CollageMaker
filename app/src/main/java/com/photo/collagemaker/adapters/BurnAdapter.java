@@ -46,15 +46,15 @@ public class BurnAdapter extends RecyclerView.Adapter<BurnAdapter.ViewHolder> {
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.binding.textViewFilterName.setText(effectsCodeList.get(i).getName());
-        viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
+        viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.text_color_light));
         viewHolder.binding.roundImageViewFilterItem.setImageBitmap(bitmapList.get(i));
         if (selectIndex == i) {
-            viewHolder.binding.roundImageViewFilterItem.setBorderColor(ContextCompat.getColor(context, R.color.itemColorBlack));
-            viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
+            viewHolder.binding.roundImageViewFilterItem.setBorderColor(ContextCompat.getColor(context, R.color.text_color_light));
+            viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.text_color_light));
             viewHolder.binding.viewSelected.setVisibility(View.VISIBLE);
             return;
         }
-        viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
+        viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.text_color_light));
         viewHolder.binding.viewSelected.setVisibility(View.GONE);
 
     }

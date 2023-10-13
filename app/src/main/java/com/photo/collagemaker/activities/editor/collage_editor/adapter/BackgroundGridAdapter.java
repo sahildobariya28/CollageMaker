@@ -33,7 +33,7 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
     public BackgroundGridAdapter(Context context, BackgroundGridListener backgroundListener) {
         this.context = context;
         this.backgroundListener = backgroundListener;
-        this.squareViewList.add(new SquareView(Color.parseColor("#00000000"), "Transparent", true));
+        this.squareViewList.add(new SquareView(context.getColor(R.color.transparent), "Transparent", true));
         List<String> lstColorForBrush = BrushColorAsset.listColorBrush();
         for (int i = 0; i < lstColorForBrush.size() - 2; i++) {
             this.squareViewList.add(new SquareView(Color.parseColor(lstColorForBrush.get(i)), "", true));

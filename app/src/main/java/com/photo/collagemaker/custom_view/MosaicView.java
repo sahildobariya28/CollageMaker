@@ -96,7 +96,7 @@ public class MosaicView extends ImageView {
         this.circlePaint = new Paint();
         this.circlePaint.setAntiAlias(true);
         this.circlePaint.setDither(true);
-        this.circlePaint.setColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+        this.circlePaint.setColor(ContextCompat.getColor(getContext(), R.color.theme_color));
         this.circlePaint.setStrokeWidth((float) SystemUtil.dpToPx(getContext(), 2));
         this.circlePaint.setStyle(Paint.Style.STROKE);
         this.mPath = new Path();

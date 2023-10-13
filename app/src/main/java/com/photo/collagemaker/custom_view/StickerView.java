@@ -144,7 +144,7 @@ public class StickerView extends RelativeLayout {
         this.paintCircle = new Paint();
         this.paintCircle.setAntiAlias(true);
         this.paintCircle.setDither(true);
-        this.paintCircle.setColor(getContext().getResources().getColor(R.color.colorAccent));
+        this.paintCircle.setColor(getContext().getResources().getColor(R.color.theme_color));
         this.paintCircle.setStrokeWidth((float) SystemUtil.dpToPx(getContext(), 2));
         this.paintCircle.setStyle(Paint.Style.STROKE);
         this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
@@ -156,10 +156,10 @@ public class StickerView extends RelativeLayout {
                 this.showBorder = typedArray.getBoolean(3, false);
                 this.bringToFrontCurrentSticker = typedArray.getBoolean(2, false);
                 this.borderPaint.setAntiAlias(true);
-                this.borderPaint.setColor(typedArray.getColor(1, Color.parseColor("#000000")));
+                this.borderPaint.setColor(typedArray.getColor(1, context.getColor(R.color.black)));
                 this.borderPaint.setAlpha(typedArray.getInteger(0, 255));
                 this.borderPaintRed.setAntiAlias(true);
-                this.borderPaintRed.setColor(typedArray.getColor(1, Color.parseColor("#000000")));
+                this.borderPaintRed.setColor(typedArray.getColor(1, context.getColor(R.color.black)));
                 this.borderPaintRed.setAlpha(typedArray.getInteger(0, 255));
                 getStickerIcons();
                 if (typedArray != null) {

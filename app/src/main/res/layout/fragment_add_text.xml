@@ -64,7 +64,7 @@
                 android:layout_height="match_parent"
                 android:padding="8dp"
                 android:src="@drawable/ic_keyboard"
-                app:tint="@color/itemColorBlack"
+                app:tint="@color/theme_color_dark"
                 android:layout_weight="1"/>
 
             <ImageView
@@ -73,7 +73,7 @@
                 android:layout_height="match_parent"
                 android:padding="8dp"
                 android:visibility="gone"
-                app:tint="@color/itemColorBlack"
+                app:tint="@color/theme_color_dark"
                 android:src="@drawable/ic_format_align_center"
                 android:layout_weight="1"/>
 
@@ -82,7 +82,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:padding="7dp"
-                app:tint="@color/itemColorBlack"
+                app:tint="@color/theme_color_dark"
                 android:src="@drawable/ic_text"
                 android:layout_weight="1"/>
 
@@ -91,7 +91,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:padding="8dp"
-                app:tint="@color/itemColorBlack"
+                app:tint="@color/theme_color_dark"
                 android:src="@drawable/ic_neon"
                 android:layout_weight="1"/>
 
@@ -100,7 +100,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                app:tint="@color/itemColorBlack"
+                app:tint="@color/theme_color_dark"
                 android:src="@drawable/ic_adjust"
                 android:layout_weight="1"/>
 
@@ -109,7 +109,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:padding="8dp"
-                app:tint="@color/itemColorBlack"
+                app:tint="@color/theme_color_dark"
                 android:src="@drawable/ic_done"
                 android:layout_weight="1"/>
 
@@ -179,7 +179,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/roboto_medium"
                                 android:text="@string/size"
-                                android:textColor="@color/itemColorBlack"
+                                android:textColor="@color/theme_color_dark"
                                 android:textSize="14sp" />
 
                             <SeekBar
@@ -207,7 +207,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/roboto_medium"
                                 android:text="@string/radius"
-                                android:textColor="@color/itemColorBlack"
+                                android:textColor="@color/theme_color_dark"
                                 android:textSize="14sp" />
 
                             <SeekBar
@@ -243,7 +243,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/roboto_medium"
                                 android:text="@string/color"
-                                android:textColor="@color/itemColorBlack"
+                                android:textColor="@color/theme_color_dark"
                                 android:textSize="14sp" />
 
                             <SeekBar
@@ -271,7 +271,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/font"
                                 android:text="@string/background"
-                                android:textColor="@color/itemColorBlack"
+                                android:textColor="@color/theme_color_dark"
                                 android:textSize="14sp" />
 
                             <SeekBar
@@ -307,7 +307,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/roboto_medium"
                                 android:text="@string/width"
-                                android:textColor="@color/itemColorBlack"
+                                android:textColor="@color/theme_color_dark"
                                 android:textSize="14sp" />
 
                             <SeekBar
@@ -335,7 +335,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/font"
                                 android:text="@string/height"
-                                android:textColor="@color/itemColorBlack"
+                                android:textColor="@color/theme_color_dark"
                                 android:textSize="14sp" />
 
                             <SeekBar
@@ -385,7 +385,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_medium"
                             android:text="@string/color"
-                            android:textColor="@color/itemColorBlack"
+                            android:textColor="@color/theme_color_dark"
                             android:textSize="14sp" />
 
                         <RelativeLayout
@@ -400,7 +400,7 @@
                                 android:layout_height="10dp"
                                 android:layout_centerInParent="true"
                                 android:src="@drawable/ic_arrow_down"
-                                app:tint="@color/itemColorBlack" />
+                                app:tint="@color/theme_color_dark" />
 
                         </RelativeLayout>
 
@@ -438,7 +438,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_medium"
                             android:text="@string/texture"
-                            android:textColor="@color/itemColorBlack"
+                            android:textColor="@color/theme_color_dark"
                             android:textSize="14sp" />
 
                         <RelativeLayout
@@ -453,7 +453,7 @@
                                 android:layout_height="10dp"
                                 android:layout_centerInParent="true"
                                 android:src="@drawable/ic_arrow_down"
-                                app:tint="@color/itemColorBlack" />
+                                app:tint="@color/theme_color_dark" />
 
                         </RelativeLayout>
 
@@ -495,7 +495,7 @@
                                 android:layout_centerVertical="true"
                                 android:fontFamily="@font/roboto_medium"
                                 android:text="@string/background"
-                                android:textColor="@color/itemColorBlack"
+                                android:textColor="@color/theme_color_dark"
                                 android:textSize="14sp" />
 
                             <CheckBox
@@ -519,7 +519,7 @@
                                 android:layout_height="10dp"
                                 android:layout_centerInParent="true"
                                 android:src="@drawable/ic_arrow_down"
-                                app:tint="@color/itemColorBlack" />
+                                app:tint="@color/theme_color_dark" />
 
                         </RelativeLayout>
 

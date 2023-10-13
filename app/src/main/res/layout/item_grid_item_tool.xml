@@ -15,7 +15,7 @@
         android:layout_height="28dp"
         android:src="@drawable/icon_filter"
         android:layout_centerHorizontal="true"
-        app:tint="@color/itemColorBlack" />
+        app:tint="@color/theme_color_dark" />
 
     <TextView
         android:id="@+id/text_view_tool_name"

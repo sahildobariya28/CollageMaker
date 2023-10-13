@@ -80,7 +80,7 @@ public class ColoredAdapter extends RecyclerView.Adapter<ColoredAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Glide.with(context).load(Integer.valueOf(coloredItems.get(i).frameId)).into(viewHolder.binding.roundImageViewMosaicItem);
         if (selectedSquareIndex == i) {
-            viewHolder.binding.roundImageViewMosaicItem.setBorderColor(ContextCompat.getColor(context, R.color.mainColor));
+            viewHolder.binding.roundImageViewMosaicItem.setBorderColor(ContextCompat.getColor(context, R.color.theme_color));
             viewHolder.binding.roundImageViewMosaicItem.setBorderWidth(borderWidth);
             return;
         }

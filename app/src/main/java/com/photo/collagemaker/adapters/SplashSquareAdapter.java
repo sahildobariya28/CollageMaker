@@ -123,7 +123,7 @@ public class SplashSquareAdapter extends RecyclerView.Adapter<SplashSquareAdapte
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.binding.roundImageViewSplashItem.setImageResource(splashList.get(i).drawableId);
         if (selectedSquareIndex == i) {
-            viewHolder.binding.roundImageViewSplashItem.setBorderColor(ContextCompat.getColor(context, R.color.colorAccent));
+            viewHolder.binding.roundImageViewSplashItem.setBorderColor(ContextCompat.getColor(context, R.color.theme_color));
             viewHolder.binding.roundImageViewSplashItem.setBorderWidth(borderWidth);
             return;
         }

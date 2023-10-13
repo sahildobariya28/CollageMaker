@@ -2,7 +2,7 @@
 <shape android:shape="rectangle"
   xmlns:android="http://schemas.android.com/apk/res/android">
     <gradient android:angle="0"
-        android:startColor="@color/mainColor"
-        android:endColor="@color/itemColorBlack"/>
+        android:startColor="@color/theme_color"
+        android:endColor="@color/text_color_dark"/>
     <corners android:radius="50dp"/>
 </shape>

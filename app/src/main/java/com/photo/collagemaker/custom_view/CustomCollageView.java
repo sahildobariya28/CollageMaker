@@ -46,7 +46,7 @@ public class CustomCollageView extends StickerView {
         this.filterImageView = new FilterImageView(getContext());
         this.filterImageView.setId(1);
         this.filterImageView.setAdjustViewBounds(true);
-        this.filterImageView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.BackgroundCardColor));
+        this.filterImageView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme_color_dark));
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(-1, -2);
         layoutParams.addRule(13, -1);
         this.brushDrawingView = new BrushDrawingView(getContext());

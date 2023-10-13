@@ -2,7 +2,7 @@
 <resources>
 
     <style name="UploadDialog" parent="@android:style/Theme.Dialog">
-        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:layout_width">match_parent</item>
@@ -12,9 +12,9 @@
 
     <style name="AppTheme.AdAttribution">
         <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/itemColorWhite</item>
+        <item name="android:textColor">@color/text_color_dark</item>
         <item name="android:layout_gravity">left</item>
-        <item name="android:background">@color/mainColor</item>
+        <item name="android:background">@color/theme_color</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:text">@string/ad_attribution</item>
@@ -36,17 +36,17 @@
 
     <style name="TextBelowImage" parent="@android:style/Widget.TextView">
         <item name="android:textSize">11sp</item>
-        <item name="android:textColor">@color/itemColorWhite</item>
+        <item name="android:textColor">@color/text_color_dark</item>
         <item name="android:lines">1</item>
     </style>
 
     <style name="mRecyclerTabLayout">
         <item name="mTabIndicatorHeight">40dp</item>
-        <item name="mTabIndicatorColor">@color/BackgroundColor</item>
+        <item name="mTabIndicatorColor">@color/icon_color_dark</item>
         <item name="mTabMaxWidth">40dp</item>
         <item name="mTabMinWidth">40dp</item>
         <item name="mTabPadding">10dp</item>
-        <item name="mTabSelectedTextColor">@color/mainColor</item>
+        <item name="mTabSelectedTextColor">@color/theme_color</item>
     </style>
 
     <style name="mRecyclerTabLayout.Tab" parent="@style/mRecyclerTabLayout">

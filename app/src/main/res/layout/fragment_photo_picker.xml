@@ -80,7 +80,7 @@
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_up"
-            app:tint="@color/itemColorBlack" />
+            app:tint="@color/theme_color_dark" />
 
         <TextView
             android:id="@+id/text_view_folder"
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="14sp"
-            android:textColor="@color/itemColorBlack"
+            android:textColor="@color/theme_color_dark"
             android:text="@string/gallery"
             android:fontFamily="@font/font" />
 

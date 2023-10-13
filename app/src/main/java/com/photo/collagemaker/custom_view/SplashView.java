@@ -99,7 +99,7 @@ public class SplashView extends AppCompatImageView {
         this.paintCircle = new Paint();
         this.paintCircle.setAntiAlias(true);
         this.paintCircle.setDither(true);
-        this.paintCircle.setColor(getContext().getResources().getColor(R.color.colorAccent));
+        this.paintCircle.setColor(getContext().getResources().getColor(R.color.theme_color));
         this.paintCircle.setStrokeWidth((float) SystemUtil.dpToPx(getContext(), 2));
         this.paintCircle.setStyle(Paint.Style.STROKE);
         this.mPath = new Path();

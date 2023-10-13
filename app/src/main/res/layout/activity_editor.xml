@@ -353,8 +353,8 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center"
-                                    android:text="@string/all"
-                                    android:textColor="@color/grayText"
+                                    android:text="All"
+                                    android:textColor="@color/text_color_dark"
                                     android:textSize="13sp" />
 
                                 <View
@@ -381,8 +381,8 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center"
-                                    android:text="@string/smooth"
-                                    android:textColor="@color/grayText"
+                                    android:text="Smooth"
+                                    android:textColor="@color/text_color_dark"
                                     android:textSize="13sp" />
 
                                 <View
@@ -409,8 +409,8 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center"
-                                    android:text="@string/b_amp_w"
-                                    android:textColor="@color/grayText"
+                                    android:text="B&amp;W"
+                                    android:textColor="@color/text_color_dark"
                                     android:textSize="13sp" />
 
                                 <View
@@ -437,8 +437,8 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center"
-                                    android:text="@string/vintage"
-                                    android:textColor="@color/grayText"
+                                    android:text="Vintage"
+                                    android:textColor="@color/text_color_dark"
                                     android:textSize="13sp" />
 
                                 <View
@@ -465,8 +465,8 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center"
-                                    android:text="@string/cold"
-                                    android:textColor="@color/grayText"
+                                    android:text="Cold"
+                                    android:textColor="@color/text_color_dark"
                                     android:textSize="13sp" />
 
                                 <View
@@ -493,8 +493,8 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center"
-                                    android:text="@string/warm"
-                                    android:textColor="@color/grayText"
+                                    android:text="Warm"
+                                    android:textColor="@color/text_color_dark"
                                     android:textSize="13sp" />
 
                                 <View
@@ -521,8 +521,8 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center"
-                                    android:text="@string/legacy"
-                                    android:textColor="@color/grayText"
+                                    android:text="Legacy"
+                                    android:textColor="@color/text_color_dark"
                                     android:textSize="13sp" />
 
                                 <View
@@ -633,57 +633,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayoutConfigCompare"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginBottom="5dp"
-                app:layout_constraintBottom_toTopOf="@id/cnstraintLayoutRecycler">
-
-                <ImageView
-                    android:id="@+id/imageViewCompareAdjust"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:onClick="onClick"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@drawable/background_flip"
-                    android:src="@drawable/icon_horizontal_flip"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-                <SeekBar
-                    android:id="@+id/seekbarAdjust"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="@null"
-                    android:max="50"
-                    android:progress="100"
-                    android:progressDrawable="@drawable/progress_drawable_filter"
-                    android:thumb="@drawable/progress_thumb_filter"
-                    android:splitTrack="false"
-                    app:layout_constraintEnd_toStartOf="@id/imageViewCompareAdjust"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/cnstraintLayoutRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/backgroundTool"
+                android:background="@color/white"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:id="@+id/constraintLayoutConfirmAdjust"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginBottom="5dp"
+                    android:gravity="center"
                     app:layout_constraintBottom_toTopOf="@+id/recyclerViewAdjust">
 
                     <ImageView
@@ -694,28 +656,22 @@
                         android:padding="8dp"
                         android:src="@drawable/ic_round_close"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="8dp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/text_color_dark" />
 
                         <TextView
                             android:id="@+id/textViewAdjust"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:text="@string/adjust"
                             android:textSize="13sp"
                             android:fontFamily="@font/roboto_medium"
-                            android:textColor="@color/white"
+                            android:textColor="@color/text_color_dark"
                             android:gravity="center"
-                            android:layout_centerHorizontal="true"/>
-
-                    </RelativeLayout>
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
 
                     <ImageView
                         android:id="@+id/imageViewSaveAdjust"
@@ -725,7 +681,46 @@
                         android:padding="8dp"
                         android:src="@drawable/ic_round_check"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/text_color_dark"/>
+
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayoutConfigCompare"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toTopOf="@id/cnstraintLayoutRecycler">
+
+                    <ImageView
+                        android:id="@+id/imageViewCompareAdjust"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:onClick="onClick"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/icon_horizontal_flip"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <SeekBar
+                        android:id="@+id/seekbarAdjust"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="@null"
+                        android:max="50"
+                        android:progress="100"
+                        android:progressDrawable="@drawable/progress_drawable_filter"
+                        android:thumb="@drawable/progress_thumb_filter"
+                        android:splitTrack="false"
+                        app:layout_constraintEnd_toStartOf="@id/imageViewCompareAdjust"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -734,10 +729,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
                     android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -752,49 +748,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayoutConfirmCompareEffect"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toTopOf="@id/constraintLayoutEffect">
-
-                <ImageView
-                    android:id="@+id/imageViewCompareEffect"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:onClick="onClick"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@drawable/background_flip"
-                    android:src="@drawable/icon_horizontal_flip"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-                <SeekBar
-                    android:id="@+id/seekbarEffect"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="@null"
-                    android:max="100"
-                    android:progress="100"
-                    android:progressDrawable="@drawable/progress_drawable_filter"
-                    android:thumb="@drawable/progress_thumb_filter"
-                    android:splitTrack="false"
-                    app:layout_constraintEnd_toStartOf="@id/imageViewCompareEffect"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:id="@+id/constraintLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -837,8 +796,8 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center"
-                                    android:text="@string/effect"
-                                    android:textColor="@color/white"
+                                    android:text="Effect"
+                                    android:textColor="@color/theme_color"
                                     android:textSize="13sp" />
 
                             </LinearLayout>
@@ -858,8 +817,8 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center"
-                                    android:text="@string/hardmix"
-                                    android:textColor="@color/grayText"
+                                    android:text="Hardmix"
+                                    android:textColor="@color/text_color_dark"
                                     android:textSize="13sp" />
 
                             </LinearLayout>
@@ -879,8 +838,8 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center"
-                                    android:text="@string/dodge"
-                                    android:textColor="@color/grayText"
+                                    android:text="Dodge"
+                                    android:textColor="@color/text_color_dark"
                                     android:textSize="13sp" />
 
                             </LinearLayout>
@@ -900,8 +859,8 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center"
-                                    android:text="@string/burn"
-                                    android:textColor="@color/grayText"
+                                    android:text="Burn"
+                                    android:textColor="@color/text_color_dark"
                                     android:textSize="13sp" />
 
                             </LinearLayout>
@@ -921,8 +880,8 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center"
-                                    android:text="@string/divide"
-                                    android:textColor="@color/grayText"
+                                    android:text="Divide"
+                                    android:textColor="@color/text_color_dark"
                                     android:textSize="13sp"
                                     android:textStyle="bold" />
 
@@ -935,9 +894,51 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayoutConfirmCompareEffect"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imageViewCompareEffect"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:onClick="onClick"
+                        android:src="@drawable/icon_horizontal_flip"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <SeekBar
+                        android:id="@+id/seekbarEffect"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="@null"
+                        android:max="100"
+                        android:progress="100"
+                        android:progressDrawable="@drawable/progress_drawable_filter"
+                        android:splitTrack="false"
+                        android:thumb="@drawable/progress_thumb_filter"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/imageViewCompareEffect"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
+                    android:layout_marginTop="10dp"
                     app:layout_constraintBottom_toBottomOf="parent">
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -982,12 +983,11 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!--Women-->
-
+        <!--Sticker type-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayoutEmoji"
             android:layout_width="match_parent"
@@ -1006,6 +1006,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!--Sticker Women-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayoutStickerWomen"
             android:layout_width="match_parent"
@@ -1065,14 +1066,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:orientation="vertical"
-                android:background="@color/BackgroundColor"
+                android:background="@color/white"
                 app:layout_constraintBottom_toTopOf="@id/constraintLayoutConfirmStickerWomen">
 
                 <FrameLayout
                     android:id="@+id/frameLayoutWrapperHorizontalWomen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#0B0B0B"
+                    android:background="@color/white"
                     app:layout_scrollFlags="enterAlways|scroll">
 
                     <com.photo.collagemaker.activities.editor.single_editor.adapter.RecyclerTabLayout
@@ -1086,7 +1087,7 @@
                     android:id="@+id/stickerWomenViewpager"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
-                    android:background="@color/BackgroundColor"
+                    android:background="@color/white"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
             </LinearLayout>
@@ -1095,7 +1096,7 @@
                 android:id="@+id/constraintLayoutConfirmStickerWomen"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@color/BackgroundColor"
+                android:background="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <ImageView
@@ -1125,6 +1126,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!--Sticker Emoji-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayoutSticker"
             android:layout_width="match_parent"
@@ -1184,20 +1186,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:orientation="vertical"
-                android:background="@color/BackgroundColor"
+                android:background="@color/white"
                 app:layout_constraintBottom_toTopOf="@id/constraintLayoutConfirmSticker">
 
                 <FrameLayout
                     android:id="@+id/frameLayoutWrapperHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#0B0B0B"
+                    android:background="@color/white"
                     app:layout_scrollFlags="enterAlways|scroll">
 
                     <com.photo.collagemaker.activities.editor.single_editor.adapter.RecyclerTabLayout
                         android:id="@+id/recyclerTabLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"/>
+                        android:layout_height="40dp"
+                        android:background="@color/white"/>
 
                 </FrameLayout>
 
@@ -1205,7 +1208,7 @@
                     android:id="@+id/stickerViewpager"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
-                    android:background="@color/BackgroundColor"
+                    android:background="@color/white"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
             </LinearLayout>
@@ -1214,7 +1217,7 @@
                 android:id="@+id/constraintLayoutConfirmSticker"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@color/BackgroundColor"
+                android:background="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <ImageView
@@ -1244,6 +1247,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!--Sticker Men-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayoutStickerMen"
             android:layout_width="match_parent"
@@ -1303,14 +1307,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:orientation="vertical"
-                android:background="@color/BackgroundColor"
+                android:background="@color/white"
                 app:layout_constraintBottom_toTopOf="@id/constraintLayoutConfirmStickerMen">
 
                 <FrameLayout
                     android:id="@+id/frameLayoutWrapperHorizontalMen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#0B0B0B"
+                    android:background="@color/white"
                     app:layout_scrollFlags="enterAlways|scroll">
 
                     <com.photo.collagemaker.activities.editor.single_editor.adapter.RecyclerTabLayout
@@ -1324,7 +1328,7 @@
                     android:id="@+id/stickerMenViewpager"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
-                    android:background="@color/BackgroundColor"
+                    android:background="@color/white"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
             </LinearLayout>
@@ -1333,7 +1337,7 @@
                 android:id="@+id/constraintLayoutConfirmStickerMen"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@color/BackgroundColor"
+                android:background="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <ImageView
@@ -1743,7 +1747,7 @@
                     android:layout_width="100dp"
                     android:layout_height="40dp"
                     android:background="@drawable/background_card"
-                    android:backgroundTint="@color/mainColor"
+                    android:backgroundTint="@color/theme_color"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
                     android:clickable="true"
@@ -1784,7 +1788,7 @@
             android:id="@+id/recyclerViewTools"
             android:layout_width="match_parent"
             android:background="@color/white"
-            android:layout_height="65dp"
+            android:layout_height="70dp"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -168,7 +168,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        requestWindowFeature(1);
         binding = ActivityEditorBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         CGENativeLibrary.setLoadImageCallback(loadImageCallback, null);
@@ -385,7 +384,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
 
         binding.recyclerTabLayoutWomen.setUpWithAdapter(new WomenTabAdapter(binding.stickerWomenViewpager, getApplicationContext()));
         binding.recyclerTabLayoutWomen.setPositionThreshold(0.5f);
-        binding.recyclerTabLayoutWomen.setBackgroundColor(ContextCompat.getColor(this, R.color.TabColor));
+        binding.recyclerTabLayoutWomen.setBackgroundColor(ContextCompat.getColor(this, R.color.theme_color_dark));
 
         binding.stickerViewpager.setAdapter(new PagerAdapter() {
             public int getCount() {
@@ -424,10 +423,10 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                 return inflate;
             }
         });
-        RecyclerTabLayout recycler_tab_layout = findViewById(R.id.recyclerTabLayout);
-        recycler_tab_layout.setUpWithAdapter(new StickerTabAdapter(binding.stickerViewpager, getApplicationContext()));
-        recycler_tab_layout.setPositionThreshold(0.5f);
-        recycler_tab_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.TabColor));
+
+        binding.recyclerTabLayout.setUpWithAdapter(new StickerTabAdapter(binding.stickerViewpager, getApplicationContext()));
+        binding.recyclerTabLayout.setPositionThreshold(0.5f);
+        binding.recyclerTabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
 
         binding.stickerMenViewpager.setAdapter(new PagerAdapter() {
             public int getCount() {
@@ -483,7 +482,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         });
         binding.recyclerTabLayoutMen.setUpWithAdapter(new MenTabAdapter(binding.stickerMenViewpager, getApplicationContext()));
         binding.recyclerTabLayoutMen.setPositionThreshold(0.5f);
-        binding.recyclerTabLayoutMen.setBackgroundColor(ContextCompat.getColor(this, R.color.TabColor));
+        binding.recyclerTabLayoutMen.setBackgroundColor(ContextCompat.getColor(this, R.color.theme_color_dark));
 
 
         Bundle bundle = getIntent().getExtras();
@@ -674,7 +673,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         quShotStickerIconAlign.setIconEvent(new AlignHorizontallyEvent());
         binding.photoEditorView.setIcons(Arrays.asList(quShotStickerIconClose, quShotStickerIconScale,
                 quShotStickerIconFlip, quShotStickerIconEdit, quShotStickerIconRotate, quShotStickerIconAlign));
-        binding.photoEditorView.setBackgroundColor(-16777216);
+        binding.photoEditorView.setBackgroundColor(getColor(R.color.white));
         binding.photoEditorView.setLocked(false);
         binding.photoEditorView.setConstrained(true);
         binding.photoEditorView.setOnStickerOperationListener(new StickerView.OnStickerOperationListener() {
@@ -784,11 +783,11 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewDodge.setVisibility(View.GONE);
         binding.recyclerViewDivide.setVisibility(View.GONE);
         binding.recyclerViewBurn.setVisibility(View.GONE);
-        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.white));
-        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
+        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
     }
 
     public void setHardmixEffect() {
@@ -797,11 +796,11 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewOverlay.setVisibility(View.GONE);
         binding.recyclerViewDivide.setVisibility(View.GONE);
         binding.recyclerViewBurn.setVisibility(View.GONE);
-        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.white));
-        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
+        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
     }
 
     public void setDodgeEffect() {
@@ -810,11 +809,11 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewDivide.setVisibility(View.GONE);
         binding.recyclerViewOverlay.setVisibility(View.GONE);
         binding.recyclerViewBurn.setVisibility(View.GONE);
-        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.white));
-        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
+        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
     }
 
     public void setDivideEffect() {
@@ -823,11 +822,11 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewOverlay.setVisibility(View.GONE);
         binding.recyclerViewDivide.setVisibility(View.VISIBLE);
         binding.recyclerViewBurn.setVisibility(View.GONE);
-        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.white));
-        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
+        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
     }
 
     public void setBurnEffect() {
@@ -836,11 +835,11 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewOverlay.setVisibility(View.GONE);
         binding.recyclerViewDivide.setVisibility(View.GONE);
         binding.recyclerViewBurn.setVisibility(View.VISIBLE);
-        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.white));
+        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
     }
 
     public void setAllFilter() {
@@ -851,13 +850,13 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
         binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.white));
-        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
+        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
         binding.viewAll.setVisibility(View.VISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
         binding.viewBW.setVisibility(View.INVISIBLE);
@@ -875,13 +874,13 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
         binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.white));
-        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
+        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
         binding.viewBW.setVisibility(View.VISIBLE);
@@ -899,13 +898,13 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
         binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.white));
-        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
+        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
         binding.viewBW.setVisibility(View.INVISIBLE);
@@ -923,13 +922,13 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
         binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.white));
-        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
+        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
         binding.viewBW.setVisibility(View.INVISIBLE);
@@ -947,13 +946,13 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewFilterCold.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
         binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.white));
-        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
+        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.VISIBLE);
         binding.viewBW.setVisibility(View.INVISIBLE);
@@ -971,13 +970,13 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
         binding.recyclerViewFilterWarm.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.white));
-        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.grayText));
+        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
+        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
         binding.viewBW.setVisibility(View.INVISIBLE);
@@ -995,13 +994,13 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewFilterCold.setVisibility(View.GONE);
         binding.recyclerViewFilterWarm.setVisibility(View.GONE);
         binding.recyclerViewFilterLegacy.setVisibility(View.VISIBLE);
-        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.grayText));
-        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.white));
+        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
         binding.viewAll.setVisibility(View.INVISIBLE);
         binding.viewCold.setVisibility(View.INVISIBLE);
         binding.viewBW.setVisibility(View.INVISIBLE);
@@ -1486,7 +1485,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
 
     public void onQuShotStickerToolSelected(Module module) {
         moduleToolsId = module;
-        ConstraintSet constraintSet;
         switch (module) {
             case STICKER:
                 setGoneSave();
@@ -1885,8 +1883,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class allFilters extends AsyncTask<Void, Void, Void> {
-        allFilters() {}
-
         public void onPreExecute() {
             showLoading(true);
         }
@@ -1922,8 +1918,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class bwFilters extends AsyncTask<Void, Void, Void> {
-        bwFilters() {}
-
         public void onPreExecute() {
             showLoading(true);
         }
@@ -1944,8 +1938,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class vintageFilters extends AsyncTask<Void, Void, Void> {
-        vintageFilters() {}
-
         public void onPreExecute() {
             showLoading(true);
         }
@@ -1966,8 +1958,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class smoothFilters extends AsyncTask<Void, Void, Void> {
-        smoothFilters() {}
-
         public void onPreExecute() {
             showLoading(true);
         }
@@ -1988,8 +1978,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class coldFilters extends AsyncTask<Void, Void, Void> {
-        coldFilters() {}
-
         public void onPreExecute() {
             showLoading(true);
         }
@@ -2010,7 +1998,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class warmFilters extends AsyncTask<Void, Void, Void> {
-        warmFilters() {}
 
         public void onPreExecute() {
             showLoading(true);
@@ -2032,7 +2019,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class legacyFilters extends AsyncTask<Void, Void, Void> {
-        legacyFilters() { }
         public void onPreExecute() {
             showLoading(true);
         }
@@ -2053,7 +2039,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class openBlurFragment extends AsyncTask<Void, Bitmap, Bitmap> {
-        openBlurFragment() {}
 
         public void onPreExecute() {
             showLoading(true);
@@ -2070,7 +2055,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class openFrameFragment extends AsyncTask<Void, Bitmap, Bitmap> {
-        openFrameFragment() {}
 
         public void onPreExecute() {
             showLoading(true);
@@ -2087,7 +2071,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class openShapeFragment extends AsyncTask<Void, List<Bitmap>, List<Bitmap>> {
-        openShapeFragment() {}
 
         public void onPreExecute() {
             showLoading(true);
@@ -2107,7 +2090,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class openColoredFragment extends AsyncTask<Void, List<Bitmap>, List<Bitmap>> {
-        openColoredFragment() { }
 
         public void onPreExecute() {
             showLoading(true);
@@ -2127,7 +2109,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class effectDodge extends AsyncTask<Void, Void, Void> {
-        effectDodge() { }
 
         public void onPreExecute() {
             showLoading(true);
@@ -2147,7 +2128,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class effectDivide extends AsyncTask<Void, Void, Void> {
-        effectDivide() { }
 
         public void onPreExecute() {
             showLoading(true);
@@ -2167,7 +2147,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class effectHardmix extends AsyncTask<Void, Void, Void> {
-        effectHardmix() { }
 
         public void onPreExecute() {
             showLoading(true);
@@ -2187,7 +2166,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class effectOvarlay extends AsyncTask<Void, Void, Void> {
-        effectOvarlay() { }
 
         public void onPreExecute() {
             showLoading(true);
@@ -2218,7 +2196,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class effectBurn extends AsyncTask<Void, Void, Void> {
-        effectBurn() { }
 
         public void onPreExecute() {
             showLoading(true);
@@ -2302,7 +2279,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class SaveFilter extends AsyncTask<Void, Void, Bitmap> {
-        SaveFilter() {}
 
         public void onPreExecute() {
             showLoading(true);
@@ -2329,8 +2305,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class SaveSticker extends AsyncTask<Void, Void, Bitmap> {
-        SaveSticker() {}
-
         public void onPreExecute() {
             binding.photoEditorView.getGLSurfaceView().setAlpha(0.0f);
             showLoading(true);
@@ -2393,8 +2367,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class loadBitmapUri extends AsyncTask<String, Bitmap, Bitmap> {
-        loadBitmapUri() {}
-
         public void onPreExecute() {
             showLoading(true);
         }
@@ -2457,8 +2429,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     }
 
     class SaveEditingBitmap extends AsyncTask<Void, String, String> {
-        SaveEditingBitmap() {}
-
         public void onPreExecute() {
             showLoading(true);
         }

@@ -7,17 +7,6 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/imageViewLogo"
-        android:layout_width="150sp"
-        android:layout_height="150sp"
-        android:layout_gravity="center"
-        android:elevation="10dp"
-        android:visibility="gone"
-        android:scaleType="centerCrop"
-        android:background="@drawable/ic_launcher_background"
-        android:src="@drawable/ic_launcher_foreground" />
-
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
@@ -28,17 +17,5 @@
         android:textColor="@color/text_color_dark"
         android:textSize="35dp"
         android:visibility="visible" />
-
-    <TextView
-        android:id="@+id/textViewSubTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_medium"
-        android:text="@string/app_subtitle"
-        android:textColor="@color/BottomColor"
-        android:textSize="15sp"
-        android:visibility="gone"
- />
-
 
 </LinearLayout>

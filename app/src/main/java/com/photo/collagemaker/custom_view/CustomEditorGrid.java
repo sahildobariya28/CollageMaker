@@ -68,7 +68,9 @@ public class CustomEditorGrid implements BrushColorChangeListener {
         this.viewList = new ArrayList();
         this.redoViews = new ArrayList();
     }
-
+    public void setBrushDrawingView( BrushDrawingView brushDrawingView){
+        this.brushDrawingView = brushDrawingView;
+    }
     public BrushDrawingView getBrushDrawingView() {
         return this.brushDrawingView;
     }
@@ -384,6 +386,7 @@ public class CustomEditorGrid implements BrushColorChangeListener {
             this.parentViewGrid = photoEditorView;
             this.brushDrawingView = photoEditorView.getBrushDrawingView();
         }
+
 
 
         public Builder setDeleteView(View view) {

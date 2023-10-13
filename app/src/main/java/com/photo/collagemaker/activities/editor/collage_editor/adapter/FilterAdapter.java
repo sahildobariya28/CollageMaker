@@ -44,10 +44,10 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.binding.textViewFilterName.setText(filterBeanList.get(i).getName());
-        viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.itemColorBlack));
+        viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.text_color_dark));
         viewHolder.binding.roundImageViewFilterItem.setImageBitmap(bitmaps.get(i));
         if (selectedIndex == i) {
-            viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.text_color_dark));
+            viewHolder.binding.textViewFilterName.setTextColor(ContextCompat.getColor(context, R.color.text_color_theme));
             viewHolder.binding.viewSelected.setVisibility(View.VISIBLE);
             return;
         }
@@ -70,6 +70,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
 
 
             binding.getRoot().setOnClickListener(view1 -> {
+                selectedIndex = getLayoutPosition();
                 filterListener.onFilterSelected(filterBeanList.get(getLayoutPosition()).getCode());
                 notifyDataSetChanged();
             });

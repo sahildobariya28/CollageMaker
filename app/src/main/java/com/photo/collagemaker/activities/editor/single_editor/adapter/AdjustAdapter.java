@@ -90,12 +90,12 @@ public class AdjustAdapter extends RecyclerView.Adapter<AdjustAdapter.ViewHolder
         viewHolder.binding.textViewAdjustName.setText(adjustModelList.get(i).name);
         viewHolder.binding.imageViewAdjustIcon.setImageDrawable(selectedIndex != i ? adjustModelList.get(i).icon : adjustModelList.get(i).icon);
         if (selectedIndex == i) {
-            viewHolder.binding.textViewAdjustName.setTextColor(ContextCompat.getColor(context, R.color.white));
-            viewHolder.binding.imageViewAdjustIcon.setColorFilter(ContextCompat.getColor(context, R.color.white));
+            viewHolder.binding.textViewAdjustName.setTextColor(ContextCompat.getColor(context, R.color.text_color_theme));
+            viewHolder.binding.imageViewAdjustIcon.setColorFilter(ContextCompat.getColor(context, R.color.text_color_theme));
 
         } else {
-            viewHolder.binding.textViewAdjustName.setTextColor(ContextCompat.getColor(context, R.color.tintCol));
-            viewHolder.binding.imageViewAdjustIcon.setColorFilter(ContextCompat.getColor(context, R.color.tintCol));
+            viewHolder.binding.textViewAdjustName.setTextColor(ContextCompat.getColor(context, R.color.text_color_dark));
+            viewHolder.binding.imageViewAdjustIcon.setColorFilter(ContextCompat.getColor(context, R.color.text_color_dark));
         }
     }
 

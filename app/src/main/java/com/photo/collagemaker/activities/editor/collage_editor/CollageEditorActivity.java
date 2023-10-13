@@ -62,6 +62,7 @@ import com.photo.collagemaker.assets.StickersAsset;
 import com.photo.collagemaker.custom_view.CustomEditorGrid;
 import com.photo.collagemaker.custom_view.CustomText;
 import com.photo.collagemaker.databinding.ActivityGridBinding;
+import com.photo.collagemaker.draw.BrushDrawingView;
 import com.photo.collagemaker.draw.Drawing;
 import com.photo.collagemaker.event.AlignHorizontallyEvent;
 import com.photo.collagemaker.event.DeleteIconEvent;
@@ -147,6 +148,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
     ActivityGridBinding binding;
     CollageEditorViewModel viewModel;
+
     public void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         binding = ActivityGridBinding.inflate(getLayoutInflater());
@@ -164,7 +166,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
         setLoading(false);
 
-        currentBackgroundState = new BackgroundGridAdapter.SquareView(Color.parseColor("#ffffff"), "", true);
+        currentBackgroundState = new BackgroundGridAdapter.SquareView(getColor(R.color.white), "", true);
 
 
         CGENativeLibrary.setLoadImageCallback(loadImageCallback, null);
@@ -184,7 +186,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         binding.collageView.setLineSize(4);
         binding.collageView.setCollagePadding(6.0f);
         binding.collageView.setCollageRadian(15.0f);
-        binding.collageView.setLineColor(ContextCompat.getColor(this, R.color.itemColorBlack));
+        binding.collageView.setLineColor(ContextCompat.getColor(this, R.color.theme_color_dark));
         binding.collageView.setSelectedLineColor(ContextCompat.getColor(this, R.color.theme_color));
         binding.collageView.setHandleBarColor(ContextCompat.getColor(this, R.color.theme_color));
         binding.collageView.setAnimateDuration(300);
@@ -390,8 +392,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         binding.imageViewSaveText.setOnClickListener(view -> {
             binding.collageView.setHandlingSticker(null);
             binding.collageView.setLocked(true);
-            binding.constraintLayoutConfirmText.setVisibility(View.GONE);
-            binding.relativeLayoutAddText.setVisibility(View.GONE);
             if (!binding.collageView.getStickers().isEmpty()) {
 //                new GridActivity.SaveSticker().execute();
             }
@@ -411,10 +411,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     public void initFilterView() {
         binding.imageViewSaveFilter.setOnClickListener(view -> {
             setGuideLineTools();
-            binding.constraintLayoutFilterLayout.setVisibility(View.GONE);
-            binding.constraintLayoutConfirmSaveFilter.setVisibility(View.GONE);
-            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-            binding.rvSecondaryToolContainer.setVisibility(View.GONE);
+            viewModel.rvPrimaryToolShow();
             moduleToolsId = Module.NONE;
         });
 
@@ -508,16 +505,8 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     }
 
     public void initDrawView() {
-//        binding.imageViewRedoNeon.setOnClickListener(view -> quShotCustomEditor.redoBrush());
         binding.imageViewRedo.setOnClickListener(view -> quShotCustomEditor.redoBrush());
-//        binding.imageViewUndoNeon.setOnClickListener(view -> quShotCustomEditor.undoBrush());
         binding.imageViewUndo.setOnClickListener(view -> quShotCustomEditor.undoBrush());
-//        binding.imageViewCleanNeon.setOnClickListener(view -> quShotCustomEditor.clearBrushAllViews());
-//        binding.imageViewNeon.setOnClickListener(view -> setColorNeon());
-//        binding.imageViewBrush.setOnClickListener(view -> setColorPaint());
-//
-//        binding.imageViewEraseNeon.setOnClickListener(view -> setImageEraseNeon());
-//        binding.imageViewErase.setOnClickListener(view -> setImageErasePaint());
 
         binding.seekbarBrushSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -541,6 +530,18 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                 quShotCustomEditor.setBrushSize((float) (i + 10));
             }
         });
+        binding.seekbarEraseSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
+                quShotCustomEditor.setBrushEraserSize((float) (i + 10));
+                quShotCustomEditor.brushEraser();
+            }
+        });
 
         binding.recyclerViewColorPaint.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewColorPaint.setHasFixedSize(true);
@@ -550,26 +551,14 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         binding.recyclerViewColorNeon.setAdapter(new ColorAdapter(getApplicationContext(), this));
 
         binding.btnSaveDraw.setOnClickListener(view -> {
-            binding.constraintSaveControl.setVisibility(View.VISIBLE);
-            binding.constraintLayoutDraw.setVisibility(View.GONE);
-            binding.constraintLayoutConfirmSaveFilter.setVisibility(View.GONE);
-            binding.constraintLayoutConfirmSavePaint.setVisibility(View.GONE);
-            binding.constraintLayoutConfirmSaveNeon.setVisibility(View.GONE);
-            binding.constraintLayoutNeon.setVisibility(View.GONE);
-            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
+            viewModel.rvPrimaryToolShow();
             quShotCustomEditor.setBrushDrawingMode(false);
         });
-        binding.btnCloseDraw.setOnClickListener(view -> {
-            binding.constraintSaveControl.setVisibility(View.VISIBLE);
-            binding.constraintLayoutDraw.setVisibility(View.GONE);
-            binding.constraintLayoutConfirmSaveFilter.setVisibility(View.GONE);
-            binding.constraintLayoutConfirmSavePaint.setVisibility(View.GONE);
-            binding.constraintLayoutConfirmSaveNeon.setVisibility(View.GONE);
-            binding.constraintLayoutNeon.setVisibility(View.GONE);
-            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-            quShotCustomEditor.setBrushDrawingMode(false);
-        });
-        binding.btnBrush.setOnClickListener(view -> {
+
+        binding.btnNeon.setOnClickListener(view -> {
+            binding.btnNeon.setColorFilter(this.getColor(R.color.icon_color_theme));
+            binding.btnColor.setColorFilter(this.getColor(R.color.icon_color_dark));
+            binding.btnEraser.setColorFilter(this.getColor(R.color.icon_color_dark));
             moduleToolsId = Module.NEON;
             ConstraintSet constraintSet;
             setColorNeon();
@@ -588,6 +577,9 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             reloadingLayout();
         });
         binding.btnColor.setOnClickListener(view -> {
+            binding.btnNeon.setColorFilter(this.getColor(R.color.icon_color_dark));
+            binding.btnColor.setColorFilter(this.getColor(R.color.icon_color_theme));
+            binding.btnEraser.setColorFilter(this.getColor(R.color.icon_color_dark));
             moduleToolsId = Module.PAINT;
             ConstraintSet constraintSet;
             setColorPaint();
@@ -604,81 +596,29 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             quShotCustomEditor.setBrushMode(1);
             reloadingLayout();
         });
-
-//        QueShotDrawToolsAdapter mEditingEffectToolsAdapter = new QueShotDrawToolsAdapter(module -> {
-//            moduleToolsId = module;
-//            ConstraintSet constraintSet;
-//            switch (module) {
-//                case PAINT:
-//
-//                    break;
-//                case COLORED:
-//                    new openColoredFragment().execute();
-//                    viewModel.rvPrimaryToolShow();
-//
-//                    break;
-//                case NEON:
-//                    setColorNeon();
-//                    quShotCustomEditor.setBrushDrawingMode(true);
-//
-//                    quShotCustomEditor.setBrushDrawingMode(false);
-//                    viewModel.neonShow();
-//
-//                    constraintSet = new ConstraintSet();
-//                    constraintSet.clone(binding.constraintLayoutCollageLayout);
-//                    constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
-//                    constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.constraintLayoutNeon.getId(), 3, 0);
-//                    constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
-//                    constraintSet.applyTo(binding.constraintLayoutCollageLayout);
-//                    quShotCustomEditor.setBrushMode(2);
-//                    reloadingLayout();
-//                    break;
-//                case MOSAIC:
-//                    new openShapeFragment().execute();
-//                    viewModel.rvPrimaryToolShow();
-//                    break;
-//            }
-//            binding.collageView.setHandlingSticker(null);
-//        });
-//        binding.recyclerViewDraw.setLayoutManager(new GridLayoutManager(getApplicationContext(), 4));
-//        binding.recyclerViewDraw.setAdapter(mEditingEffectToolsAdapter);
-//        binding.recyclerViewDraw.setHasFixedSize(true);
+        binding.btnEraser.setOnClickListener(view -> {
+            binding.btnNeon.setColorFilter(this.getColor(R.color.icon_color_dark));
+            binding.btnColor.setColorFilter(this.getColor(R.color.icon_color_dark));
+            binding.btnEraser.setColorFilter(this.getColor(R.color.icon_color_theme));
+            viewModel.eraserShow();
+            quShotCustomEditor.brushEraser();
+            binding.seekbarEraseSize.setProgress(20);
+        });
     }
 
-    public void initAddImageView(){
+    public void initAddImageView() {
         binding.imageViewCloseAddImage.setOnClickListener(view -> {
-            binding.constraintSaveControl.setVisibility(View.VISIBLE);
+            viewModel.rvPrimaryToolShow();
             binding.collageView.removeCurrentSticker();
             binding.collageView.setLocked(true);
             binding.collageView.setTouchEnable(true);
-            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-            binding.constraintLayoutConfirmSaveAddImage.setVisibility(View.GONE);
         });
         binding.imageViewSaveAddImage.setOnClickListener(view -> {
-            binding.constraintSaveControl.setVisibility(View.VISIBLE);
+            viewModel.rvPrimaryToolShow();
             binding.collageView.setLocked(true);
             binding.collageView.setTouchEnable(true);
-            binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-            binding.constraintLayoutConfirmSaveAddImage.setVisibility(View.GONE);
         });
     }
-//    public void setImageEraseNeon() {
-//        binding.seekbarBrushSizeNeon.setVisibility(View.GONE);
-//        binding.recyclerViewColorNeon.setVisibility(View.GONE);
-//        binding.seekbarEraseSizeNeon.setVisibility(View.VISIBLE);
-//        binding.imageViewEraseNeon.setImageResource(R.drawable.ic_erase_selected);
-//        quShotCustomEditor.brushEraser();
-//        binding.seekbarEraseSizeNeon.setProgress(20);
-//    }
-//
-//    public void setImageErasePaint() {
-//        binding.seekbarBrushSize.setVisibility(View.GONE);
-//        binding.recyclerViewColorPaint.setVisibility(View.GONE);
-//        binding.seekbarEraseSize.setVisibility(View.VISIBLE);
-//        binding.imageViewErase.setImageResource(R.drawable.ic_erase_selected);
-//        quShotCustomEditor.brushEraser();
-//        binding.seekbarEraseSize.setProgress(20);
-//    }
 
     public void reloadingLayout() {
         binding.collageView.postDelayed(() -> {
@@ -687,9 +627,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                 Point point = new Point();
                 display.getSize(point);
 
-//                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(-1, -2);
-//                params.addRule(13);
-//                binding.collageView.setLayoutParams(params);
                 binding.collageView.setVisibility(View.VISIBLE);
 
             } catch (Exception e) {
@@ -702,8 +639,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     public ColorAdapter colorAdapter;
 
     public void setColorNeon() {
-        binding.seekbarBrushSizeNeon.setVisibility(View.VISIBLE);
-        binding.recyclerViewColorNeon.setVisibility(View.VISIBLE);
         colorAdapter = (ColorAdapter) binding.recyclerViewColorNeon.getAdapter();
         if (colorAdapter != null) {
             colorAdapter.setSelectedColorIndex(0);
@@ -712,16 +647,12 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         if (colorAdapter != null) {
             colorAdapter.notifyDataSetChanged();
         }
-//        binding.seekbarEraseSizeNeon.setVisibility(View.GONE);
-//        binding.imageViewEraseNeon.setImageResource(R.drawable.ic_erase);
         quShotCustomEditor.setBrushMode(2);
         quShotCustomEditor.setBrushDrawingMode(true);
         binding.seekbarBrushSizeNeon.setProgress(20);
     }
 
     public void setColorPaint() {
-        binding.seekbarBrushSize.setVisibility(View.VISIBLE);
-        binding.recyclerViewColorPaint.setVisibility(View.VISIBLE);
         binding.recyclerViewColorPaint.scrollToPosition(0);
         colorAdapter = (ColorAdapter) binding.recyclerViewColorPaint.getAdapter();
         if (colorAdapter != null) {
@@ -730,8 +661,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         if (colorAdapter != null) {
             colorAdapter.notifyDataSetChanged();
         }
-        binding.seekbarEraseSize.setVisibility(View.GONE);
-//        binding.imageViewErase.setImageResource(R.drawable.ic_erase);
         quShotCustomEditor.setBrushMode(1);
         quShotCustomEditor.setBrushDrawingMode(true);
         binding.seekbarBrushSize.setProgress(20);
@@ -739,59 +668,12 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
     @Override
     public void onSaveMosaic(Bitmap bitmap) {
-//        binding.collageView.setImageSource(bitmap);
         moduleToolsId = Module.NONE;
     }
 
     @Override
     public void onColorChanged(String str) {
         quShotCustomEditor.setBrushColor(Color.parseColor(str));
-    }
-
-    class openShapeFragment extends AsyncTask<Void, List<Bitmap>, List<Bitmap>> {
-        openShapeFragment() {
-        }
-
-        public void onPreExecute() {
-            setLoading(true);
-        }
-
-        public List<Bitmap> doInBackground(Void... voids) {
-            List<Bitmap> arrayList = new ArrayList<>();
-            Bitmap createBitmap = SaveFileUtils.createBitmap(binding.collageView, 1920);
-            Bitmap createBitmap2 = binding.collageView.createBitmap();
-            arrayList.add(createBitmap2);
-            arrayList.add(createBitmap);
-            return arrayList;
-        }
-
-        public void onPostExecute(List<Bitmap> list) {
-            setLoading(false);
-            MosaicFragment.show(CollageEditorActivity.this, list.get(0), list.get(1), CollageEditorActivity.this);
-        }
-    }
-
-    class openColoredFragment extends AsyncTask<Void, List<Bitmap>, List<Bitmap>> {
-        openColoredFragment() {
-        }
-
-        public void onPreExecute() {
-            setLoading(true);
-        }
-
-        public List<Bitmap> doInBackground(Void... voids) {
-            List<Bitmap> arrayList = new ArrayList<>();
-            Bitmap createBitmap = SaveFileUtils.createBitmap(binding.collageView, 1920);
-            Bitmap createBitmap2 = binding.collageView.createBitmap();
-            arrayList.add(createBitmap2);
-            arrayList.add(createBitmap);
-            return arrayList;
-        }
-
-        public void onPostExecute(List<Bitmap> list) {
-            setLoading(false);
-            ColoredFragment.show(CollageEditorActivity.this, list.get(0), list.get(1), CollageEditorActivity.this);
-        }
     }
 
 
@@ -895,10 +777,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                 };
                 addTextFragment.setOnTextEditorListener(textEditor);
             }
-//            if (sticker instanceof CustomTextView) {
-//                sticker.setShow(false);
-//                binding.collageView.setHandlingSticker(null);
-//            }
         }
     };
 
@@ -920,7 +798,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             bitmap.recycle();
         }
     };
-
 
 
     public void setBackgroundColor() {
@@ -960,7 +837,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         binding.backgroundContainer.recyclerViewBlur.setVisibility(View.VISIBLE);
     }
 
-    public void selectColorPicker(){
+    public void selectColorPicker() {
 
         binding.colorPickerView.setVisibility(View.VISIBLE);
 
@@ -999,7 +876,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         moduleToolsId = module;
         switch (module) {
             case LAYER:
-//                setLayer();
                 setGuideLine();
                 viewModel.collageShow();
                 queShotLayout = binding.collageView.getQueShotLayout();
@@ -1020,8 +896,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                 binding.collageView.setTouchEnable(false);
                 break;
             case DRAW:
-                binding.rvPrimaryTool.setVisibility(View.GONE);
-                binding.constraintLayoutDraw.setVisibility(View.VISIBLE);
+                viewModel.drawShow();
                 break;
             case ADDIMAGE:
                 binding.constraintSaveControl.setVisibility(View.GONE);
@@ -1043,12 +918,12 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             case TEXT:
                 viewModel.textShow();
                 textFragment();
-                ConstraintSet constraintsetEffect = new ConstraintSet();
-                constraintsetEffect.clone(binding.constraintLayoutCollageLayout);
-                constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
-                constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineTool.getId(), 3, 0);
-                constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
-                constraintsetEffect.applyTo(binding.constraintLayoutCollageLayout);
+                ConstraintSet constraintSetEffect = new ConstraintSet();
+                constraintSetEffect.clone(binding.constraintLayoutCollageLayout);
+                constraintSetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
+                constraintSetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineTool.getId(), 3, 0);
+                constraintSetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
+                constraintSetEffect.applyTo(binding.constraintLayoutCollageLayout);
                 binding.collageView.setLocked(false);
                 binding.collageView.setTouchEnable(false);
                 break;
@@ -1069,13 +944,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                 break;
             case STICKER:
                 setGuideLine();
-//                binding.constrantLayoutChangeLayout.setVisibility(View.GONE);
-//                binding.constraintLayoutFilterLayout.setVisibility(View.GONE);
-//                binding.backgroundContainer.getRoot().setVisibility(View.GONE);
-//                binding.rvPrimaryTool.setVisibility(View.GONE);
-//                binding.rvSecondaryToolContainer.setVisibility(View.GONE);
-//                binding.constraintLayoutSticker.setVisibility(View.VISIBLE);
-//                binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
 
                 viewModel.stickerShow();
 
@@ -1232,9 +1100,11 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                     }
                     moduleToolsId = Module.NONE;
                     return;
-
+                case PAINT:
+                case NEON:
                 case DRAW:
-                    binding.constraintLayoutDraw.setVisibility(View.GONE);
+                    quShotCustomEditor.setBrushDrawingMode(false);
+                    viewModel.rvPrimaryToolShow();
                     moduleToolsId = Module.NONE;
                     break;
                 case ADDIMAGE:
@@ -1382,7 +1252,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
     public void resultAddImage(String str) {
 
-        if (!str.isEmpty()){
+        if (!str.isEmpty()) {
             try {
                 Uri fromFile = Uri.fromFile(new File(str));
                 Bitmap bitmap = SystemUtil.rotateBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), fromFile), new ExifInterface(getContentResolver().openInputStream(fromFile)).getAttributeInt(ExifInterface.TAG_ORIENTATION, 1));
@@ -1390,7 +1260,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             binding.constraintSaveControl.setVisibility(View.VISIBLE);
             binding.collageView.removeCurrentSticker();
             binding.collageView.setLocked(true);
@@ -1504,9 +1374,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     }
 
     class allFilters extends AsyncTask<Void, Void, Void> {
-        allFilters() {
-        }
-
         public void onPreExecute() {
             setLoading(true);
         }
@@ -1532,9 +1399,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     }
 
     class bwFilters extends AsyncTask<Void, Void, Void> {
-        bwFilters() {
-        }
-
         public void onPreExecute() {
             setLoading(true);
         }
@@ -1555,9 +1419,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     }
 
     class vintageFilters extends AsyncTask<Void, Void, Void> {
-        vintageFilters() {
-        }
-
         public void onPreExecute() {
             setLoading(true);
         }
@@ -1578,9 +1439,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     }
 
     class smoothFilters extends AsyncTask<Void, Void, Void> {
-        smoothFilters() {
-        }
-
         public void onPreExecute() {
             setLoading(true);
         }
@@ -1601,9 +1459,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     }
 
     class coldFilters extends AsyncTask<Void, Void, Void> {
-        coldFilters() {
-        }
-
         public void onPreExecute() {
             setLoading(true);
         }
@@ -1624,9 +1479,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     }
 
     class warmFilters extends AsyncTask<Void, Void, Void> {
-        warmFilters() {
-        }
-
         public void onPreExecute() {
             setLoading(true);
         }
@@ -1647,9 +1499,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     }
 
     class legacyFilters extends AsyncTask<Void, Void, Void> {
-        legacyFilters() {
-        }
-
         public void onPreExecute() {
             setLoading(true);
         }
