@@ -11,4 +11,5 @@
     <dimen name="gnt_ad_indicator_height">18.0dip</dimen>
     <dimen name="gnt_ad_indicator_text_size">10.0dip</dimen>
     <dimen name="gnt_ad_indicator_width">25.0dip</dimen>
+    <dimen name="touch_area_interval">10dp</dimen>
 </resources>

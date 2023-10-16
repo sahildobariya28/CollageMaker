@@ -95,4 +95,6 @@
     <string name="vertical">Vertical</string>
     <string name="splash">SPLASH</string>
     <string name="splash_square">SPLASH SQUARE</string>
+
+    <string name="waring_out_of_memory">Not enough memory. Please remove images or your program will be crashed.!!!</string>
 </resources>

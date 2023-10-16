@@ -54,17 +54,18 @@
 
 
 <!--    new Ui -->
-    <color name="transparent">#644AFF</color>
+    <color name="transparent">#00000000</color>
+
     <color name="theme_color">#644AFF</color>
     <color name="theme_gray_bg">#EBEBEB</color>
     <color name="theme_color_dark">#333333</color>
 
-    <color name="icon_color_dark">#000000</color>
+    <color name="icon_color_dark">#333333</color>
     <color name="icon_color_theme">#644AFF</color>
     <color name="icon_color_gray">#E2E2E2</color>
     <color name="icon_color_light">#FFFFFF</color>
 
-    <color name="icon_bg_color_dark">#000000</color>
+    <color name="icon_bg_color_dark">#333333</color>
     <color name="icon_bg_color_theme">#644AFF</color>
     <color name="icon_bg_color_gray">#E2E2E2</color>
     <color name="icon_bg_color_light">#FFFFFF</color>

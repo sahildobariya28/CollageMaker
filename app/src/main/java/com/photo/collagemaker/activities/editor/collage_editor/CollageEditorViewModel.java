@@ -31,6 +31,7 @@ public class CollageEditorViewModel extends ViewModel {
         binding.constraintLayoutDraw.setVisibility(View.GONE);
         binding.constraintLayoutPaint.setVisibility(View.GONE);
         binding.constraintLayoutNeon.setVisibility(View.GONE);
+        binding.constraintLayoutEraser.setVisibility(View.GONE);
         binding.constraintLayoutConfirmText.setVisibility(View.GONE);
         binding.relativeLayoutAddText.setVisibility(View.GONE);
         binding.constrantLayoutChangeLayout.setVisibility(View.GONE);
@@ -74,7 +75,7 @@ public class CollageEditorViewModel extends ViewModel {
         binding.viewLegacy.setVisibility(View.INVISIBLE);
 
 
-        binding.constraintLayoutEraser.setVisibility(View.GONE);
+
     }
 
     public void rvPrimaryToolShow() {

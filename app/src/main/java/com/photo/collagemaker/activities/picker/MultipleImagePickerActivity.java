@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
+import com.photo.collagemaker.activities.editor.scrapbook.ScrapBookActivity;
 import com.photo.collagemaker.adapters.SelectedPhotoAdapter;
 import com.photo.collagemaker.constants.Constants;
 import com.photo.collagemaker.adapters.AlbumAdapter;
@@ -48,6 +49,7 @@ public class MultipleImagePickerActivity extends AppCompatActivity
     ArrayList<String> stringArrayListPath = new ArrayList<>();
 
     ActivityMultiImagePickerBinding binding;
+    String tracker;
 
 
     @Override
@@ -60,6 +62,7 @@ public class MultipleImagePickerActivity extends AppCompatActivity
         if (extras != null) {
             limitImageMax = extras.getInt(KEY_LIMIT_MAX_IMAGE, 9);
             limitImageMin = extras.getInt(KEY_LIMIT_MIN_IMAGE, 2);
+            tracker = extras.getString("tracker");
             if (limitImageMin > limitImageMax || limitImageMin < 1) {
                 finish();
             }
@@ -68,9 +71,15 @@ public class MultipleImagePickerActivity extends AppCompatActivity
         binding.textViewDone.setOnClickListener(view -> {
             ArrayList<String> imageList = getListString(listItemSelect);
             if (imageList.size() >= limitImageMin) {
-                Intent intent = new Intent(this, CollageEditorActivity.class);
-                intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
-                startActivity(intent);
+                if (tracker.equals("Collage")) {
+                    Intent intent = new Intent(this, CollageEditorActivity.class);
+                    intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
+                    startActivity(intent);
+                }else if (tracker.equals("ScrapBook")){
+                    Intent intent = new Intent(this, ScrapBookActivity.class);
+                    intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
+                    startActivity(intent);
+                }
             } else {
                 Toast.makeText(this, "Please select at least " + limitImageMin + " images", Toast.LENGTH_SHORT).show();
             }

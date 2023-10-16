@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.photo.collagemaker.activities.editor.scrapbook.ScrapBookActivity;
 import com.photo.collagemaker.activities.editor.single_editor.SingleEditorActivity;
 import com.photo.collagemaker.activities.picker.MultipleImagePickerActivity;
 import com.photo.collagemaker.activities.picker.NewSingleImagePickerActivity;
@@ -44,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
                         Intent intent = new Intent(HomeActivity.this, MultipleImagePickerActivity.class);
                         intent.putExtra(MultipleImagePickerActivity.KEY_LIMIT_MAX_IMAGE, 9);
                         intent.putExtra(MultipleImagePickerActivity.KEY_LIMIT_MIN_IMAGE, 2);
+                        intent.putExtra("tracker", "Collage");
                         startActivityForResult(intent, 1001);
                     }
                     if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied()) {
@@ -82,6 +84,26 @@ public class HomeActivity extends AppCompatActivity {
                     .withErrorListener(dexterError -> Toast.makeText(HomeActivity.this, "Error occurred!", Toast.LENGTH_SHORT).show()).onSameThread().check();
 
 
+        });
+        binding.cardFreeStyle.setOnClickListener(view -> {
+            Dexter.withContext(HomeActivity.this).withPermissions("android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE").withListener(new MultiplePermissionsListener() {
+                public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
+                    if (multiplePermissionsReport.areAllPermissionsGranted()) {
+                        Intent intent = new Intent(HomeActivity.this, MultipleImagePickerActivity.class);
+                        intent.putExtra(MultipleImagePickerActivity.KEY_LIMIT_MAX_IMAGE, 9);
+                        intent.putExtra(MultipleImagePickerActivity.KEY_LIMIT_MIN_IMAGE, 2);
+                        intent.putExtra("tracker", "ScrapBook");
+                        startActivityForResult(intent, 1001);
+                    }
+                    if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied()) {
+                        DetailsDialog.showDetailsDialog(HomeActivity.this);
+                    }
+                }
+
+                public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+                    permissionToken.continuePermissionRequest();
+                }
+            }).withErrorListener(dexterError -> Toast.makeText(HomeActivity.this, "Error occurred! ", Toast.LENGTH_SHORT).show()).onSameThread().check();
         });
 
 

@@ -93,6 +93,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
                 android:text="Collage"
+                android:singleLine="true"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
@@ -137,6 +138,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
                 android:text="Editor"
+                android:singleLine="true"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
@@ -215,7 +217,7 @@
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toBottomOf="@+id/ly_home_panel">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardFreeStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -224,13 +226,16 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
-
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:id="@+id/cardView2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_marginHorizontal="10dp"
-                android:layout_weight="1"
                 android:backgroundTint="#F664AF"
-                card_view:cardCornerRadius="35dp">
+                card_view:cardCornerRadius="50dp"
+                card_view:layout_constraintDimensionRatio="1:1"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -253,39 +258,43 @@
                 android:id="@+id/textFreeStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
                 android:text="FreeStyle"
+                android:singleLine="true"
+                android:layout_marginTop="10dp"
                 android:textColor="@color/text_color_dark"
                 android:textSize="16sp"
-                card_view:layout_constraintEnd_toEndOf="@+id/cardFreeStyle"
-                card_view:layout_constraintStart_toStartOf="@+id/cardFreeStyle"
-                card_view:layout_constraintTop_toBottomOf="@+id/cardFreeStyle" />
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardMultiFit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            card_view:layout_constraintDimensionRatio="1:1"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent">
 
             <androidx.cardview.widget.CardView
-
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:id="@+id/cardView3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:backgroundTint="#64A5FF"
-                card_view:cardCornerRadius="35dp"
-                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:cardCornerRadius="50dp"
                 card_view:layout_constraintDimensionRatio="1:1"
-                card_view:layout_constraintEnd_toStartOf="@+id/cardStitch"
-                card_view:layout_constraintHorizontal_bias="0.5"
-                card_view:layout_constraintStart_toEndOf="@+id/cardFreeStyle"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
@@ -314,14 +323,16 @@
                 android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
                 android:text="Multi-fit"
+                android:singleLine="true"
                 android:textColor="@color/text_color_dark"
                 android:textSize="16sp"
-                card_view:layout_constraintEnd_toEndOf="@+id/cardMultiFit"
-                card_view:layout_constraintStart_toStartOf="@+id/cardMultiFit"
-                card_view:layout_constraintTop_toBottomOf="@+id/cardMultiFit" />
-        </LinearLayout>
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/cardView3" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardStitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -330,18 +341,16 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
-
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:id="@+id/cardView4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:backgroundTint="#FFB51E"
-                card_view:cardCornerRadius="35dp"
-                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:cardCornerRadius="50dp"
                 card_view:layout_constraintDimensionRatio="1:1"
-                card_view:layout_constraintEnd_toStartOf="@+id/cardMaterial"
-                card_view:layout_constraintHorizontal_bias="0.5"
-                card_view:layout_constraintStart_toEndOf="@+id/cardMultiFit"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
@@ -369,14 +378,16 @@
                 android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
                 android:text="Stitch"
+                android:singleLine="true"
                 android:textColor="@color/text_color_dark"
                 android:textSize="16sp"
-                card_view:layout_constraintEnd_toEndOf="@+id/cardStitch"
-                card_view:layout_constraintStart_toStartOf="@+id/cardStitch"
-                card_view:layout_constraintTop_toBottomOf="@+id/cardStitch" />
-        </LinearLayout>
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/cardView4" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardMaterial"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -385,18 +396,16 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
-
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:id="@+id/cardView5"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:backgroundTint="#FF6161"
-                card_view:cardCornerRadius="35dp"
-                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:cardCornerRadius="50dp"
                 card_view:layout_constraintDimensionRatio="1:1"
                 card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintHorizontal_bias="0.5"
-                card_view:layout_constraintStart_toEndOf="@+id/cardStitch"
+                card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
@@ -424,12 +433,14 @@
                 android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
                 android:text="Material"
+                android:singleLine="true"
                 android:textColor="@color/text_color_dark"
                 android:textSize="16sp"
-                card_view:layout_constraintEnd_toEndOf="@+id/cardMaterial"
-                card_view:layout_constraintStart_toStartOf="@+id/cardMaterial"
-                card_view:layout_constraintTop_toBottomOf="@+id/cardMaterial" />
-        </LinearLayout>
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/cardView5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 

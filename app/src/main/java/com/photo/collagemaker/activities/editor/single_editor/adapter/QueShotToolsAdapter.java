@@ -24,7 +24,7 @@ public class QueShotToolsAdapter extends RecyclerView.Adapter<QueShotToolsAdapte
 
     public QueShotToolsAdapter(OnQuShotItemSelected onItemSelected) {
         this.onQuShotItemSelected = onItemSelected;
-        toolModelArrayList.add(new ModuleModel("Crop", R.drawable.ic_crop, Module.CROP));
+        toolModelArrayList.add(new ModuleModel("Crop", R.drawable.img_crop, Module.CROP));
         toolModelArrayList.add(new ModuleModel("Filter", R.drawable.icon_filter, Module.FILTER));
         toolModelArrayList.add(new ModuleModel("Adjust", R.drawable.ic_adjust, Module.ADJUST));
         toolModelArrayList.add(new ModuleModel("Overlay", R.drawable.ic_overlay, Module.OVERLAY));
@@ -32,9 +32,9 @@ public class QueShotToolsAdapter extends RecyclerView.Adapter<QueShotToolsAdapte
         toolModelArrayList.add(new ModuleModel("Text", R.drawable.ic_text, Module.TEXT));
         toolModelArrayList.add(new ModuleModel("Sticker", R.drawable.icon_sticker, Module.EMOJI));
         toolModelArrayList.add(new ModuleModel("Blur", R.drawable.ic_blur, Module.BLUR));
-        toolModelArrayList.add(new ModuleModel("Rotate", R.drawable.ic_rotate, Module.ROTATE));
+        toolModelArrayList.add(new ModuleModel("Rotate", R.drawable.img_rotate, Module.ROTATE));
         toolModelArrayList.add(new ModuleModel("s-Splash", R.drawable.ic_splash_square, Module.SQUARESPLASH));
-        toolModelArrayList.add(new ModuleModel("Draw", R.drawable.ic_paint, Module.DRAW));
+        toolModelArrayList.add(new ModuleModel("Draw", R.drawable.img_draw, Module.DRAW));
         toolModelArrayList.add(new ModuleModel("Frame", R.drawable.ic_frame, Module.BACKGROUND));
         toolModelArrayList.add(new ModuleModel("Splash", R.drawable.ic_splash, Module.SPLASH));
         toolModelArrayList.add(new ModuleModel("s-Blur", R.drawable.ic_blur_square, Module.SQUAEBLUR));

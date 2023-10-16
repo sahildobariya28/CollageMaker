@@ -24,7 +24,7 @@
         android:layout_width="60dp"
         android:layout_height="16dp"
         android:layout_below="@id/round_image_view_filter_item"
-        android:background="#000000"
+        android:background="@color/text_color_dark"
         android:visibility="gone"
         android:textSize="9sp"
         android:text="Filter"

@@ -34,6 +34,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.core.internal.view.SupportMenu;
 import androidx.exifinterface.media.ExifInterface;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,7 +47,6 @@ import com.photo.collagemaker.activities.editor.single_editor.adapter.HardmixAda
 import com.photo.collagemaker.activities.editor.single_editor.adapter.MenBeautyAdapter;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.MenTabAdapter;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.QueShotStickersToolsAdapter;
-import com.photo.collagemaker.activities.editor.single_editor.adapter.RecyclerTabLayout;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.QueShotToolsAdapter;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.WomenBeautyAdapter;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.WomenTabAdapter;
@@ -165,10 +165,12 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     public ArrayList listLegacyFilter = new ArrayList<>();
 
     ActivityEditorBinding binding;
+    SingleEditorViewModel viewModel;
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         binding = ActivityEditorBinding.inflate(getLayoutInflater());
+        viewModel = new ViewModelProvider(this, new SingleEditorViewModelFactory(this, binding)).get(SingleEditorViewModel.class);
         setContentView(binding.getRoot());
         CGENativeLibrary.setLoadImageCallback(loadImageCallback, null);
         if (Build.VERSION.SDK_INT < 26) {
@@ -180,8 +182,164 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         onClickListener();
         setView();
         setBottomToolbar(false);
+
+        initDrawView();
     }
 
+    public void initDrawView() {
+        binding.imageViewRedo.setOnClickListener(view -> quShotCustomEditor.redoBrush());
+        binding.imageViewUndo.setOnClickListener(view -> quShotCustomEditor.undoBrush());
+
+        binding.seekbarBrushSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
+                quShotCustomEditor.setBrushSize((float) (i + 10));
+            }
+        });
+        binding.seekbarBrushSizeNeon.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
+                quShotCustomEditor.setBrushSize((float) (i + 10));
+            }
+        });
+        binding.seekbarEraseSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
+                quShotCustomEditor.setBrushEraserSize((float) (i + 10));
+                quShotCustomEditor.brushEraser();
+            }
+        });
+
+        binding.recyclerViewColorPaint.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        binding.recyclerViewColorPaint.setHasFixedSize(true);
+        binding.recyclerViewColorPaint.setAdapter(new ColorAdapter(getApplicationContext(), this));
+        binding.recyclerViewColorNeon.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        binding.recyclerViewColorNeon.setHasFixedSize(true);
+        binding.recyclerViewColorNeon.setAdapter(new ColorAdapter(getApplicationContext(), this));
+
+        binding.btnCloseDraw.setOnClickListener(view -> {
+            setVisibleSave();
+            onBackPressed();
+        });
+
+        binding.btnSaveDraw.setOnClickListener(view -> {
+            showLoading(true);
+            quShotCustomEditor.setBrushDrawingMode(false);
+
+//            binding.imageViewUndo.setVisibility(View.GONE);
+//            binding.imageViewRedo.setVisibility(View.GONE);
+//            binding.recyclerViewTools.setVisibility(View.VISIBLE);
+//            binding.constraintLayoutConfirmSavePaint.setVisibility(View.GONE);
+//            binding.constraintLayoutPaint.setVisibility(View.GONE);
+            viewModel.rvPrimaryToolShow();
+
+//            ConstraintSet constraintSet = new ConstraintSet();
+//            constraintSet.clone(binding.constraintLayoutRootView);
+//            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
+//            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
+//            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
+//            constraintSet.applyTo(binding.constraintLayoutRootView);
+
+            binding.photoEditorView.setImageSource(quShotCustomEditor.getBrushDrawingView().getDrawBitmap(binding.photoEditorView.getCurrentBitmap()));
+            quShotCustomEditor.clearBrushAllViews();
+            showLoading(false);
+            reloadingLayout();
+            setVisibleSave();
+            moduleToolsId = Module.NONE;
+        });
+
+        binding.btnNeon.setOnClickListener(view -> {
+            binding.btnNeon.setColorFilter(this.getColor(R.color.icon_color_theme));
+            binding.btnColor.setColorFilter(this.getColor(R.color.icon_color_dark));
+            binding.btnEraser.setColorFilter(this.getColor(R.color.icon_color_dark));
+            moduleToolsId = Module.NEON;
+            ConstraintSet constraintSet;
+            setColorNeon();
+            quShotCustomEditor.setBrushDrawingMode(true);
+
+            quShotCustomEditor.setBrushDrawingMode(false);
+            viewModel.neonShow();
+
+            constraintSet = new ConstraintSet();
+            constraintSet.clone(binding.constraintLayoutRootView);
+            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
+            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.constraintLayoutNeon.getId(), 3, 0);
+            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
+            constraintSet.applyTo(binding.constraintLayoutRootView);
+            quShotCustomEditor.setBrushMode(2);
+            reloadingLayout();
+        });
+        binding.btnColor.setOnClickListener(view -> {
+            binding.btnNeon.setColorFilter(this.getColor(R.color.icon_color_dark));
+            binding.btnColor.setColorFilter(this.getColor(R.color.icon_color_theme));
+            binding.btnEraser.setColorFilter(this.getColor(R.color.icon_color_dark));
+            moduleToolsId = Module.PAINT;
+            ConstraintSet constraintSet;
+            setColorPaint();
+            quShotCustomEditor.setBrushDrawingMode(true);
+            viewModel.paintShow();
+            quShotCustomEditor.setBrushDrawingMode(false);
+
+            constraintSet = new ConstraintSet();
+            constraintSet.clone(binding.constraintLayoutRootView);
+            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
+            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
+            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
+            constraintSet.applyTo(binding.constraintLayoutRootView);
+            quShotCustomEditor.setBrushMode(1);
+            reloadingLayout();
+        });
+        binding.btnEraser.setOnClickListener(view -> {
+            binding.btnNeon.setColorFilter(this.getColor(R.color.icon_color_dark));
+            binding.btnColor.setColorFilter(this.getColor(R.color.icon_color_dark));
+            binding.btnEraser.setColorFilter(this.getColor(R.color.icon_color_theme));
+            viewModel.eraserShow();
+            quShotCustomEditor.brushEraser();
+            binding.seekbarEraseSize.setProgress(20);
+        });
+    }
+    public void setColorNeon() {
+        colorAdapter = (ColorAdapter) binding.recyclerViewColorNeon.getAdapter();
+        if (colorAdapter != null) {
+            colorAdapter.setSelectedColorIndex(0);
+        }
+        binding.recyclerViewColorNeon.scrollToPosition(0);
+        if (colorAdapter != null) {
+            colorAdapter.notifyDataSetChanged();
+        }
+        quShotCustomEditor.setBrushMode(2);
+        quShotCustomEditor.setBrushDrawingMode(true);
+        binding.seekbarBrushSizeNeon.setProgress(20);
+    }
+
+    public void setColorPaint() {
+        binding.recyclerViewColorPaint.scrollToPosition(0);
+        colorAdapter = (ColorAdapter) binding.recyclerViewColorPaint.getAdapter();
+        if (colorAdapter != null) {
+            colorAdapter.setSelectedColorIndex(0);
+        }
+        if (colorAdapter != null) {
+            colorAdapter.notifyDataSetChanged();
+        }
+        quShotCustomEditor.setBrushMode(1);
+        quShotCustomEditor.setBrushDrawingMode(true);
+        binding.seekbarBrushSize.setProgress(20);
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -225,24 +383,10 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
 
 
         binding.seekbarStickerMenAlpha.setVisibility(View.GONE);
-
         binding.seekbarStickerWomenAlpha.setVisibility(View.GONE);
-
         binding.seekbarStickerAlpha.setVisibility(View.GONE);
-
-
-
-
-
         binding.imageViewUndo.setVisibility(View.GONE);
-
         binding.imageViewRedo.setVisibility(View.GONE);
-
-        binding.imageViewClean.setVisibility(View.GONE);
-
-        binding.imageViewCleanNeon.setVisibility(View.GONE);
-        binding.imageViewUndoNeon.setVisibility(View.GONE);
-        binding.imageViewRedoNeon.setVisibility(View.GONE);
 
 
         binding.imageViewCompareAdjust.setOnTouchListener(onTouchListener);
@@ -278,9 +422,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewTools.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewTools.setAdapter(mEditingToolsAdapter);
         binding.recyclerViewTools.setHasFixedSize(true);
-        binding.recyclerViewDraw.setLayoutManager(new GridLayoutManager(getApplicationContext(), 4));
-        binding.recyclerViewDraw.setAdapter(mEditingEffectToolsAdapter);
-        binding.recyclerViewDraw.setHasFixedSize(true);
         binding.recyclerViewemoji.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
         binding.recyclerViewemoji.setAdapter(mEditingStickersToolsAdapter);
         binding.recyclerViewemoji.setHasFixedSize(true);
@@ -521,8 +662,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             }
         });
         binding.imageViewExit.setOnClickListener(view -> onBackPressed());
-        binding.imageViewErase.setOnClickListener(view -> setImageErasePaint());
-        binding.imageViewBrush.setOnClickListener(view -> setColorPaint());
         binding.seekbarEraseSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
@@ -546,20 +685,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                 quShotCustomEditor.setBrushSize((float) (i + 10));
             }
         });
-        binding.imageViewEraseNeon.setOnClickListener(view -> setImageEraseNeon());
-        binding.imageViewNeon.setOnClickListener(view -> setColorNeon());
-        binding.seekbarEraseSizeNeon.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
 
-            public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
-                quShotCustomEditor.setBrushEraserSize((float) i);
-            }
-
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                quShotCustomEditor.brushEraser();
-            }
-        });
         binding.seekbarBrushSizeNeon.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
@@ -1012,71 +1138,10 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
 
     private void setBottomToolbar(boolean z) {
         int mVisibility = !z ? View.GONE : View.VISIBLE;
-        binding.imageViewBrush.setVisibility(mVisibility);
-        binding.imageViewErase.setVisibility(mVisibility);
         binding.imageViewUndo.setVisibility(mVisibility);
         binding.imageViewRedo.setVisibility(mVisibility);
-        binding.imageViewClean.setVisibility(mVisibility);
-        binding.imageViewCleanNeon.setVisibility(mVisibility);
-        binding.imageViewNeon.setVisibility(mVisibility);
-        binding.imageViewEraseNeon.setVisibility(mVisibility);
-        binding.imageViewUndoNeon.setVisibility(mVisibility);
-        binding.imageViewRedoNeon.setVisibility(mVisibility);
     }
 
-    public void setImageErasePaint() {
-        binding.seekbarBrushSize.setVisibility(View.GONE);
-        binding.recyclerViewColorPaint.setVisibility(View.GONE);
-        binding.seekbarEraseSize.setVisibility(View.VISIBLE);
-        binding.imageViewErase.setImageResource(R.drawable.ic_erase_selected);
-        quShotCustomEditor.brushEraser();
-        binding.seekbarEraseSize.setProgress(20);
-    }
-
-    public void setImageEraseNeon() {
-        binding.seekbarBrushSizeNeon.setVisibility(View.GONE);
-        binding.recyclerViewColorNeon.setVisibility(View.GONE);
-        binding.seekbarEraseSizeNeon.setVisibility(View.VISIBLE);
-        binding.imageViewEraseNeon.setImageResource(R.drawable.ic_erase_selected);
-        quShotCustomEditor.brushEraser();
-        binding.seekbarEraseSizeNeon.setProgress(20);
-    }
-
-    public void setColorNeon() {
-        binding.seekbarBrushSizeNeon.setVisibility(View.VISIBLE);
-        binding.recyclerViewColorNeon.setVisibility(View.VISIBLE);
-        colorAdapter = (ColorAdapter) binding.recyclerViewColorNeon.getAdapter();
-        if (colorAdapter != null) {
-            colorAdapter.setSelectedColorIndex(0);
-        }
-        binding.recyclerViewColorNeon.scrollToPosition(0);
-        if (colorAdapter != null) {
-            colorAdapter.notifyDataSetChanged();
-        }
-        binding.seekbarEraseSizeNeon.setVisibility(View.GONE);
-        binding.imageViewEraseNeon.setImageResource(R.drawable.ic_erase);
-        quShotCustomEditor.setBrushMode(2);
-        quShotCustomEditor.setBrushDrawingMode(true);
-        binding.seekbarBrushSizeNeon.setProgress(20);
-    }
-
-    public void setColorPaint() {
-        binding.seekbarBrushSize.setVisibility(View.VISIBLE);
-        binding.recyclerViewColorPaint.setVisibility(View.VISIBLE);
-        binding.recyclerViewColorPaint.scrollToPosition(0);
-        colorAdapter = (ColorAdapter) binding.recyclerViewColorPaint.getAdapter();
-        if (colorAdapter != null) {
-            colorAdapter.setSelectedColorIndex(0);
-        }
-        if (colorAdapter != null) {
-            colorAdapter.notifyDataSetChanged();
-        }
-        binding.seekbarEraseSize.setVisibility(View.GONE);
-        binding.imageViewErase.setImageResource(R.drawable.ic_erase);
-        quShotCustomEditor.setBrushMode(1);
-        quShotCustomEditor.setBrushDrawingMode(true);
-        binding.seekbarBrushSize.setProgress(20);
-    }
 
     public CGENativeLibrary.LoadImageCallback loadImageCallback = new CGENativeLibrary.LoadImageCallback() {
         public Bitmap loadImage(String string, Object object) {
@@ -1156,8 +1221,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                 quShotCustomEditor.setBrushDrawingMode(false);
                 binding.imageViewUndo.setVisibility(View.GONE);
                 binding.imageViewRedo.setVisibility(View.GONE);
-                binding.imageViewClean.setVisibility(View.GONE);
-                binding.imageViewErase.setVisibility(View.GONE);
                 binding.recyclerViewTools.setVisibility(View.VISIBLE);
                 binding.constraintLayoutConfirmSavePaint.setVisibility(View.GONE);
                 binding.constraintLayoutPaint.setVisibility(View.GONE);
@@ -1179,12 +1242,9 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             showLoading(true);
             runOnUiThread(() -> {
                 quShotCustomEditor.setBrushDrawingMode(false);
-                binding.imageViewUndoNeon.setVisibility(View.GONE);
-                binding.imageViewRedoNeon.setVisibility(View.GONE);
                 binding.recyclerViewTools.setVisibility(View.VISIBLE);
                 binding.constraintLayoutConfirmSaveNeon.setVisibility(View.GONE);
                 binding.constraintLayoutNeon.setVisibility(View.GONE);
-                binding.imageViewEraseNeon.setVisibility(View.GONE);
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(binding.constraintLayoutRootView);
                 constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
@@ -1288,12 +1348,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             binding.recyclerViewTools.setVisibility(View.VISIBLE);
             setVisibleSave();
             moduleToolsId = Module.NONE;
-        } else if (id == R.id.imageViewRedoNeon || id == binding.imageViewRedo.getId()) {
-            quShotCustomEditor.redoBrush();
-        } else if (id == binding.imageViewUndoNeon.getId() || id == binding.imageViewUndo.getId()) {
-            quShotCustomEditor.undoBrush();
-        } else if (id == binding.imageViewCloseNeon.getId() || id == binding.imageViewClean.getId()) {
-            quShotCustomEditor.clearBrushAllViews();
         }
     }
 
@@ -1302,6 +1356,9 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             new SaveEditingBitmap().execute();
         }
     }
+
+
+
 
     public void onFilterSelected(String string) {
         quShotCustomEditor.setFilterEffect(string);
@@ -1416,8 +1473,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                 binding.constraintLayoutDraw.setVisibility(View.GONE);
                 break;
             case DRAW:
-                binding.constraintLayoutDraw.setVisibility(View.VISIBLE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
+                viewModel.drawShow();
                 break;
             case OVERLAY:
                 setGoneSave();
@@ -1552,30 +1608,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         ConstraintSet constraintSet;
         switch (module) {
             case PAINT:
-                setColorPaint();
-                quShotCustomEditor.setBrushDrawingMode(true);
-                binding.constraintLayoutPaint.setVisibility(View.VISIBLE);
-                binding.recyclerViewTools.setVisibility(View.GONE);
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutAdjust.setVisibility(View.GONE);
-                binding.constraintLayoutFilter.setVisibility(View.GONE);
-                binding.constraintLayoutNeon.setVisibility(View.GONE);
-                binding.constraintLayoutConfirmSavePaint.setVisibility(View.VISIBLE);
-                binding.relativeLayoutAddText.setVisibility(View.GONE);
-                binding.constraintLayoutConfirmText.setVisibility(View.GONE);
-                quShotCustomEditor.setFilterEffect("");
-                quShotCustomEditor.clearBrushAllViews();
-                quShotCustomEditor.setBrushDrawingMode(false);
-                setGoneSave();
-                setBottomToolbar(true);
-                constraintSet = new ConstraintSet();
-                constraintSet.clone(binding.constraintLayoutRootView);
-                constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-                constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guidelinePaint.getId(), 3, 0);
-                constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-                constraintSet.applyTo(binding.constraintLayoutRootView);
-                quShotCustomEditor.setBrushMode(1);
-                reloadingLayout();
+
                 break;
             case COLORED:
                 new openColoredFragment().execute();
@@ -1583,30 +1616,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                 goneLayout();
                 break;
             case NEON:
-                setColorNeon();
-                quShotCustomEditor.setBrushDrawingMode(true);
-                binding.recyclerViewTools.setVisibility(View.GONE);
-                binding.constraintLayoutConfirmSaveNeon.setVisibility(View.VISIBLE);
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutNeon.setVisibility(View.VISIBLE);
-                binding.constraintLayoutAdjust.setVisibility(View.GONE);
-                binding.constraintLayoutFilter.setVisibility(View.GONE);
-                binding.constraintLayoutPaint.setVisibility(View.GONE);
-                binding.relativeLayoutAddText.setVisibility(View.GONE);
-                binding.constraintLayoutConfirmText.setVisibility(View.GONE);
-                quShotCustomEditor.setFilterEffect("");
-                quShotCustomEditor.clearBrushAllViews();
-                quShotCustomEditor.setBrushDrawingMode(false);
-                setGoneSave();
-                setBottomToolbar(true);
-                constraintSet = new ConstraintSet();
-                constraintSet.clone(binding.constraintLayoutRootView);
-                constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-                constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.constraintLayoutNeon.getId(), 3, 0);
-                constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-                constraintSet.applyTo(binding.constraintLayoutRootView);
-                quShotCustomEditor.setBrushMode(2);
-                reloadingLayout();
+
                 break;
             case MOSAIC:
                 new openShapeFragment().execute();
@@ -1634,46 +1644,12 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             try {
                 switch (moduleToolsId) {
                     case PAINT:
-                        binding.constraintLayoutPaint.setVisibility(View.GONE);
-                        setVisibleSave();
-                        binding.imageViewUndo.setVisibility(View.GONE);
-                        binding.imageViewRedo.setVisibility(View.GONE);
-                        binding.imageViewClean.setVisibility(View.GONE);
-                        binding.imageViewErase.setVisibility(View.GONE);
-                        binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                        binding.constraintLayoutConfirmSavePaint.setVisibility(View.GONE);
-                        quShotCustomEditor.setBrushDrawingMode(false);
-                        ConstraintSet constraintSet = new ConstraintSet();
-                        constraintSet.clone(binding.constraintLayoutRootView);
-                        constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-                        constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-                        constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-                        constraintSet.applyTo(binding.constraintLayoutRootView);
-                        quShotCustomEditor.clearBrushAllViews();
-                        setVisibleSave();
-                        moduleToolsId = Module.NONE;
-                        reloadingLayout();
-                        return;
                     case NEON:
-                        setVisibleSave();
-                        binding.imageViewUndoNeon.setVisibility(View.GONE);
-                        binding.imageViewRedoNeon.setVisibility(View.GONE);
-                        binding.imageViewEraseNeon.setVisibility(View.GONE);
-                        binding.constraintLayoutNeon.setVisibility(View.GONE);
-                        binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                        binding.constraintLayoutConfirmSaveNeon.setVisibility(View.GONE);
+                    case DRAW:
                         quShotCustomEditor.setBrushDrawingMode(false);
-                        ConstraintSet constraintSet1 = new ConstraintSet();
-                        constraintSet1.clone(binding.constraintLayoutRootView);
-                        constraintSet1.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-                        constraintSet1.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-                        constraintSet1.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-                        constraintSet1.applyTo(binding.constraintLayoutRootView);
-                        quShotCustomEditor.clearBrushAllViews();
-                        setVisibleSave();
+                        viewModel.rvPrimaryToolShow();
                         moduleToolsId = Module.NONE;
-                        reloadingLayout();
-                        return;
+                        break;
                     case TEXT:
                         if (!binding.photoEditorView.getStickers().isEmpty()) {
                             binding.photoEditorView.getStickers().clear();

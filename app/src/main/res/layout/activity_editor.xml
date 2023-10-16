@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:id="@+id/linearLayoutEditorContent"
-    android:background="@color/theme_gray_bg"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/theme_gray_bg"
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutSave"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="?actionBarSize"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -204,9 +204,9 @@
 
         <RelativeLayout
             android:id="@+id/relativeLayoutLoading"
-            android:background="@android:color/transparent"
             android:layout_width="120dp"
             android:layout_height="120dp"
+            android:background="@android:color/transparent"
             android:elevation="200dp"
             app:layout_constraintBottom_toTopOf="@id/guidelinePaint"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -217,16 +217,16 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:background="@drawable/background_loading"
-                app:loading_renderer="DanceLoading"/>
+                app:loading_renderer="DanceLoading" />
 
         </RelativeLayout>
 
         <androidx.constraintlayout.widget.Guideline
-            android:orientation="horizontal"
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintGuide_end="65dp"/>
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="65dp" />
 
         <RelativeLayout
             android:id="@+id/relativeLayoutWrapperPhoto"
@@ -255,7 +255,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_end="170dp"/>
+            app:layout_constraintGuide_end="170dp" />
 
         <!--Filter-->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -272,18 +272,18 @@
                 android:id="@+id/constraintLayoutConfirmCompare"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:background="@color/white"
                 android:layout_marginBottom="5dp"
+                android:background="@color/white"
                 app:layout_constraintBottom_toTopOf="@id/constraintLayoutFilter">
 
                 <ImageView
                     android:id="@+id/imageViewCompareFilter"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:onClick="onClick"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/background_flip"
+                    android:onClick="onClick"
                     android:src="@drawable/icon_horizontal_flip"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -299,12 +299,12 @@
                     android:max="100"
                     android:progress="100"
                     android:progressDrawable="@drawable/progress_drawable_filter"
-                    android:thumb="@drawable/progress_thumb_filter"
                     android:splitTrack="false"
-                    app:layout_constraintEnd_toStartOf="@id/imageViewCompareFilter"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:thumb="@drawable/progress_thumb_filter"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    app:layout_constraintEnd_toStartOf="@id/imageViewCompareFilter"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -554,7 +554,7 @@
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewFilterBW"
@@ -564,7 +564,7 @@
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewFilterCold"
@@ -574,7 +574,7 @@
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewFilterVintage"
@@ -584,7 +584,7 @@
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewFilterSmooth"
@@ -594,7 +594,7 @@
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewFilterWarm"
@@ -604,7 +604,7 @@
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewFilterLegacy"
@@ -614,7 +614,7 @@
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -627,11 +627,11 @@
             android:id="@+id/constraintLayoutAdjust"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintStart_toStartOf="parent">
 
             <LinearLayout
                 android:id="@+id/cnstraintLayoutRecycler"
@@ -659,19 +659,19 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:tint="@color/text_color_dark" />
 
-                        <TextView
-                            android:id="@+id/textViewAdjust"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/adjust"
-                            android:textSize="13sp"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textColor="@color/text_color_dark"
-                            android:gravity="center"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"/>
+                    <TextView
+                        android:id="@+id/textViewAdjust"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/roboto_medium"
+                        android:gravity="center"
+                        android:text="@string/adjust"
+                        android:textColor="@color/text_color_dark"
+                        android:textSize="13sp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:id="@+id/imageViewSaveAdjust"
@@ -682,7 +682,7 @@
                         android:src="@drawable/ic_round_check"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/text_color_dark"/>
+                        app:tint="@color/text_color_dark" />
 
                 </LinearLayout>
 
@@ -697,13 +697,13 @@
                         android:id="@+id/imageViewCompareAdjust"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:onClick="onClick"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
+                        android:onClick="onClick"
                         android:src="@drawable/icon_horizontal_flip"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <SeekBar
                         android:id="@+id/seekbarAdjust"
@@ -715,12 +715,12 @@
                         android:max="50"
                         android:progress="100"
                         android:progressDrawable="@drawable/progress_drawable_filter"
-                        android:thumb="@drawable/progress_thumb_filter"
                         android:splitTrack="false"
-                        app:layout_constraintEnd_toStartOf="@id/imageViewCompareAdjust"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:thumb="@drawable/progress_thumb_filter"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"/>
+                        app:layout_constraintEnd_toStartOf="@id/imageViewCompareAdjust"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -728,10 +728,10 @@
                     android:id="@+id/recyclerViewAdjust"
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
-                    android:orientation="horizontal"
                     android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </LinearLayout>
 
@@ -1002,7 +1002,7 @@
                 android:layout_height="90dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -1011,10 +1011,10 @@
             android:id="@+id/constraintLayoutStickerWomen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:elevation="400dp"
             android:orientation="vertical"
             android:visibility="gone"
-            android:elevation="400dp"
-            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -1024,22 +1024,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginBottom="25dp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayoutConfirmStickerWomen"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/constraintLayoutConfirmStickerWomen">
+                app:layout_constraintStart_toStartOf="parent">
 
                 <ImageView
                     android:id="@+id/imageViewAddStickerWomen"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:onClick="onClick"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/background_flip"
+                    android:onClick="onClick"
                     android:src="@drawable/ic_add"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <SeekBar
                     android:id="@+id/seekbarStickerWomenAlpha"
@@ -1051,12 +1051,12 @@
                     android:max="255"
                     android:progress="255"
                     android:progressDrawable="@drawable/progress_drawable_filter"
-                    android:thumb="@drawable/progress_thumb_filter"
                     android:splitTrack="false"
-                    app:layout_constraintEnd_toStartOf="@id/imageViewAddStickerWomen"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:thumb="@drawable/progress_thumb_filter"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    app:layout_constraintEnd_toStartOf="@id/imageViewAddStickerWomen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -1065,8 +1065,8 @@
                 android:id="@+id/linearLayoutWrapperStickerWomenList"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:orientation="vertical"
                 android:background="@color/white"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@id/constraintLayoutConfirmStickerWomen">
 
                 <FrameLayout
@@ -1079,7 +1079,7 @@
                     <com.photo.collagemaker.activities.editor.single_editor.adapter.RecyclerTabLayout
                         android:id="@+id/recyclerTabLayoutWomen"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"/>
+                        android:layout_height="40dp" />
 
                 </FrameLayout>
 
@@ -1088,7 +1088,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:background="@color/white"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
             </LinearLayout>
 
@@ -1103,8 +1103,8 @@
                     android:id="@+id/imageViewCloseStickerWomen"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:padding="9dp"
                     android:onClick="onClick"
+                    android:padding="9dp"
                     android:src="@drawable/ic_close"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -1115,8 +1115,8 @@
                     android:id="@+id/imageViewSaveStickerWomen"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:padding="9dp"
                     android:onClick="onClick"
+                    android:padding="9dp"
                     android:src="@drawable/ic_done"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -1131,10 +1131,10 @@
             android:id="@+id/constraintLayoutSticker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:elevation="400dp"
             android:orientation="vertical"
             android:visibility="gone"
-            android:elevation="400dp"
-            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -1144,22 +1144,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginBottom="25dp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayoutConfirmSticker"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/constraintLayoutConfirmSticker">
+                app:layout_constraintStart_toStartOf="parent">
 
                 <ImageView
                     android:id="@+id/imageViewAddSticker"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:onClick="onClick"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/background_flip"
+                    android:onClick="onClick"
                     android:src="@drawable/ic_add"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <SeekBar
                     android:id="@+id/seekbarStickerAlpha"
@@ -1171,12 +1171,12 @@
                     android:max="255"
                     android:progress="255"
                     android:progressDrawable="@drawable/progress_drawable_filter"
-                    android:thumb="@drawable/progress_thumb_filter"
                     android:splitTrack="false"
-                    app:layout_constraintEnd_toStartOf="@id/imageViewAddSticker"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:thumb="@drawable/progress_thumb_filter"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    app:layout_constraintEnd_toStartOf="@id/imageViewAddSticker"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -1185,8 +1185,8 @@
                 android:id="@+id/linearLayoutWrapperStickerList"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:orientation="vertical"
                 android:background="@color/white"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@id/constraintLayoutConfirmSticker">
 
                 <FrameLayout
@@ -1200,7 +1200,7 @@
                         android:id="@+id/recyclerTabLayout"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:background="@color/white"/>
+                        android:background="@color/white" />
 
                 </FrameLayout>
 
@@ -1209,7 +1209,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:background="@color/white"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
             </LinearLayout>
 
@@ -1224,8 +1224,8 @@
                     android:id="@+id/imageViewCloseSticker"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:padding="9dp"
                     android:onClick="onClick"
+                    android:padding="9dp"
                     android:src="@drawable/ic_close"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -1236,8 +1236,8 @@
                     android:id="@+id/imageViewSaveSticker"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:padding="9dp"
                     android:onClick="onClick"
+                    android:padding="9dp"
                     android:src="@drawable/ic_done"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -1252,10 +1252,10 @@
             android:id="@+id/constraintLayoutStickerMen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:elevation="400dp"
             android:orientation="vertical"
             android:visibility="gone"
-            android:elevation="400dp"
-            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -1265,22 +1265,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginBottom="25dp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayoutConfirmStickerMen"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/constraintLayoutConfirmStickerMen">
+                app:layout_constraintStart_toStartOf="parent">
 
                 <ImageView
                     android:id="@+id/imageViewAddStickerMen"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:onClick="onClick"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/background_flip"
+                    android:onClick="onClick"
                     android:src="@drawable/ic_add"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <SeekBar
                     android:id="@+id/seekbarStickerMenAlpha"
@@ -1292,12 +1292,12 @@
                     android:max="255"
                     android:progress="255"
                     android:progressDrawable="@drawable/progress_drawable_filter"
-                    android:thumb="@drawable/progress_thumb_filter"
                     android:splitTrack="false"
-                    app:layout_constraintEnd_toStartOf="@id/imageViewAddStickerMen"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:thumb="@drawable/progress_thumb_filter"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    app:layout_constraintEnd_toStartOf="@id/imageViewAddStickerMen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -1306,8 +1306,8 @@
                 android:id="@+id/linearLayoutWrapperStickerMenList"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:orientation="vertical"
                 android:background="@color/white"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@id/constraintLayoutConfirmStickerMen">
 
                 <FrameLayout
@@ -1320,7 +1320,7 @@
                     <com.photo.collagemaker.activities.editor.single_editor.adapter.RecyclerTabLayout
                         android:id="@+id/recyclerTabLayoutMen"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"/>
+                        android:layout_height="40dp" />
 
                 </FrameLayout>
 
@@ -1329,7 +1329,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:background="@color/white"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
             </LinearLayout>
 
@@ -1344,8 +1344,8 @@
                     android:id="@+id/imageViewCloseStickerMen"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:padding="9dp"
                     android:onClick="onClick"
+                    android:padding="9dp"
                     android:src="@drawable/ic_close"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -1356,8 +1356,8 @@
                     android:id="@+id/imageViewSaveStickerMen"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:padding="9dp"
                     android:onClick="onClick"
+                    android:padding="9dp"
                     android:src="@drawable/ic_done"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -1382,7 +1382,7 @@
                 android:layout_height="90dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -1401,326 +1401,220 @@
                 android:layout_height="90dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!--Paint-->
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/constraintLayoutDraw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/recyclerViewTools">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewDraw"
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayoutPaint"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayoutConfirmControl"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginBottom="5dp"
-                app:layout_constraintBottom_toTopOf="@+id/constraintLayoutSeekbar">
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/imageViewBrush"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:padding="6dp"
+                    android:id="@+id/btnCloseDraw"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@drawable/background_flip"
-                    android:src="@drawable/ic_brush"
                     android:onClick="onClick"
+                    android:src="@drawable/ic_close"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="150dp"
+                    android:id="@+id/constraintLayout3"
+                    android:layout_width="100dp"
                     android:layout_height="35dp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:id="@+id/imageViewUndo"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:background="@drawable/background_flip"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:onClick="onClick"
-                        android:padding="6dp"
                         android:src="@drawable/ic_undo"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"/>
-
-                    <ImageView
-                        android:id="@+id/imageViewClean"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:background="@drawable/background_flip"
-                        android:onClick="onClick"
-                        android:padding="6dp"
-                        android:src="@drawable/ic_delete_outline"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/imageViewUndo"
-                        app:layout_constraintEnd_toStartOf="@+id/imageViewRedo"/>
+                        app:layout_constraintStart_toStartOf="parent" />
 
                     <ImageView
                         android:id="@+id/imageViewRedo"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:onClick="onClick"
-                        android:background="@drawable/background_flip"
-                        android:padding="6dp"
                         android:src="@drawable/ic_redo"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                 <ImageView
-                    android:id="@+id/imageViewErase"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:id="@+id/btnSaveDraw"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:padding="6dp"
-                    android:src="@drawable/ic_erase"
-                    android:background="@drawable/background_flip"
                     android:onClick="onClick"
+                    android:src="@drawable/ic_done"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayoutSeekbar"
+            <LinearLayout
+                android:id="@+id/drawingTools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:background="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent">
+                android:padding="5dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/btnNeon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:onClick="onClick"
+                    android:src="@drawable/ic_brush"
+                    android:padding="3dp"
+                    app:tint="@color/icon_color_dark" />
+
+                <ImageView
+                    android:id="@+id/btnColor"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:onClick="onClick"
+                    android:src="@drawable/ic_color"
+                    android:padding="3dp"
+                    app:tint="@color/icon_color_dark" />
+
+                <ImageView
+                    android:id="@+id/btnEraser"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:onClick="onClick"
+                    android:padding="3dp"
+                    android:src="@drawable/ic_eraser"
+                    app:tint="@color/icon_color_dark" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/constraintLayoutPaint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:padding="10dp"
+                android:orientation="vertical">
 
                 <SeekBar
                     android:id="@+id/seekbarBrushSize"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="15dp"
                     android:background="@null"
                     android:max="60"
-                    android:progress="20"
-                    android:progressDrawable="@drawable/progress_drawable"
-                    android:thumb="@drawable/progress_thumb"
-                    android:splitTrack="false"
-                    app:layout_constraintBottom_toTopOf="@id/recyclerViewColorPaint"/>
-
-                <SeekBar
-                    android:id="@+id/seekbarEraseSize"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:paddingTop="8dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="15dp"
-                    android:background="@null"
-                    android:max="100"
                     android:progress="20"
                     android:progressDrawable="@drawable/progress_drawable"
-                    android:thumb="@drawable/progress_thumb"
                     android:splitTrack="false"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    android:thumb="@drawable/progress_thumb"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewColorPaint"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="50dp"
                     android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    android:layout_marginTop="10dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayoutNeon"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginBottom="5dp"
-                app:layout_constraintBottom_toTopOf="@+id/constraintLayoutSeekbarNeon">
-
-                <ImageView
-                    android:id="@+id/imageViewNeon"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:padding="6dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@drawable/background_flip"
-                    android:src="@drawable/ic_brush"
-                    android:onClick="onClick"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="150dp"
-                    android:layout_height="35dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
-
-                    <ImageView
-                        android:id="@+id/imageViewUndoNeon"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:background="@drawable/background_flip"
-                        android:onClick="onClick"
-                        android:padding="6dp"
-                        android:src="@drawable/ic_undo"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"/>
-
-                    <ImageView
-                        android:id="@+id/imageViewCleanNeon"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:background="@drawable/background_flip"
-                        android:onClick="onClick"
-                        android:padding="6dp"
-                        android:src="@drawable/ic_delete_outline"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/imageViewUndoNeon"
-                        app:layout_constraintEnd_toStartOf="@+id/imageViewRedoNeon"/>
-
-                    <ImageView
-                        android:id="@+id/imageViewRedoNeon"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:onClick="onClick"
-                        android:background="@drawable/background_flip"
-                        android:padding="6dp"
-                        android:src="@drawable/ic_redo"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <ImageView
-                    android:id="@+id/imageViewEraseNeon"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:padding="6dp"
-                    android:src="@drawable/ic_erase"
-                    android:background="@drawable/background_flip"
-                    android:onClick="onClick"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayoutSeekbarNeon"
+            <LinearLayout
+                android:id="@+id/constraintLayoutNeon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:background="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent">
+                android:visibility="gone"
+                android:padding="10dp"
+                android:orientation="vertical">
 
                 <SeekBar
                     android:id="@+id/seekbarBrushSizeNeon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="15dp"
                     android:background="@null"
                     android:max="60"
+                    android:paddingTop="8dp"
                     android:progress="20"
                     android:progressDrawable="@drawable/progress_drawable"
-                    android:thumb="@drawable/progress_thumb"
                     android:splitTrack="false"
-                    app:layout_constraintBottom_toTopOf="@id/recyclerViewColorNeon"/>
+                    android:thumb="@drawable/progress_thumb"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewColorNeon"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/constraintLayoutEraser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="vertical">
 
                 <SeekBar
-                    android:id="@+id/seekbarEraseSizeNeon"
+                    android:id="@+id/seekbarEraseSize"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="15dp"
                     android:background="@null"
                     android:max="100"
+                    android:paddingTop="8dp"
                     android:progress="20"
                     android:progressDrawable="@drawable/progress_drawable"
-                    android:thumb="@drawable/progress_thumb"
                     android:splitTrack="false"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    android:thumb="@drawable/progress_thumb"/>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewColorNeon"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
         <!--Text-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayoutConfirmText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:background="@color/white"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -1740,7 +1634,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/icon_bg_color_dark"/>
+                    app:tint="@color/icon_bg_color_dark" />
 
                 <RelativeLayout
                     android:id="@+id/relativeLayoutAddText"
@@ -1748,23 +1642,23 @@
                     android:layout_height="40dp"
                     android:background="@drawable/background_card"
                     android:backgroundTint="@color/theme_color"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
                     android:clickable="true"
                     android:focusable="true"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:textColor="@color/white"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:layout_marginStart="5dp"
-                        android:text="@string/add_text"
                         android:fontFamily="@font/roboto_medium"
-                        android:layout_centerInParent="true"/>
+                        android:text="@string/add_text"
+                        android:textColor="@color/white" />
 
                 </RelativeLayout>
 
@@ -1787,9 +1681,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewTools"
             android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:visibility="visible"
             android:background="@color/white"
-            android:layout_height="70dp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

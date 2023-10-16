@@ -27,7 +27,7 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
     public List<SquareView> squareViewList = new ArrayList();
 
     public interface BackgroundGridListener {
-        void onBackgroundSelected(SquareView squareView);
+        void onBackgroundSelected(SquareView squareView, int position);
     }
 
     public BackgroundGridAdapter(Context context, BackgroundGridListener backgroundListener) {
@@ -160,7 +160,7 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
             binding.imageViewSquare.setVisibility(View.GONE);
             binding.getRoot().setOnClickListener(view -> {
                 selectedIndex = getAdapterPosition();
-                backgroundListener.onBackgroundSelected((SquareView) squareViewList.get(selectedIndex));
+                backgroundListener.onBackgroundSelected((SquareView) squareViewList.get(selectedIndex), selectedIndex);
                 notifyDataSetChanged();
             });
         }

@@ -36,9 +36,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.photo.collagemaker.R;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.BackgroundGridAdapter;
 import com.photo.collagemaker.adapters.FontAdapter;
 import com.photo.collagemaker.assets.FontAsset;
 import com.photo.collagemaker.databinding.FragmentAddTextBinding;
@@ -50,7 +53,7 @@ import com.photo.collagemaker.utils.SystemUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextFragment extends DialogFragment implements View.OnClickListener, FontAdapter.ItemClickListener{
+public class TextFragment extends DialogFragment implements View.OnClickListener, FontAdapter.ItemClickListener {
     public static final String EXTRA_COLOR_CODE = "extra_color_code";
     public static final String EXTRA_INPUT_TEXT = "extra_input_text";
     public static final String TAG = "TextFragment";
@@ -71,6 +74,8 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
 
         void onDone(CustomText addTextProperties);
     }
+
+    BackgroundGridAdapter textColorPickerAdapter, textBackgroundColorPickerAdapter;
 
     FragmentAddTextBinding binding;
 
@@ -96,35 +101,51 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
         fontAdapter = new FontAdapter(getContext(), FontAsset.getListFonts());
         fontAdapter.setClickListener(this);
         binding.recyclerViewFonts.setAdapter(fontAdapter);
-        binding.colorCarouselPicker.setAdapter(new QuShotCarouselPicker.CarouselViewAdapter(getContext(), colorItems, 0));
-        binding.colorCarouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            public void onPageScrollStateChanged(int i) {
-            }
+        Log.d("dkfldsfkjsjnif", "onViewCreated: " + colorItems.size() + "    " + colorItems.get(1).getColor());
 
-            public void onPageSelected(int i) {
-            }
-
-            public void onPageScrolled(int i, float f, int i2) {
-                if (f > 0.0f) {
-                    if (binding.imageViewColorDown.getVisibility() == View.INVISIBLE) {
-                        binding.imageViewColorDown.setVisibility(View.VISIBLE);
-                        binding.viewHighlightTextColor.setVisibility(View.VISIBLE);
-                        binding.imageViewTextTexture.setVisibility(View.INVISIBLE);
-                        binding.viewHighlightTexture.setVisibility(View.GONE);
-                    }
-                    binding.textViewPreviewEffect.getPaint().setShader(null);
-                    int i3 = -1;
-                    float f2 = ((float) i) + f;
-                    if (Math.round(f2) < colorItems.size()) {
-                        i3 = Color.parseColor((colorItems.get(Math.round(f2))).getColor());
-                    }
-                    binding.textViewPreviewEffect.setTextColor(i3);
-                    quShotText.setQuShotTextColorIndex(Math.round(f2));
-                    quShotText.setQuShotTextColor(i3);
-                    quShotText.setQuShotTextShader(null);
-                }
+        textColorPickerAdapter = new BackgroundGridAdapter(getContext(), (squareView, position) -> {
+            if (squareView.isColor){
+                binding.textViewPreviewEffect.setTextColor(squareView.drawableId);
+                quShotText.setQuShotTextColorIndex(position);
+                quShotText.setQuShotTextColor(squareView.drawableId);
+                quShotText.setQuShotTextShader(null);
             }
         });
+        binding.rvTextColor.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        binding.rvTextColor.setHasFixedSize(true);
+        binding.rvTextColor.setAdapter(textColorPickerAdapter);
+
+
+//        binding.colorCarouselPicker.setAdapter(new QuShotCarouselPicker.CarouselViewAdapter(getContext(), colorItems, 0));
+//        binding.colorCarouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            public void onPageScrollStateChanged(int i) {
+//            }
+//
+//            public void onPageSelected(int i) {
+//            }
+//
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                if (positionOffset > 0.0f) {
+//                    if (binding.imageViewColorDown.getVisibility() == View.INVISIBLE) {
+//                        binding.imageViewColorDown.setVisibility(View.VISIBLE);
+//                        binding.viewHighlightTextColor.setVisibility(View.VISIBLE);
+//                        binding.imageViewTextTexture.setVisibility(View.INVISIBLE);
+//                        binding.viewHighlightTexture.setVisibility(View.GONE);
+//                    }
+//                    binding.textViewPreviewEffect.getPaint().setShader(null);
+//                    int colorId = -1;
+//                    float f2 = ((float) position) + positionOffset;
+//                    if (Math.round(f2) < colorItems.size()) {
+//                        colorId = Color.parseColor((colorItems.get(Math.round(f2))).getColor());
+//                    }
+//                    binding.textViewPreviewEffect.setTextColor(colorId);
+//                    quShotText.setQuShotTextColorIndex(Math.round(f2));
+//                    quShotText.setQuShotTextColor(colorId);
+//                    quShotText.setQuShotTextShader(null);
+//                }
+//            }
+//        });
+
         binding.textureCarouselPicker.setAdapter(new QuShotCarouselPicker.CarouselViewAdapter(getContext(), textTextureItems, 0));
         binding.textureCarouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             public void onPageScrollStateChanged(int i) {
@@ -138,8 +159,7 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
                     if (binding.imageViewTextTexture.getVisibility() == View.INVISIBLE) {
                         binding.imageViewTextTexture.setVisibility(View.VISIBLE);
                         binding.viewHighlightTexture.setVisibility(View.VISIBLE);
-                        binding.imageViewColorDown.setVisibility(View.INVISIBLE);
-                        binding.viewHighlightTextColor.setVisibility(View.GONE);
+
                     }
                     float f2 = ((float) i) + f;
                     BitmapShader bitmapShader = new BitmapShader((textTextureItems.get(Math.round(f2))).getBitmap(), Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
@@ -191,46 +211,66 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
                 }
             }
         });
-        binding.backgroundCarouselPicker.setAdapter(new QuShotCarouselPicker.CarouselViewAdapter(getContext(), colorItems, 0));
-        binding.backgroundCarouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            public void onPageScrollStateChanged(int i) {
-            }
 
-            public void onPageSelected(int i) {
-            }
-
-            public void onPageScrolled(int i, float f, int i2) {
-                if (f > 0.0f) {
-                    int i3 = 0;
-                    if (binding.imageViewBackground.getVisibility() == View.INVISIBLE) {
-                        binding.imageViewBackground.setVisibility(View.VISIBLE);
-                        binding.viewHighlightBackgroundColor.setVisibility(View.VISIBLE);
-                    }
-                    quShotText.setQuShotShowBackground(true);
-                    if (!binding.checkboxBackground.isChecked()) {
-                        binding.checkboxBackground.setChecked(true);
-                    }
-                    float f2 = ((float) i) + f;
-                    int round = Math.round(f2);
-                    if (round >= colorItems.size()) {
-                        i3 = colorItems.size() - 1;
-                    } else if (round >= 0) {
-                        i3 = round;
-                    }
-                    int parseColor = Color.parseColor((colorItems.get(i3)).getColor());
-                    int red = Color.red(parseColor);
-                    int green = Color.green(parseColor);
-                    int blue = Color.blue(parseColor);
-                    GradientDrawable gradientDrawable = new GradientDrawable();
-                    gradientDrawable.setColor(Color.argb(quShotText.getQuShotBackgroundAlpha(), red, green, blue));
-                    gradientDrawable.setCornerRadius((float) SystemUtil.dpToPx(requireContext(), quShotText.getQuShotBackgroundBorder()));
-                    binding.textViewPreviewEffect.setBackground(gradientDrawable);
-                    quShotText.setQuShotBackgroundColor(parseColor);
-                    quShotText.setQuShotBackgroundColorIndex(Math.round(f2));
-                    binding.seekbarRadius.setEnabled(true);
+        textBackgroundColorPickerAdapter = new BackgroundGridAdapter(getContext(), (squareView, position) -> {
+            if (squareView.isColor){
+                quShotText.setQuShotShowBackground(true);
+                if (!binding.checkboxBackground.isChecked()) {
+                    binding.checkboxBackground.setChecked(true);
                 }
+                GradientDrawable gradientDrawable = new GradientDrawable();
+                gradientDrawable.setColor(Color.argb(quShotText.getQuShotBackgroundAlpha(), squareView.drawableId, squareView.drawableId, squareView.drawableId));
+                gradientDrawable.setCornerRadius((float) SystemUtil.dpToPx(requireContext(), quShotText.getQuShotBackgroundBorder()));
+                binding.textViewPreviewEffect.setBackground(gradientDrawable);
+                quShotText.setQuShotBackgroundColor(squareView.drawableId);
+                quShotText.setQuShotBackgroundColorIndex(position);
+                binding.seekbarRadius.setEnabled(true);
             }
         });
+        binding.rvTextBackgroundColor.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        binding.rvTextBackgroundColor.setHasFixedSize(true);
+        binding.rvTextBackgroundColor.setAdapter(textBackgroundColorPickerAdapter);
+
+//        binding.backgroundCarouselPicker.setAdapter(new QuShotCarouselPicker.CarouselViewAdapter(getContext(), colorItems, 0));
+//        binding.backgroundCarouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            public void onPageScrollStateChanged(int i) {
+//            }
+//
+//            public void onPageSelected(int i) {
+//            }
+//
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                if (positionOffset > 0.0f) {
+//                    int colorId = 0;
+//                    if (binding.imageViewBackground.getVisibility() == View.INVISIBLE) {
+//                        binding.imageViewBackground.setVisibility(View.VISIBLE);
+//                        binding.viewHighlightBackgroundColor.setVisibility(View.VISIBLE);
+//                    }
+//                    quShotText.setQuShotShowBackground(true);
+//                    if (!binding.checkboxBackground.isChecked()) {
+//                        binding.checkboxBackground.setChecked(true);
+//                    }
+//                    float f2 = ((float) position) + positionOffset;
+//                    int round = Math.round(f2);
+//                    if (round >= colorItems.size()) {
+//                        colorId = colorItems.size() - 1;
+//                    } else if (round >= 0) {
+//                        colorId = round;
+//                    }
+//                    int parseColor = Color.parseColor((colorItems.get(colorId)).getColor());
+//                    int red = Color.red(parseColor);
+//                    int green = Color.green(parseColor);
+//                    int blue = Color.blue(parseColor);
+//                    GradientDrawable gradientDrawable = new GradientDrawable();
+//                    gradientDrawable.setColor(Color.argb(quShotText.getQuShotBackgroundAlpha(), red, green, blue));
+//                    gradientDrawable.setCornerRadius((float) SystemUtil.dpToPx(requireContext(), quShotText.getQuShotBackgroundBorder()));
+//                    binding.textViewPreviewEffect.setBackground(gradientDrawable);
+//                    quShotText.setQuShotBackgroundColor(parseColor);
+//                    quShotText.setQuShotBackgroundColorIndex(Math.round(f2));
+//                    binding.seekbarRadius.setEnabled(true);
+//                }
+//            }
+//        });
         binding.seekbarWidth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
@@ -314,7 +354,6 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
         }
         initPreviewText();
     }
-
 
 
     public void onItemClick(View view, int i) {
@@ -454,7 +493,7 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
 
     public void updateAddTextBottomToolbarHeight(final int i) {
         new Handler().post(() -> {
-            ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) binding.linearLayoutEditTextTools.getLayoutParams();
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) binding.linearLayoutEditTextTools.getLayoutParams();
 //            layoutParams.bottomMargin = i;
             binding.linearLayoutEditTextTools.setLayoutParams(layoutParams);
             binding.linearLayoutEditTextTools.invalidate();
@@ -517,16 +556,18 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
             highlightFunction(binding.imageViewColor);
             binding.scrollViewChangeFontLayout.setVisibility(View.GONE);
             binding.addTextEditText.setVisibility(View.GONE);
-            binding.colorCarouselPicker.setCurrentItem(quShotText.getQuShotTextColorIndex());
+            textColorPickerAdapter.setSelectedIndex(quShotText.getQuShotTextColorIndex());
+//            binding.colorCarouselPicker.setCurrentItem(quShotText.getQuShotTextColorIndex());
             binding.textureCarouselPicker.setCurrentItem(quShotText.getQuShotTextShaderIndex());
             binding.checkboxBackground.setChecked(quShotText.isQuShotShowBackground());
-            binding.backgroundCarouselPicker.setCurrentItem(quShotText.getQuShotBackgroundColorIndex());
+            textBackgroundColorPickerAdapter.setSelectedIndex(quShotText.getQuShotBackgroundColorIndex());
+//            binding.backgroundCarouselPicker.setCurrentItem(quShotText.getQuShotBackgroundColorIndex());
             binding.checkboxBackground.setChecked(quShotText.isQuShotShowBackground());
             if (quShotText.getQuShotTextShader() != null && binding.imageViewTextTexture.getVisibility() == View.INVISIBLE) {
                 binding.imageViewTextTexture.setVisibility(View.VISIBLE);
                 binding.viewHighlightTexture.setVisibility(View.VISIBLE);
-                binding.imageViewColorDown.setVisibility(View.INVISIBLE);
-                binding.viewHighlightTextColor.setVisibility(View.GONE);
+//                binding.imageViewColorDown.setVisibility(View.INVISIBLE);
+//                binding.viewHighlightTextColor.setVisibility(View.GONE);
             }
         } else if (id == binding.imageViewFonts.getId()) {
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);

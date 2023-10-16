@@ -1293,7 +1293,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         binding.relativeLayoutAddSticker.setVisibility(View.VISIBLE);
     }
 
-    public void onBackgroundSelected(final BackgroundGridAdapter.SquareView squareView) {
+    public void onBackgroundSelected(final BackgroundGridAdapter.SquareView squareView, int position) {
         if (squareView.isColor) {
             binding.collageView.setBackgroundColor(squareView.drawableId);
             binding.collageView.setBackgroundResourceMode(0);

@@ -92,14 +92,14 @@
                 android:layout_height="match_parent"
                 android:padding="8dp"
                 app:tint="@color/theme_color_dark"
-                android:src="@drawable/ic_neon"
+                android:src="@drawable/img_draw"
                 android:layout_weight="1"/>
 
             <ImageView
                 android:id="@+id/image_view_adjust"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:padding="10dp"
+                android:padding="5dp"
                 app:tint="@color/theme_color_dark"
                 android:src="@drawable/ic_adjust"
                 android:layout_weight="1"/>
@@ -108,7 +108,7 @@
                 android:id="@+id/image_view_save_change"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:padding="8dp"
+                android:padding="5dp"
                 app:tint="@color/theme_color_dark"
                 android:src="@drawable/ic_done"
                 android:layout_weight="1"/>
@@ -178,7 +178,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/roboto_medium"
-                                android:text="@string/size"
+                                android:text="Size"
                                 android:textColor="@color/theme_color_dark"
                                 android:textSize="14sp" />
 
@@ -206,7 +206,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/roboto_medium"
-                                android:text="@string/radius"
+                                android:text="Radius"
                                 android:textColor="@color/theme_color_dark"
                                 android:textSize="14sp" />
 
@@ -242,7 +242,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/roboto_medium"
-                                android:text="@string/color"
+                                android:text="Color"
                                 android:textColor="@color/theme_color_dark"
                                 android:textSize="14sp" />
 
@@ -269,8 +269,8 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/font"
-                                android:text="@string/background"
+                                android:fontFamily="@font/roboto_medium"
+                                android:text="Background"
                                 android:textColor="@color/theme_color_dark"
                                 android:textSize="14sp" />
 
@@ -306,7 +306,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/roboto_medium"
-                                android:text="@string/width"
+                                android:text="Width"
                                 android:textColor="@color/theme_color_dark"
                                 android:textSize="14sp" />
 
@@ -333,8 +333,8 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/font"
-                                android:text="@string/height"
+                                android:fontFamily="@font/roboto_medium"
+                                android:text="Height"
                                 android:textColor="@color/theme_color_dark"
                                 android:textSize="14sp" />
 
@@ -357,6 +357,7 @@
                 </LinearLayout>
 
             </ScrollView>
+
             <!--Background-->
             <ScrollView
                 android:id="@+id/scroll_view_change_color_layout"
@@ -388,41 +389,51 @@
                             android:textColor="@color/theme_color_dark"
                             android:textSize="14sp" />
 
-                        <RelativeLayout
-                            android:id="@+id/relative_layout_color"
+<!--                        <RelativeLayout-->
+<!--                            android:id="@+id/relativeLayoutColor"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:background="@color/theme_gray_bg">-->
+
+<!--                            <ImageView-->
+<!--                                android:id="@+id/imageViewColorDown"-->
+<!--                                android:layout_width="10dp"-->
+<!--                                android:layout_height="10dp"-->
+<!--                                android:layout_centerInParent="true"-->
+<!--                                android:src="@drawable/ic_arrow_down"-->
+<!--                                app:tint="@color/theme_color_dark" />-->
+
+<!--                        </RelativeLayout>-->
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvTextColor"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/theme_gray_bg">
+                            android:layout_height="55dp"
+                            android:layout_marginVertical="10dp"
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                            <ImageView
-                                android:id="@+id/image_view_color_down"
-                                android:layout_width="10dp"
-                                android:layout_height="10dp"
-                                android:layout_centerInParent="true"
-                                android:src="@drawable/ic_arrow_down"
-                                app:tint="@color/theme_color_dark" />
+<!--                        <FrameLayout-->
+<!--                            android:id="@+id/frameLayoutColorSlider"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content">-->
 
-                        </RelativeLayout>
+<!--                            <com.photo.collagemaker.picker.QuShotCarouselPicker-->
+<!--                                android:id="@+id/colorCarouselPicker"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="45dp"-->
+<!--                                app:item_width="35"/>-->
 
-                        <FrameLayout
-                            android:id="@+id/frame_layout_color_slider"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+<!--                            <View-->
+<!--                                android:id="@+id/viewHighlightTextColor"-->
+<!--                                android:layout_width="35dp"-->
+<!--                                android:layout_height="45dp"-->
+<!--                                android:layout_gravity="center"-->
+<!--                                android:background="@drawable/black_border" />-->
 
-                            <com.photo.collagemaker.picker.QuShotCarouselPicker
-                                android:id="@+id/color_carousel_picker"
-                                android:layout_width="match_parent"
-                                android:layout_height="45dp"
-                                app:item_width="35" />
-
-                            <View
-                                android:id="@+id/view_highlight_text_color"
-                                android:layout_width="35dp"
-                                android:layout_height="45dp"
-                                android:layout_gravity="center"
-                                android:background="@drawable/black_border" />
-
-                        </FrameLayout>
+<!--                        </FrameLayout>-->
 
                     </LinearLayout>
 
@@ -482,19 +493,19 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingTop="10dp">
+                        android:orientation="vertical">
 
-                        <RelativeLayout
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
+                                android:layout_weight="1"
                                 android:fontFamily="@font/roboto_medium"
-                                android:text="@string/background"
+                                android:text="Background"
                                 android:textColor="@color/theme_color_dark"
                                 android:textSize="14sp" />
 
@@ -502,46 +513,55 @@
                                 android:id="@+id/checkbox_background"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
                                 android:theme="@style/SCBSwitch" />
 
-                        </RelativeLayout>
+                        </LinearLayout>
 
-                        <RelativeLayout
-                            android:id="@+id/relative_layout_background"
+<!--                        <RelativeLayout-->
+<!--                            android:id="@+id/relativeLayoutBackground"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:background="@color/theme_gray_bg">-->
+
+<!--                            <ImageView-->
+<!--                                android:id="@+id/imageViewBackground"-->
+<!--                                android:layout_width="10dp"-->
+<!--                                android:layout_height="10dp"-->
+<!--                                android:layout_centerInParent="true"-->
+<!--                                android:src="@drawable/ic_arrow_down"-->
+<!--                                app:tint="@color/theme_color_dark" />-->
+
+<!--                        </RelativeLayout>-->
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvTextBackgroundColor"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/theme_gray_bg">
+                            android:layout_height="55dp"
+                            android:layout_marginVertical="10dp"
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                            <ImageView
-                                android:id="@+id/image_view_background"
-                                android:layout_width="10dp"
-                                android:layout_height="10dp"
-                                android:layout_centerInParent="true"
-                                android:src="@drawable/ic_arrow_down"
-                                app:tint="@color/theme_color_dark" />
+<!--                        <FrameLayout-->
+<!--                            android:id="@+id/frameLayoutBackground"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content">-->
 
-                        </RelativeLayout>
+<!--                            <com.photo.collagemaker.picker.QuShotCarouselPicker-->
+<!--                                android:id="@+id/backgroundCarouselPicker"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="45dp"-->
+<!--                                app:item_width="35" />-->
 
-                        <FrameLayout
-                            android:id="@+id/frame_layout_background"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+<!--                            <View-->
+<!--                                android:id="@+id/viewHighlightBackgroundColor"-->
+<!--                                android:layout_width="35dp"-->
+<!--                                android:layout_height="45dp"-->
+<!--                                android:layout_gravity="center"-->
+<!--                                android:background="@drawable/black_border" />-->
 
-                            <com.photo.collagemaker.picker.QuShotCarouselPicker
-                                android:id="@+id/background_carousel_picker"
-                                android:layout_width="match_parent"
-                                android:layout_height="45dp"
-                                app:item_width="35" />
-
-                            <View
-                                android:id="@+id/view_highlight_background_color"
-                                android:layout_width="35dp"
-                                android:layout_height="45dp"
-                                android:layout_gravity="center"
-                                android:background="@drawable/black_border" />
-
-                        </FrameLayout>
+<!--                        </FrameLayout>-->
 
                     </LinearLayout>
 
@@ -550,10 +570,4 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-
-
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
