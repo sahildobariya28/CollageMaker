@@ -17,7 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
-import com.photo.collagemaker.activities.editor.scrapbook.ScrapBookActivity;
+import com.photo.collagemaker.activities.freestyle.FreeStyle;
+import com.photo.collagemaker.activities.multifit.MultiFitActivity;
 import com.photo.collagemaker.adapters.SelectedPhotoAdapter;
 import com.photo.collagemaker.constants.Constants;
 import com.photo.collagemaker.adapters.AlbumAdapter;
@@ -71,12 +72,18 @@ public class MultipleImagePickerActivity extends AppCompatActivity
         binding.textViewDone.setOnClickListener(view -> {
             ArrayList<String> imageList = getListString(listItemSelect);
             if (imageList.size() >= limitImageMin) {
-                if (tracker.equals("Collage")) {
+                if (tracker.equals("Multifit")) {
+                    Intent intent = new Intent(this, MultiFitActivity.class);
+                    intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
+                    startActivity(intent);
+                } else if (tracker.equals("Collage")) {
                     Intent intent = new Intent(this, CollageEditorActivity.class);
                     intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
                     startActivity(intent);
-                }else if (tracker.equals("ScrapBook")){
-                    Intent intent = new Intent(this, ScrapBookActivity.class);
+                } else if (tracker.equals("ScrapBook")) {
+                    Intent intent = new Intent(this, FreeStyle.class);
+//                    Intent intent = new Intent(this, NewScrapBookActivity.class);
+//                    Intent intent = new Intent(this, ScrapBookActivity.class);
                     intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
                     startActivity(intent);
                 }

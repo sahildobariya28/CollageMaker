@@ -2,6 +2,7 @@ package com.photo.collagemaker.activities.editor.collage_editor.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,7 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
         for (int i = 0; i < lstColorForBrush.size() - 2; i++) {
             this.squareViewList.add(new SquareView(Color.parseColor(lstColorForBrush.get(i)), "", true));
         }
+
     }
 
     public BackgroundGridAdapter(Context context2, BackgroundGridListener backgroundChangeListener2, boolean z) {
@@ -111,6 +113,14 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
     }
 
     public BackgroundGridAdapter(Context context2, BackgroundGridListener backgroundChangeListener2, List<Drawable> list) {
+        this.context = context2;
+        this.backgroundListener = backgroundChangeListener2;
+        for (Drawable squareView : list) {
+            squareViewList.add(new SquareView(1, "", false, true, squareView));
+        }
+    }
+
+    public BackgroundGridAdapter(Context context2, BackgroundGridListener backgroundChangeListener2, List<BitmapDrawable> list, Boolean isboolean) {
         this.context = context2;
         this.backgroundListener = backgroundChangeListener2;
         for (Drawable squareView : list) {
@@ -194,6 +204,46 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
             isColor = z;
             isBitmap = z2;
             drawable = drawable2;
+        }
+
+        public Drawable getDrawable() {
+            return drawable;
+        }
+
+        public void setDrawable(Drawable drawable) {
+            this.drawable = drawable;
+        }
+
+        public int getDrawableId() {
+            return drawableId;
+        }
+
+        public void setDrawableId(int drawableId) {
+            this.drawableId = drawableId;
+        }
+
+        public boolean isBitmap() {
+            return isBitmap;
+        }
+
+        public void setBitmap(boolean bitmap) {
+            isBitmap = bitmap;
+        }
+
+        public boolean isColor() {
+            return isColor;
+        }
+
+        public void setColor(boolean color) {
+            isColor = color;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
         }
     }
 }

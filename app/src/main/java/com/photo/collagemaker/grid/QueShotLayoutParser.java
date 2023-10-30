@@ -3,7 +3,7 @@ package com.photo.collagemaker.grid;
 import android.graphics.RectF;
 
 import com.photo.collagemaker.layer.slant.SlantCollageLayout;
-import com.photo.collagemaker.layer.straight.StraightCollageLayout;
+import com.photo.collagemaker.layer.straight.layout.StraightCollageLayout;
 
 public class QueShotLayoutParser {
     private QueShotLayoutParser() {

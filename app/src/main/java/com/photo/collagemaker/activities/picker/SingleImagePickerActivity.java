@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.photo.collagemaker.activities.editor.single_editor.SingleEditorActivity;
 import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
+import com.photo.collagemaker.activities.freestyle.FreeStyle;
 import com.photo.collagemaker.databinding.ActivitySingleImagePickerBinding;
 import com.photo.collagemaker.fragment.ImagePagerFragment;
 import com.photo.collagemaker.fragment.PhotoPickerFragment;
@@ -31,6 +32,7 @@ public class SingleImagePickerActivity extends AppCompatActivity {
         boolean booleanExtra2 = getIntent().getBooleanExtra("SHOW_GIF", false);
         boolean booleanExtra3 = getIntent().getBooleanExtra("PREVIEW_ENABLED", true);
         boolean isAddImage = getIntent().getBooleanExtra("ADD_IMAGE", true);
+        boolean isFreeStyleAddImage = getIntent().getBooleanExtra("FREE_STYLE_ADD_IMAGE", true);
         forwardMain = getIntent().getBooleanExtra("MAIN_ACTIVITY", false);
 
         maxCount = getIntent().getIntExtra("MAX_COUNT", 9);
@@ -50,6 +52,8 @@ public class SingleImagePickerActivity extends AppCompatActivity {
             }
             if (isAddImage) {
                 CollageEditorActivity.getQueShotGridActivityInstance().resultAddImage(photo.getPath());
+            } else if (isFreeStyleAddImage) {
+                FreeStyle.getQueShotGridActivityInstance().resultAddImage(photo.getPath());
             } else {
                 CollageEditorActivity.getQueShotGridActivityInstance().replaceCurrentPiece(photo.getPath());
             }

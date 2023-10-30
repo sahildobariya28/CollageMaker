@@ -53,16 +53,14 @@ import com.photo.collagemaker.activities.editor.collage_editor.adapter.GridAdapt
 import com.photo.collagemaker.activities.editor.collage_editor.adapter.GridItemToolsAdapter;
 import com.photo.collagemaker.activities.editor.collage_editor.adapter.GridToolsAdapter;
 import com.photo.collagemaker.activities.editor.collage_editor.adapter.ColorAdapter;
-import com.photo.collagemaker.activities.editor.collage_editor.adapter.QueShotDrawToolsAdapter;
 import com.photo.collagemaker.activities.editor.collage_editor.adapter.StickerAdapter;
 import com.photo.collagemaker.activities.editor.collage_editor.adapter.StickerTabAdapter;
 import com.photo.collagemaker.assets.EffectCodeAsset;
 import com.photo.collagemaker.assets.FilterCodeAsset;
 import com.photo.collagemaker.assets.StickersAsset;
-import com.photo.collagemaker.custom_view.CustomEditorGrid;
+import com.photo.collagemaker.custom_view.CustomEditorForCollage;
 import com.photo.collagemaker.custom_view.CustomText;
 import com.photo.collagemaker.databinding.ActivityGridBinding;
-import com.photo.collagemaker.draw.BrushDrawingView;
 import com.photo.collagemaker.draw.Drawing;
 import com.photo.collagemaker.event.AlignHorizontallyEvent;
 import com.photo.collagemaker.event.DeleteIconEvent;
@@ -123,7 +121,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     public AspectRatio aspectRatio;
     public BackgroundGridAdapter.SquareView currentBackgroundState;
     public QueShotLayout queShotLayout;
-    public GridToolsAdapter gridToolsAdapter = new GridToolsAdapter(this, true);
+    public GridToolsAdapter gridToolsAdapter = new GridToolsAdapter(this);
     private GridItemToolsAdapter gridItemToolsAdapter = new GridItemToolsAdapter(this);
 
     public Module moduleToolsId;
@@ -144,7 +142,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     public List<String> imageList;
     public List<Target> targets = new ArrayList();
 
-    public CustomEditorGrid quShotCustomEditor;
+    public CustomEditorForCollage quShotCustomEditor;
 
     ActivityGridBinding binding;
     CollageEditorViewModel viewModel;
@@ -221,7 +219,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     }
 
     public void initDrawingView() {
-        quShotCustomEditor = new CustomEditorGrid.Builder(this, binding.collageView).setPinchTextScalable(true).build();
+        quShotCustomEditor = new CustomEditorForCollage.Builder(this, binding.collageView).setPinchTextScalable(true).build();
         quShotCustomEditor.setOnPhotoEditorListener(new OnQuShotEditorListener() {
             @Override
             public void onAddViewListener(Drawing viewType, int i) {
@@ -411,6 +409,8 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     public void initFilterView() {
         binding.imageViewSaveFilter.setOnClickListener(view -> {
             setGuideLineTools();
+            binding.collageView.setLocked(true);
+            binding.collageView.setTouchEnable(true);
             viewModel.rvPrimaryToolShow();
             moduleToolsId = Module.NONE;
         });
@@ -623,10 +623,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     public void reloadingLayout() {
         binding.collageView.postDelayed(() -> {
             try {
-                Display display = getWindowManager().getDefaultDisplay();
-                Point point = new Point();
-                display.getSize(point);
-
                 binding.collageView.setVisibility(View.VISIBLE);
 
             } catch (Exception e) {
@@ -748,9 +744,11 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
         }
 
-        public void onStickerSelected(@NonNull Sticker sticker) {
+        @Override
+        public void onStickerSelected(Sticker sticker, int selectedStickerPosition) {
 
         }
+
 
         public void onStickerDeleted(@NonNull Sticker sticker) {
 
@@ -933,6 +931,8 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                         drawableList.add(drawable.getDrawable());
                     }
                 }
+                binding.collageView.setLocked(false);
+                binding.collageView.setTouchEnable(false);
                 viewModel.filterAllShow();
                 new allFilters().execute();
                 new bwFilters().execute();
@@ -950,7 +950,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                 binding.collageView.updateLayout(queShotLayout);
                 binding.collageView.setCollagePadding(Padding);
                 binding.collageView.setCollageRadian(BorderRadius);
-                getWindowManager().getDefaultDisplay().getSize(new Point());
                 onNewAspectRatioSelected(aspectRatio);
                 binding.collageView.setAspectRatio(aspectRatio);
                 for (int i = 0; i < drawableList.size(); i++) {
@@ -1078,7 +1077,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                     binding.collageView.updateLayout(queShotLayout);
                     binding.collageView.setCollagePadding(Padding);
                     binding.collageView.setCollageRadian(BorderRadius);
-                    getWindowManager().getDefaultDisplay().getSize(new Point());
                     onNewAspectRatioSelected(aspectRatio);
                     binding.collageView.setAspectRatio(aspectRatio);
                     binding.collageView.setLocked(true);

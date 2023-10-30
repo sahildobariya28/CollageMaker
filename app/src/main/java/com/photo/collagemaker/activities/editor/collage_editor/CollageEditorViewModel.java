@@ -27,24 +27,29 @@ public class CollageEditorViewModel extends ViewModel {
         binding.rvPrimaryTool.setVisibility(View.GONE);
         binding.rvSecondaryToolContainer.setVisibility(View.GONE);
 
-        //tools
+        //text
+        binding.constraintLayoutConfirmText.setVisibility(View.GONE);
+        binding.relativeLayoutAddText.setVisibility(View.GONE);
+
+        //sticker
+        binding.constraintLayoutSticker.setVisibility(View.GONE);
+        binding.linearLayoutWrapperStickerList.setVisibility(View.GONE);
+
+        //paint
         binding.constraintLayoutDraw.setVisibility(View.GONE);
         binding.constraintLayoutPaint.setVisibility(View.GONE);
         binding.constraintLayoutNeon.setVisibility(View.GONE);
         binding.constraintLayoutEraser.setVisibility(View.GONE);
-        binding.constraintLayoutConfirmText.setVisibility(View.GONE);
-        binding.relativeLayoutAddText.setVisibility(View.GONE);
-        binding.constrantLayoutChangeLayout.setVisibility(View.GONE);
-        binding.constraintLayoutSticker.setVisibility(View.GONE);
-        binding.constraintLayoutFilterLayout.setVisibility(View.GONE);
 
         //collage
+        binding.constrantLayoutChangeLayout.setVisibility(View.GONE);
         binding.recyclerViewCollage.setVisibility(View.GONE);
         binding.recyclerViewRatio.setVisibility(View.GONE);
         binding.linearLayoutPadding.setVisibility(View.GONE);
         binding.backgroundContainer.getRoot().setVisibility(View.GONE);
 
         //filter
+        binding.constraintLayoutFilterLayout.setVisibility(View.GONE);
         binding.recyclerViewFilterAll.setVisibility(View.GONE);
         binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);

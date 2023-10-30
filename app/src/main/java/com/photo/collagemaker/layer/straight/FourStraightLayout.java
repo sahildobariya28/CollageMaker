@@ -2,6 +2,8 @@ package com.photo.collagemaker.layer.straight;
 
 import com.photo.collagemaker.grid.QueShotLayout;
 import com.photo.collagemaker.grid.QueShotLine;
+import com.photo.collagemaker.layer.straight.layout.NumberStraightLayout;
+import com.photo.collagemaker.layer.straight.layout.StraightCollageLayout;
 
 public class FourStraightLayout extends NumberStraightLayout {
     private static final String TAG = "FourStraightLayout";

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/ic_topbar">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="18dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="15dp"
+            app:tint="#ffffff"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Text"
+            android:textColor="#ffffff"
+            android:textSize="15dp"
+            />
+
+        <ImageView
+            android:id="@+id/save"
+            android:layout_width="18dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            app:tint="#ffffff"
+            android:src="@drawable/ic_done" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:hint="Text"
+        android:backgroundTint="#B6B6B6"
+        android:textColorHint="#B6B6B6"
+        android:textColor="@android:color/black"
+        android:textSize="15dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="190dp"
+            android:layout_height="35dp"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="@color/theme_color">
+            <TextView
+                android:id="@+id/colorView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Select text color"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textColor="#ffffff"
+                android:textSize="12dp"/>
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="20dp"
+            android:text="Font"
+            android:textSize="12dp"
+            android:textColor="#B6B6B6"/>
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:spinnerMode="dropdown"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</RelativeLayout>

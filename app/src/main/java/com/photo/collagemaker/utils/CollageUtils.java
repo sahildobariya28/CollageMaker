@@ -2,7 +2,7 @@ package com.photo.collagemaker.utils;
 
 import com.photo.collagemaker.grid.QueShotLayout;
 import com.photo.collagemaker.layer.slant.SlantLayoutHelper;
-import com.photo.collagemaker.layer.straight.StraightLayoutHelper;
+import com.photo.collagemaker.layer.straight.layout.StraightLayoutHelper;
 
 import java.util.ArrayList;
 import java.util.List;

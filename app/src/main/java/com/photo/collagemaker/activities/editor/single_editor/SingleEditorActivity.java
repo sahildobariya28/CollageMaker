@@ -834,7 +834,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             }
 
             @SuppressLint("RestrictedApi")
-            public void onStickerSelected(@NonNull Sticker sticker) {
+            public void onStickerSelected(Sticker sticker, int selectedStickerPosition) {
                 if (sticker instanceof CustomTextView) {
                     ((CustomTextView) sticker).setTextColor(SupportMenu.CATEGORY_MASK);
                     binding.photoEditorView.replace(sticker);
@@ -863,7 +863,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             public void onStickerDoubleTap(@NonNull Sticker sticker) {
                 if (sticker instanceof CustomTextView) {
                     sticker.setShow(false);
-                    binding.photoEditorView.setHandlingSticker( (Sticker) null);
+                    binding.photoEditorView.setHandlingSticker(null);
                     addTextFragment = TextFragment.show(SingleEditorActivity.this, ((CustomTextView) sticker).getQuShotText());
                     textEditor = new TextFragment.TextEditor() {
                         public void onDone(CustomText addTextProperties) {

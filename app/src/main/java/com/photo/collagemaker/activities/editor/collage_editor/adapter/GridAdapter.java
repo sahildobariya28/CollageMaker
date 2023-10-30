@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.photo.collagemaker.databinding.ItemGridBinding;
 import com.photo.collagemaker.grid.QueShotLayout;
 import com.photo.collagemaker.layer.slant.NumberSlantLayout;
-import com.photo.collagemaker.layer.straight.NumberStraightLayout;
+import com.photo.collagemaker.layer.straight.layout.NumberStraightLayout;
 
 import java.util.ArrayList;
 import java.util.List;

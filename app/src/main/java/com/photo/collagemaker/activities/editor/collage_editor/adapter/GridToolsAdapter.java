@@ -18,16 +18,29 @@ public class GridToolsAdapter extends RecyclerView.Adapter<GridToolsAdapter.View
     public OnItemSelected mOnItemSelected;
 
     public List<ToolModel> mToolList = new ArrayList<>();
+    Boolean isFreeStyleTool;
 
     public interface OnItemSelected {
         void onToolSelected(Module toolType);
     }
 
-    public GridToolsAdapter(OnItemSelected onItemSelected, boolean z) {
+    public GridToolsAdapter(OnItemSelected onItemSelected) {
         this.mOnItemSelected = onItemSelected;
         mToolList.add(new ToolModel("Collage", R.drawable.icon_layout, Module.LAYER));
         mToolList.add(new ToolModel("Border", R.drawable.icon_border, Module.PADDING));
 //        mToolList.add(new ToolModel("Ratio", R.drawable.ic_ratio, Module.RATIO));
+        mToolList.add(new ToolModel("Text", R.drawable.ic_text, Module.TEXT));
+        mToolList.add(new ToolModel("Filter", R.drawable.icon_filter, Module.FILTER));
+        mToolList.add(new ToolModel("Sticker", R.drawable.icon_sticker, Module.STICKER));
+        mToolList.add(new ToolModel("Background", R.drawable.icon_background, Module.GRADIENT));
+        mToolList.add(new ToolModel("Draw", R.drawable.img_draw, Module.DRAW));
+        mToolList.add(new ToolModel("Add", R.drawable.gallery_add, Module.ADDIMAGE));
+    }
+
+    public GridToolsAdapter(OnItemSelected onItemSelected, Boolean isFreeStyleTool) {
+        this.mOnItemSelected = onItemSelected;
+        this.isFreeStyleTool = isFreeStyleTool;
+        mToolList.add(new ToolModel("Border", R.drawable.icon_border, Module.PADDING));
         mToolList.add(new ToolModel("Text", R.drawable.ic_text, Module.TEXT));
         mToolList.add(new ToolModel("Filter", R.drawable.icon_filter, Module.FILTER));
         mToolList.add(new ToolModel("Sticker", R.drawable.icon_sticker, Module.STICKER));
@@ -71,6 +84,7 @@ public class GridToolsAdapter extends RecyclerView.Adapter<GridToolsAdapter.View
     class ViewHolder extends RecyclerView.ViewHolder {
 
         ItemGridToolsBinding binding;
+
         ViewHolder(ItemGridToolsBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
