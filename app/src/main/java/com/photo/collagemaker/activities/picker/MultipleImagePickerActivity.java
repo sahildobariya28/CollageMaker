@@ -18,7 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
 import com.photo.collagemaker.activities.freestyle.FreeStyle;
+import com.photo.collagemaker.activities.material.CollageMaterialActivity;
 import com.photo.collagemaker.activities.multifit.MultiFitActivity;
+import com.photo.collagemaker.activities.stitch.StitchActivity;
 import com.photo.collagemaker.adapters.SelectedPhotoAdapter;
 import com.photo.collagemaker.constants.Constants;
 import com.photo.collagemaker.adapters.AlbumAdapter;
@@ -48,6 +50,7 @@ public class MultipleImagePickerActivity extends AppCompatActivity
     SelectedPhotoAdapter selectedPhotoAdapter;
     ArrayList<ImageModel> listItemSelect = new ArrayList<>();
     ArrayList<String> stringArrayListPath = new ArrayList<>();
+    int selectedPosition = 0;
 
     ActivityMultiImagePickerBinding binding;
     String tracker;
@@ -64,6 +67,10 @@ public class MultipleImagePickerActivity extends AppCompatActivity
             limitImageMax = extras.getInt(KEY_LIMIT_MAX_IMAGE, 9);
             limitImageMin = extras.getInt(KEY_LIMIT_MIN_IMAGE, 2);
             tracker = extras.getString("tracker");
+
+            if (tracker.equals("CollageMaterial")){
+                selectedPosition = extras.getInt("position", 0);
+            }
             if (limitImageMin > limitImageMax || limitImageMin < 1) {
                 finish();
             }
@@ -72,7 +79,16 @@ public class MultipleImagePickerActivity extends AppCompatActivity
         binding.textViewDone.setOnClickListener(view -> {
             ArrayList<String> imageList = getListString(listItemSelect);
             if (imageList.size() >= limitImageMin) {
-                if (tracker.equals("Multifit")) {
+                if (tracker.equals("Stitch")){
+                    Intent intent = new Intent(this, StitchActivity.class);
+                    intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
+                    startActivity(intent);
+                }else if (tracker.equals("CollageMaterial")){
+                    Intent intent = new Intent(this, CollageMaterialActivity.class);
+                    intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
+                    intent.putExtra("position", selectedPosition);
+                    startActivity(intent);
+                }else if (tracker.equals("Multifit")) {
                     Intent intent = new Intent(this, MultiFitActivity.class);
                     intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
                     startActivity(intent);

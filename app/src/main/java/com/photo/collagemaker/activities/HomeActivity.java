@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.photo.collagemaker.activities.editor.single_editor.SingleEditorActivity;
 import com.photo.collagemaker.activities.material.CollageMaterialActivity;
+import com.photo.collagemaker.activities.material.MaterialThemeList;
 import com.photo.collagemaker.activities.picker.MultipleImagePickerActivity;
 import com.photo.collagemaker.activities.picker.NewSingleImagePickerActivity;
 import com.photo.collagemaker.databinding.ActivityHomeBinding;
@@ -127,7 +128,28 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         binding.cardMaterial.setOnClickListener(view -> {
-            startActivity(new Intent(this, CollageMaterialActivity.class));
+            startActivity(new Intent(this, MaterialThemeList.class));
+        });
+
+        binding.cardStitch.setOnClickListener(view -> {
+            Dexter.withContext(HomeActivity.this).withPermissions("android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE").withListener(new MultiplePermissionsListener() {
+                public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
+                    if (multiplePermissionsReport.areAllPermissionsGranted()) {
+                        Intent intent = new Intent(HomeActivity.this, MultipleImagePickerActivity.class);
+                        intent.putExtra(MultipleImagePickerActivity.KEY_LIMIT_MAX_IMAGE, 20);
+                        intent.putExtra(MultipleImagePickerActivity.KEY_LIMIT_MIN_IMAGE, 2);
+                        intent.putExtra("tracker", "Stitch");
+                        startActivityForResult(intent, 1001);
+                    }
+                    if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied()) {
+                        DetailsDialog.showDetailsDialog(HomeActivity.this);
+                    }
+                }
+
+                public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+                    permissionToken.continuePermissionRequest();
+                }
+            }).withErrorListener(dexterError -> Toast.makeText(HomeActivity.this, "Error occurred! ", Toast.LENGTH_SHORT).show()).onSameThread().check();
         });
 
         binding.imageViewSettings.setOnClickListener(view -> {

@@ -35,6 +35,9 @@
         tools:replace="android:theme"
         tools:targetApi="31">
         <activity
+            android:name=".activities.material.MaterialThemeList"
+            android:exported="false" />
+        <activity
             android:name=".activities.material.CollageMaterialActivity"
             android:exported="false" />
         <activity
@@ -48,6 +51,9 @@
             android:exported="false" />
         <activity
             android:name=".activities.picker.NewSingleImagePickerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.stitch.StitchActivity"
             android:exported="false" />
 
         <provider
