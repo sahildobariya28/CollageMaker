@@ -43,12 +43,8 @@
         <activity
             android:name=".activities.freestyle.FreeStyle"
             android:exported="false" />
-        <activity
-            android:name=".activities.new_scrapbook.NewScrapBookActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.scrapbook.ScrapBookActivity"
-            android:exported="false" />
+
+
         <activity
             android:name=".activities.picker.NewSingleImagePickerActivity"
             android:exported="false" />
@@ -98,12 +94,8 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.scrapbook.AddTextItemActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.scrapbook.CustomGalleryActivity"
-            android:screenOrientation="portrait" />
+
+
         <activity
             android:name=".activities.multifit.MultiFitActivity"
             android:screenOrientation="portrait" />

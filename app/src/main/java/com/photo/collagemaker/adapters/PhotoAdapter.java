@@ -41,12 +41,13 @@ public class PhotoAdapter extends ArrayAdapter<ImageModel> {
         }
     }
 
-    public PhotoAdapter(Context context, int layoutResourceId, ArrayList<ImageModel> arrayList) {
+    public PhotoAdapter(Context context, int layoutResourceId, ArrayList<ImageModel> arrayList, OnPhoto onPhoto) {
         super(context, layoutResourceId, arrayList);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = arrayList;
         this.pHeightItem = getDisplayInfo((Activity) context).widthPixels / 3;
+        this.onPhoto = onPhoto;
     }
 
     public View getView(int i, View view, ViewGroup viewGroup) {
@@ -108,6 +109,7 @@ public class PhotoAdapter extends ArrayAdapter<ImageModel> {
 
     public void updateSelectionList(ArrayList<ImageModel> selectedPhotoList) {
         this.selectedPhotoList = selectedPhotoList;
+        notifyDataSetChanged();
     }
 
     public static DisplayMetrics getDisplayInfo(Activity activity) {

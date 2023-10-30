@@ -179,8 +179,7 @@ public class NewSingleImagePickerActivity extends AppCompatActivity implements O
 
     public void setListAlbum(String str) {
         binding.textTitle.setText(new File(str).getName());
-        photoAdapter = new PhotoAdapter(this, R.layout.item_list_album, listPhotos);
-        photoAdapter.setOnListAlbum(this);
+        photoAdapter = new PhotoAdapter(this, R.layout.item_list_album, listPhotos, this);
         binding.gridViewPhotos.setAdapter(photoAdapter);
         binding.gridViewPhotos.setVisibility(View.GONE);
         binding.gridViewPhotos.setVisibility(View.VISIBLE);

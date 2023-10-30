@@ -75,6 +75,10 @@ public class MultipleImagePickerActivity extends AppCompatActivity
                 finish();
             }
         }
+        selectedPhotoAdapter = new SelectedPhotoAdapter(this, listItemSelect, this);
+        binding.recyclerSelectedItem.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        binding.recyclerSelectedItem.setAdapter(selectedPhotoAdapter);
+
 
         binding.textViewDone.setOnClickListener(view -> {
             ArrayList<String> imageList = getListString(listItemSelect);
@@ -104,7 +108,7 @@ public class MultipleImagePickerActivity extends AppCompatActivity
                     startActivity(intent);
                 }
             } else {
-                Toast.makeText(this, "Please select at least " + limitImageMin + " images", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please select at least " + limitImageMax + " images", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -118,10 +122,23 @@ public class MultipleImagePickerActivity extends AppCompatActivity
 
         binding.btnBack.setOnClickListener(view -> onBackPressed());
 
-        selectedPhotoAdapter = new SelectedPhotoAdapter(this, listItemSelect, this);
-        binding.recyclerSelectedItem.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        binding.recyclerSelectedItem.setAdapter(selectedPhotoAdapter);
 
+
+        binding.btnDelete.setOnClickListener(view -> {
+            listItemSelect.clear();
+            photoAdapter = new PhotoAdapter(this, R.layout.item_list_album, listPhotos, this);
+            photoAdapter.updateSelectionList(listItemSelect);
+            binding.gridViewPhotos.setAdapter(photoAdapter);
+
+
+            binding.textSelectCount.setText("Select 1 - " + limitImageMax + " photos  (" + listItemSelect.size() + ")");
+            if (listItemSelect.isEmpty()) {
+                binding.selectCountContainer.setVisibility(View.GONE);
+                binding.recyclerSelectedItem.setVisibility(View.GONE);
+            }
+            photoAdapter.notifyDataSetChanged();
+            selectedPhotoAdapter.notifyDataSetChanged();
+        });
         try {
             listAlbums.sort((imageModel, imageModel2) -> imageModel.getName().compareToIgnoreCase(imageModel2.getName()));
         } catch (Exception e) {
@@ -244,8 +261,7 @@ public class MultipleImagePickerActivity extends AppCompatActivity
     public void itemSelect(final ImageModel imageModel) {
         imageModel.setId(listItemSelect.size());
         listItemSelect.add(imageModel);
-        photoAdapter = new PhotoAdapter(this, R.layout.item_list_album, listPhotos);
-        photoAdapter.setOnListAlbum(this);
+        photoAdapter = new PhotoAdapter(this, R.layout.item_list_album, listPhotos, this);
         photoAdapter.updateSelectionList(listItemSelect);
         binding.gridViewPhotos.setAdapter(photoAdapter);
 
@@ -254,7 +270,7 @@ public class MultipleImagePickerActivity extends AppCompatActivity
             binding.selectCountContainer.setVisibility(View.VISIBLE);
             binding.recyclerSelectedItem.setVisibility(View.VISIBLE);
 
-            binding.textSelectCount.setText("Select 1 - 9 photos    (" + listItemSelect.size() + ")");
+            binding.textSelectCount.setText("Select 1 - "+ limitImageMax +" photos  (" + listItemSelect.size() + ")");
         } else {
             binding.selectCountContainer.setVisibility(View.GONE);
             binding.recyclerSelectedItem.setVisibility(View.GONE);
@@ -265,8 +281,7 @@ public class MultipleImagePickerActivity extends AppCompatActivity
 
     public void setListAlbum(String str) {
         binding.textTitle.setText(new File(str).getName());
-        photoAdapter = new PhotoAdapter(this, R.layout.item_list_album, listPhotos);
-        photoAdapter.setOnListAlbum(this);
+        photoAdapter = new PhotoAdapter(this, R.layout.item_list_album, listPhotos, this);
         photoAdapter.updateSelectionList(listItemSelect);
         binding.gridViewPhotos.setAdapter(photoAdapter);
         binding.gridViewPhotos.setVisibility(View.GONE);
@@ -312,17 +327,17 @@ public class MultipleImagePickerActivity extends AppCompatActivity
     @Override
     public void OnSelectedItemDelete(ImageModel imageModel) {
         listItemSelect.remove(imageModel);
-        photoAdapter = new PhotoAdapter(this, R.layout.item_list_album, listPhotos);
-        photoAdapter.setOnListAlbum(this);
+        photoAdapter = new PhotoAdapter(this, R.layout.item_list_album, listPhotos,this);
         photoAdapter.updateSelectionList(listItemSelect);
         binding.gridViewPhotos.setAdapter(photoAdapter);
 
 
-        binding.textSelectCount.setText("Select 1 - 9 photos    (" + listItemSelect.size() + ")");
+        binding.textSelectCount.setText("Select 1 - " + limitImageMax + " photos  (" + listItemSelect.size() + ")");
         if (listItemSelect.isEmpty()) {
             binding.selectCountContainer.setVisibility(View.GONE);
             binding.recyclerSelectedItem.setVisibility(View.GONE);
         }
+        photoAdapter.notifyDataSetChanged();
         selectedPhotoAdapter.notifyDataSetChanged();
     }
 
