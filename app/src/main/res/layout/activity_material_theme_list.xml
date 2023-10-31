@@ -33,7 +33,7 @@
             android:fontFamily="@font/roboto_medium"
             android:text="Select Collage Material"
             android:textColor="@color/text_color_dark"
-            android:textSize="16sp"
+            android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnBack"
             app:layout_constraintTop_toTopOf="parent" />

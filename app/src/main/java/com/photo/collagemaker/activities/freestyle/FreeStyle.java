@@ -20,7 +20,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -39,6 +41,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.photo.collagemaker.R;
+import com.photo.collagemaker.activities.PhotoShareActivity;
 import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
 import com.photo.collagemaker.activities.editor.collage_editor.adapter.AspectAdapter;
 import com.photo.collagemaker.activities.editor.collage_editor.adapter.BackgroundGridAdapter;
@@ -69,9 +72,11 @@ import com.photo.collagemaker.listener.BrushColorListener;
 import com.photo.collagemaker.listener.FilterListener;
 import com.photo.collagemaker.listener.OnQuShotEditorListener;
 import com.photo.collagemaker.module.Module;
+import com.photo.collagemaker.picker.PermissionsUtils;
 import com.photo.collagemaker.sticker.DrawableSticker;
 import com.photo.collagemaker.sticker.Sticker;
 import com.photo.collagemaker.utils.FilterUtils;
+import com.photo.collagemaker.utils.SaveFileUtils;
 import com.photo.collagemaker.utils.SystemUtil;
 import com.skydoves.colorpickerview.listeners.ColorListener;
 import com.steelkiwi.cropiwa.AspectRatio;
@@ -79,9 +84,13 @@ import com.steelkiwi.cropiwa.AspectRatio;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class FreeStyle extends AppCompatActivity implements FilterListener, GridToolsAdapter.OnItemSelected, StickerAdapter.OnClickSplashListener, AspectAdapter.OnNewSelectedListener, BackgroundGridAdapter.BackgroundGridListener, BrushColorListener {
@@ -402,29 +411,20 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
                 float randomRotationDegrees;
                 if (random.nextBoolean()) {
                     // Randomly choose between 270 to 360 or 0 to 90
-                    randomRotationDegrees = random.nextFloat() * 90; // 0 to 90 degrees
+                    randomRotationDegrees = random.nextFloat() * 45; // 0 to 90 degrees
                 } else {
-                    randomRotationDegrees = 270 + random.nextFloat() * 90; // 270 to 360 degrees
+                    randomRotationDegrees = 315 + random.nextFloat() * 90; // 270 to 360 degrees
                 }
-
-//                if (randomX >= ((binding.stickerView.getWidth() / 3) / 2)){
-//                    randomX += ((binding.stickerView.getWidth() / 3) / 2);
-//                }else if (randomX <= binding.stickerView.getWidth() - ((binding.stickerView.getWidth() / 3) / 2)){
-//                    randomX -= ((binding.stickerView.getWidth() / 3) / 2);
-//                }
-//
-//                if (randomY >= ((binding.stickerView.getHeight() / 2) / 2)){
-//                    randomY += ((binding.stickerView.getHeight() / 2) / 2);
-//                }else if (randomY <= binding.stickerView.getHeight() - ((binding.stickerView.getHeight() / 2) / 2)){
-//                    randomY -= ((binding.stickerView.getHeight() / 2) / 2);
-//                }
 
                 // Apply the translation (position) and rotation to the sticker
                 Matrix matrix = binding.stickerView.getStickers().get(i).getMatrix();
+
+
                 matrix.reset(); // Reset the matrix to an identity matrix
+                matrix.postScale(0.4f, 0.4f);
                 matrix.postTranslate(randomX, randomY); // Translate to the random X and Y position
                 matrix.postRotate(randomRotationDegrees, binding.stickerView.getWidth() / 2, binding.stickerView.getHeight() / 2);
-                // The postRotate method takes an additional parameter (pivotX, pivotY) which is usually set to the center of the view.
+                binding.stickerView.getStickers().get(i).setMatrix(matrix);
             }
         });
 
@@ -514,6 +514,16 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
             binding.relativeLayoutAddSticker.setVisibility(View.GONE);
             binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
         });
+        binding.btnDone.setOnClickListener(view -> {
+            if (PermissionsUtils.checkWriteStoragePermission(FreeStyle.this)) {
+                Bitmap createBitmap = SaveFileUtils.createBitmap(binding.stickerView, 1920);
+                Bitmap createBitmap2 = binding.stickerView.createBitmap();
+                new SaveCollageAsFile().execute(createBitmap, createBitmap2);
+            }
+        });
+
+
+
         binding.imageViewSaveSticker.setOnClickListener(view -> {
             binding.stickerView.setHandlingSticker(null);
             binding.constraintLayoutSticker.setVisibility(View.GONE);
@@ -576,6 +586,7 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
 
 
     }
+
 
     public void initBackgroundColor() {
         currentBackgroundState = new BackgroundGridAdapter.SquareView(getColor(R.color.white), "", true);
@@ -966,17 +977,18 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
             setLoading(false);
         }
     }
-    public static Bitmap drawableToBitmap (Drawable drawable) {
+
+    public static Bitmap drawableToBitmap(Drawable drawable) {
         Bitmap bitmap = null;
 
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            if(bitmapDrawable.getBitmap() != null) {
+            if (bitmapDrawable.getBitmap() != null) {
                 return bitmapDrawable.getBitmap();
             }
         }
 
-        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
             bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
         } else {
             bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
@@ -987,6 +999,7 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
         drawable.draw(canvas);
         return bitmap;
     }
+
     class allFilters extends AsyncTask<Void, Void, Void> {
         public void onPreExecute() {
             setLoading(true);
@@ -1216,4 +1229,44 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
     public void onColorChanged(String str) {
         quShotCustomEditor.setBrushColor(Color.parseColor(str));
     }
+
+    class SaveCollageAsFile extends AsyncTask<Bitmap, String, String> {
+        SaveCollageAsFile() {
+        }
+
+        @Override
+        public void onPreExecute() {
+            setLoading(true);
+        }
+
+        @Override
+        public String doInBackground(Bitmap... bitmapArr) {
+            Bitmap bitmap = bitmapArr[0];
+            Bitmap bitmap2 = bitmapArr[1];
+            Bitmap createBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(createBitmap);
+            Paint paint = null;
+            canvas.drawBitmap(bitmap, null, new RectF(0.0f, 0.0f, (float) bitmap.getWidth(), (float) bitmap.getHeight()), paint);
+            canvas.drawBitmap(bitmap2, null, new RectF(0.0f, 0.0f, (float) bitmap.getWidth(), (float) bitmap.getHeight()), paint);
+            bitmap.recycle();
+            bitmap2.recycle();
+            try {
+                File image = SaveFileUtils.saveBitmapFileCollage(FreeStyle.this, createBitmap, new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date()));
+                createBitmap.recycle();
+                return image.getAbsolutePath();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        public void onPostExecute(String str) {
+            setLoading(false);
+            Intent intent = new Intent(FreeStyle.this, PhotoShareActivity.class);
+            intent.putExtra("path", str);
+            startActivity(intent);
+        }
+    }
+
 }

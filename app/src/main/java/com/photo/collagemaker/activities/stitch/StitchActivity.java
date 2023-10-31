@@ -1,8 +1,13 @@
 package com.photo.collagemaker.activities.stitch;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,15 +17,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.photo.collagemaker.R;
+import com.photo.collagemaker.activities.PhotoShareActivity;
+import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
 import com.photo.collagemaker.activities.picker.MultipleImagePickerActivity;
 import com.photo.collagemaker.databinding.ActivityStitchBinding;
 import com.photo.collagemaker.grid.QueShotLayout;
+import com.photo.collagemaker.picker.PermissionsUtils;
 import com.photo.collagemaker.utils.CollageUtils;
+import com.photo.collagemaker.utils.SaveFileUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class StitchActivity extends AppCompatActivity implements ImageStitchingView.OnGenerateBitmapListener {
 
@@ -59,7 +73,22 @@ public class StitchActivity extends AppCompatActivity implements ImageStitchingV
             binding.horizontalStitchScrollView.setVisibility(View.VISIBLE);
         });
 
+        binding.btnSave.setOnClickListener(view -> {
+            if (PermissionsUtils.checkWriteStoragePermission(StitchActivity.this)) {
 
+                if (binding.verticalStitchScrollView.getVisibility() == View.VISIBLE){
+                    Bitmap createBitmap = SaveFileUtils.createBitmap(binding.verticalCollageView, 1920);
+                    Bitmap createBitmap2 = binding.verticalCollageView.createBitmap();
+                    new SaveCollageAsFile().execute(createBitmap, createBitmap2);
+                }else {
+                    Bitmap createBitmap = SaveFileUtils.createBitmap(binding.horizontalCollageView, 1920);
+                    Bitmap createBitmap2 = binding.horizontalCollageView.createBitmap();
+                    new SaveCollageAsFile().execute(createBitmap, createBitmap2);
+                }
+
+            }
+
+        });
     }
 
 
@@ -217,13 +246,11 @@ public class StitchActivity extends AppCompatActivity implements ImageStitchingV
         }
     }
 
-    public void setLoading(boolean z) {
-        if (z) {
-            getWindow().setFlags(16, 16);
+    public void setLoading(boolean isShowing) {
+        if (isShowing) {
             binding.relativeLayoutLoading.setVisibility(View.VISIBLE);
             return;
         }
-        getWindow().clearFlags(16);
         binding.relativeLayoutLoading.setVisibility(View.GONE);
     }
 
@@ -235,5 +262,44 @@ public class StitchActivity extends AppCompatActivity implements ImageStitchingV
     @Override
     public void onResourceReady(Bitmap bitmap) {
 
+    }
+
+    class SaveCollageAsFile extends AsyncTask<Bitmap, String, String> {
+        SaveCollageAsFile() {
+        }
+
+        @Override
+        public void onPreExecute() {
+            setLoading(true);
+        }
+
+        @Override
+        public String doInBackground(Bitmap... bitmapArr) {
+            Bitmap bitmap = bitmapArr[0];
+            Bitmap bitmap2 = bitmapArr[1];
+            Bitmap createBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(createBitmap);
+            Paint paint = null;
+            canvas.drawBitmap(bitmap, null, new RectF(0.0f, 0.0f, (float) bitmap.getWidth(), (float) bitmap.getHeight()), paint);
+            canvas.drawBitmap(bitmap2, null, new RectF(0.0f, 0.0f, (float) bitmap.getWidth(), (float) bitmap.getHeight()), paint);
+            bitmap.recycle();
+            bitmap2.recycle();
+            try {
+                File image = SaveFileUtils.saveBitmapFileCollage(StitchActivity.this, createBitmap, new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date()));
+                createBitmap.recycle();
+                return image.getAbsolutePath();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        public void onPostExecute(String str) {
+            setLoading(false);
+            Intent intent = new Intent(StitchActivity.this, PhotoShareActivity.class);
+            intent.putExtra("path", str);
+            startActivity(intent);
+        }
     }
 }

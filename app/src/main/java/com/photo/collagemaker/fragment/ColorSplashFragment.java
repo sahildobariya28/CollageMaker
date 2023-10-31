@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,15 +32,11 @@ public class ColorSplashFragment extends DialogFragment implements BrushColorLis
 
     @Nullable
     public View onCreateView(@NonNull LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
-        getDialog().getWindow().requestFeature(1);
-        getDialog().getWindow().setFlags(1024, 1024);
-        View inflate = layoutInflater.inflate(R.layout.layout_splash, viewGroup, false);
         binding = LayoutSplashBinding.inflate(layoutInflater, viewGroup, false);
 
 
         binding.imageViewPreview.setImageBitmap(bitmap);
         binding.recyclerViewColorBrush.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-//        recycler_view_color_brush.setHasFixedSize(true);
         binding.recyclerViewColorBrush.setAdapter(new ColorAdapter(getContext(), this));
 
         return binding.getRoot();
@@ -69,8 +66,11 @@ public class ColorSplashFragment extends DialogFragment implements BrushColorLis
         super.onStart();
         Dialog dialog = getDialog();
         if (dialog != null) {
-            dialog.getWindow().setLayout(-1, -1);
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(-16777216));
+            WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+            layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+            dialog.getWindow().setAttributes(layoutParams);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xFF000000)); // Set your desired color
         }
     }
 

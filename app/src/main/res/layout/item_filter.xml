@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="60dp"
     android:layout_height="80dp"
-    android:layout_marginEnd="1dp"
+    android:layout_marginStart="5dp"
     android:gravity="center">
 
     <androidx.cardview.widget.CardView
@@ -29,7 +29,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:riv_corner_radius="10dp"
+                app:riv_corner_radius="8dp"
                 app:siBorderType="fill" />
 
             <View
@@ -37,7 +37,6 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@drawable/background_card_selected"
-                android:backgroundTint="@color/theme_color"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/round_image_view_filter_item"
                 app:layout_constraintEnd_toEndOf="parent"

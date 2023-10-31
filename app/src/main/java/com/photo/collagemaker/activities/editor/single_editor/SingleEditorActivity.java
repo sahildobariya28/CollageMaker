@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -2431,13 +2432,11 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
 
     }
 
-    public void showLoading(boolean z) {
-        if (z) {
-            getWindow().setFlags(16, 16);
+    public void showLoading(boolean isShowing) {
+        if (isShowing) {
             binding.relativeLayoutLoading.setVisibility(View.VISIBLE);
             return;
         }
-        getWindow().clearFlags(16);
         binding.relativeLayoutLoading.setVisibility(View.GONE);
     }
 }

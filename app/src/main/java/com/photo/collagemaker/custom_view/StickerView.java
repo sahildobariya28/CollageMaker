@@ -284,19 +284,18 @@ public class StickerView extends RelativeLayout {
         float f3;
         float f4;
         Canvas canvas2 = canvas;
-        int i = 0;
-        for (int i2 = 0; i2 < stickers.size(); i2++) {
-            Sticker sticker = stickers.get(i2);
+
+        for (int i = 0; i < stickers.size(); i++) {
+            Sticker sticker = stickers.get(i);
             if (sticker != null && sticker.isShow()) {
                 sticker.draw(canvas2);
             }
         }
 
-
         if (handlingSticker != null && !locked && (showBorder || showIcons)) {
             getStickerPoints(handlingSticker, bitmapPoints);
+
             float f5 = bitmapPoints[0];
-            int i3 = 1;
             float f6 = bitmapPoints[1];
             float f7 = bitmapPoints[2];
             float f8 = bitmapPoints[3];
@@ -304,83 +303,62 @@ public class StickerView extends RelativeLayout {
             float f10 = bitmapPoints[5];
             float f11 = bitmapPoints[6];
             float f12 = bitmapPoints[7];
-            if (this.showBorder) {
-                Canvas canvas3 = canvas;
-                float f13 = f5;
-                f4 = f12;
-                float f14 = f6;
-                f3 = f11;
-                f2 = f10;
-                f = f9;
-                canvas3.drawLine(f13, f14, f7, f8, borderPaint);
-                canvas3.drawLine(f13, f14, f, f2, borderPaint);
-                canvas3.drawLine(f7, f8, f3, f4, borderPaint);
-                canvas3.drawLine(f3, f4, f, f2, borderPaint);
-            } else {
-                f4 = f12;
-                f3 = f11;
-                f2 = f10;
-                f = f9;
+
+            if (showBorder) {
+                canvas.drawLine(f5, f6, f7, f8, borderPaint);
+                canvas.drawLine(f5, f6, f9, f10, borderPaint);
+                canvas.drawLine(f7, f8, f11, f12, borderPaint);
+                canvas.drawLine(f11, f12, f9, f10, borderPaint);
             }
-            if (this.showIcons) {
-                float f15 = f4;
-                float f16 = f3;
-                float f17 = f2;
-                float f18 = f;
+
+            if (showIcons) {
+                float f15 = f12;
+                float f16 = f11;
+                float f17 = f10;
+                float f18 = f9;
                 float calculateRotation = calculateRotation(f16, f15, f18, f17);
-                while (i < icons.size()) {
-                    StickerIcons bitmapStickerIcon = icons.get(i);
+
+                for (StickerIcons bitmapStickerIcon : icons) {
                     switch (bitmapStickerIcon.getPosition()) {
                         case 0:
                             configIconMatrix(bitmapStickerIcon, f5, f6, calculateRotation);
                             bitmapStickerIcon.draw(canvas2, borderPaintRed);
                             break;
                         case 1:
-                            if (((this.handlingSticker instanceof CustomTextView) && bitmapStickerIcon.getTag().equals(StickerIcons.EDIT)) || ((this.handlingSticker instanceof DrawableSticker) && bitmapStickerIcon.getTag().equals(StickerIcons.FLIP))) {
+                            if ((handlingSticker instanceof CustomTextView && bitmapStickerIcon.getTag().equals(StickerIcons.EDIT)) ||
+                                    (handlingSticker instanceof DrawableSticker && bitmapStickerIcon.getTag().equals(StickerIcons.FLIP))) {
                                 configIconMatrix(bitmapStickerIcon, f7, f8, calculateRotation);
                                 bitmapStickerIcon.draw(canvas2, borderPaint);
-                                break;
                             }
+                            break;
                         case 2:
-                            if (this.handlingSticker instanceof CustomSticker) {
-                                if (((CustomSticker) handlingSticker).getType() != 0) {
-                                    break;
-                                } else {
+                            if (handlingSticker instanceof CustomSticker) {
+                                if (((CustomSticker) handlingSticker).getType() == 0) {
                                     configIconMatrix(bitmapStickerIcon, f18, f17, calculateRotation);
                                     bitmapStickerIcon.draw(canvas2, borderPaint);
-                                    break;
                                 }
                             } else {
                                 configIconMatrix(bitmapStickerIcon, f18, f17, calculateRotation);
                                 bitmapStickerIcon.draw(canvas2, borderPaint);
-                                break;
                             }
+                            break;
                         case 3:
-                            if ((!(handlingSticker instanceof CustomTextView) || !bitmapStickerIcon.getTag().equals(StickerIcons.ROTATE)) && (!(this.handlingSticker instanceof DrawableSticker) || !bitmapStickerIcon.getTag().equals(StickerIcons.SCALE))) {
-                                if (handlingSticker instanceof CustomSticker) {
-                                    CustomSticker beautySticker = (CustomSticker) handlingSticker;
-                                    if (beautySticker.getType() != i3) {
-                                        if (beautySticker.getType() != 2 && beautySticker.getType() != 8) {
-                                            if (beautySticker.getType() != 4) {
-                                                break;
-                                            }
+                            if (!(handlingSticker instanceof CustomTextView) || !bitmapStickerIcon.getTag().equals(StickerIcons.ROTATE)) {
+                                if (!(handlingSticker instanceof DrawableSticker) || !bitmapStickerIcon.getTag().equals(StickerIcons.SCALE)) {
+                                    if (handlingSticker instanceof CustomSticker) {
+                                        CustomSticker beautySticker = (CustomSticker) handlingSticker;
+                                        if (beautySticker.getType() != 0) {
+                                            configIconMatrix(bitmapStickerIcon, f16, f15, calculateRotation);
+                                            bitmapStickerIcon.draw(canvas2, borderPaint);
                                         }
-                                        configIconMatrix(bitmapStickerIcon, f16, f15, calculateRotation);
-                                        bitmapStickerIcon.draw(canvas2, borderPaint);
-                                        break;
                                     } else {
                                         configIconMatrix(bitmapStickerIcon, f16, f15, calculateRotation);
                                         bitmapStickerIcon.draw(canvas2, borderPaint);
                                     }
                                 }
-                            } else {
-                                configIconMatrix(bitmapStickerIcon, f16, f15, calculateRotation);
-                                bitmapStickerIcon.draw(canvas2, borderPaint);
                             }
                             break;
                     }
-                    i++;
-                    i3 = 1;
                 }
             }
         }

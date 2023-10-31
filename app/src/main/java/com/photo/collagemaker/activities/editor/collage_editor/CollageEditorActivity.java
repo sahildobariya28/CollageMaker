@@ -33,7 +33,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.lifecycle.ViewModelProvider;
@@ -328,7 +327,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         binding.seekbarRadius.setOnSeekBarChangeListener(onSeekBarChangeListener);
 
         binding.imageViewSaveLayer.setOnClickListener(view -> {
-            setGuideLineTools();
             viewModel.rvPrimaryToolShow();
             queShotLayout = binding.collageView.getQueShotLayout();
             BorderRadius = binding.collageView.getCollageRadian();
@@ -337,9 +335,8 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             binding.collageView.setTouchEnable(true);
             aspectRatio = binding.collageView.getAspectRatio();
             moduleToolsId = Module.NONE;
-            if (binding.colorPickerView.isSelected()) {
-                binding.collageView.setBackgroundColor(binding.colorPickerView.getColor());
-            }
+
+            binding.collageView.setBackgroundColor(binding.colorPickerView.getColor());
 
             binding.backgroundContainer.backgroundTools.setVisibility(View.VISIBLE);
             binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
@@ -393,12 +390,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             if (!binding.collageView.getStickers().isEmpty()) {
 //                new GridActivity.SaveSticker().execute();
             }
-            ConstraintSet constraintsetText = new ConstraintSet();
-            constraintsetText.clone(binding.constraintLayoutCollageLayout);
-            constraintsetText.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
-            constraintsetText.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineTool.getId(), 3, 0);
-            constraintsetText.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
-            constraintsetText.applyTo(binding.constraintLayoutCollageLayout);
+
             binding.constraintLayoutConfirmText.setVisibility(View.GONE);
             binding.relativeLayoutAddText.setVisibility(View.GONE);
             binding.rvPrimaryTool.setVisibility(View.VISIBLE);
@@ -408,17 +400,13 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
     public void initFilterView() {
         binding.imageViewSaveFilter.setOnClickListener(view -> {
-            setGuideLineTools();
+
             binding.collageView.setLocked(true);
             binding.collageView.setTouchEnable(true);
             viewModel.rvPrimaryToolShow();
             moduleToolsId = Module.NONE;
         });
 
-        binding.imageViewCloseFilter.setOnClickListener(view -> {
-            viewModel.rvPrimaryToolShow();
-            onBackPressed();
-        });
 
         binding.recyclerViewFilterBW.setVisibility(View.GONE);
         binding.recyclerViewFilterVintage.setVisibility(View.GONE);
@@ -438,16 +426,9 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
     public void initStickerView() {
 
-        binding.relativeLayoutAddSticker.setVisibility(View.GONE);
-        binding.relativeLayoutAddSticker.setOnClickListener(view -> {
-            binding.relativeLayoutAddSticker.setVisibility(View.GONE);
-            binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-        });
-
         binding.imageViewSaveSticker.setOnClickListener(view -> {
-            setGuideLineTools();
+
             binding.collageView.setHandlingSticker(null);
-            binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
             viewModel.rvPrimaryToolShow();
 
             binding.collageView.setLocked(true);
@@ -560,19 +541,13 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             binding.btnColor.setColorFilter(this.getColor(R.color.icon_color_dark));
             binding.btnEraser.setColorFilter(this.getColor(R.color.icon_color_dark));
             moduleToolsId = Module.NEON;
-            ConstraintSet constraintSet;
+
             setColorNeon();
             quShotCustomEditor.setBrushDrawingMode(true);
 
             quShotCustomEditor.setBrushDrawingMode(false);
             viewModel.neonShow();
 
-            constraintSet = new ConstraintSet();
-            constraintSet.clone(binding.constraintLayoutCollageLayout);
-            constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
-            constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.constraintLayoutNeon.getId(), 3, 0);
-            constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
-            constraintSet.applyTo(binding.constraintLayoutCollageLayout);
             quShotCustomEditor.setBrushMode(2);
             reloadingLayout();
         });
@@ -581,18 +556,11 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             binding.btnColor.setColorFilter(this.getColor(R.color.icon_color_theme));
             binding.btnEraser.setColorFilter(this.getColor(R.color.icon_color_dark));
             moduleToolsId = Module.PAINT;
-            ConstraintSet constraintSet;
             setColorPaint();
             quShotCustomEditor.setBrushDrawingMode(true);
             viewModel.paintShow();
             quShotCustomEditor.setBrushDrawingMode(false);
 
-            constraintSet = new ConstraintSet();
-            constraintSet.clone(binding.constraintLayoutCollageLayout);
-            constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
-            constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineLayout.getId(), 3, 0);
-            constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
-            constraintSet.applyTo(binding.constraintLayoutCollageLayout);
             quShotCustomEditor.setBrushMode(1);
             reloadingLayout();
         });
@@ -852,29 +820,11 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
     }
 
-    public void setGuideLineTools() {
-        ConstraintSet constraintSet = new ConstraintSet();
-        constraintSet.clone(binding.constrantLayoutChangeLayout);
-        constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constrantLayoutChangeLayout.getId(), 1, 0);
-        constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineTool.getId(), 3, 0);
-        constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constrantLayoutChangeLayout.getId(), 2, 0);
-        constraintSet.applyTo(binding.constrantLayoutChangeLayout);
-    }
-
-    public void setGuideLine() {
-        ConstraintSet constraintSet = new ConstraintSet();
-        constraintSet.clone(binding.constrantLayoutChangeLayout);
-        constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constrantLayoutChangeLayout.getId(), 1, 0);
-        constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineLayout.getId(), 3, 0);
-        constraintSet.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constrantLayoutChangeLayout.getId(), 2, 0);
-        constraintSet.applyTo(binding.constrantLayoutChangeLayout);
-    }
 
     public void onToolSelected(Module module) {
         moduleToolsId = module;
         switch (module) {
             case LAYER:
-                setGuideLine();
                 viewModel.collageShow();
                 queShotLayout = binding.collageView.getQueShotLayout();
                 aspectRatio = binding.collageView.getAspectRatio();
@@ -884,7 +834,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                 binding.collageView.setTouchEnable(false);
                 break;
             case PADDING:
-                setGuideLine();
+
                 viewModel.borderShow();
                 queShotLayout = binding.collageView.getQueShotLayout();
                 aspectRatio = binding.collageView.getAspectRatio();
@@ -910,18 +860,13 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                 optionsBundle.putBoolean("SHOW_CAMERA", false);
                 optionsBundle.putBoolean("MAIN_ACTIVITY", true);
                 optionsBundle.putBoolean("ADD_IMAGE", true);
+                optionsBundle.putBoolean("FREE_STYLE_ADD_IMAGE", false);
                 intent.putExtras(optionsBundle);
                 startActivityForResult(intent, 266);
                 break;
             case TEXT:
                 viewModel.textShow();
                 textFragment();
-                ConstraintSet constraintSetEffect = new ConstraintSet();
-                constraintSetEffect.clone(binding.constraintLayoutCollageLayout);
-                constraintSetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
-                constraintSetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineTool.getId(), 3, 0);
-                constraintSetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
-                constraintSetEffect.applyTo(binding.constraintLayoutCollageLayout);
                 binding.collageView.setLocked(false);
                 binding.collageView.setTouchEnable(false);
                 break;
@@ -943,8 +888,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                 new legacyFilters().execute();
                 break;
             case STICKER:
-                setGuideLine();
-
                 viewModel.stickerShow();
 
                 binding.collageView.updateLayout(queShotLayout);
@@ -1072,7 +1015,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                 case PADDING:
                 case RATIO:
                 case LAYER:
-                    setGuideLineTools();
                     viewModel.rvPrimaryToolShow();
                     binding.collageView.updateLayout(queShotLayout);
                     binding.collageView.setCollagePadding(Padding);
@@ -1115,25 +1057,17 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                     break;
                 case TEXT:
                     if (!binding.collageView.getStickers().isEmpty()) {
-                        binding.collageView.getStickers().clear();
+                        binding.collageView.removeCurrentSticker();
                         binding.collageView.setHandlingSticker(null);
                     }
                     viewModel.rvPrimaryToolShow();
 
                     binding.collageView.setHandlingSticker(null);
                     binding.collageView.setLocked(true);
-                    ConstraintSet constraintsetEffect = new ConstraintSet();
-                    constraintsetEffect.clone(binding.constraintLayoutCollageLayout);
-                    constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 1, binding.constraintLayoutCollageLayout.getId(), 1, 0);
-                    constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 4, binding.guidelineTool.getId(), 3, 0);
-                    constraintsetEffect.connect(binding.constraintLayoutWrapperCollageView.getId(), 2, binding.constraintLayoutCollageLayout.getId(), 2, 0);
-                    constraintsetEffect.applyTo(binding.constraintLayoutCollageLayout);
 
                     moduleToolsId = Module.NONE;
-                    return;
+                    break;
                 case COLLAGE:
-
-                    setGuideLineTools();
                     binding.rvPrimaryTool.setVisibility(View.VISIBLE);
                     binding.rvSecondaryToolContainer.setVisibility(View.GONE);
                     moduleToolsId = Module.NONE;
@@ -1141,12 +1075,10 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                     binding.collageView.setPrevHandlingQueShotGrid(null);
                     binding.collageView.invalidate();
                     moduleToolsId = Module.NONE;
-                    return;
+                    break;
 
                 case FILTER:
-                    setGuideLineTools();
                     viewModel.rvPrimaryToolShow();
-
                     binding.collageView.setLocked(true);
                     binding.collageView.setTouchEnable(true);
                     for (int i = 0; i < drawableList.size(); i++) {
@@ -1154,40 +1086,14 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                     }
                     binding.collageView.invalidate();
                     moduleToolsId = Module.NONE;
-                    return;
+                    break;
                 case STICKER:
-                    setGuideLineTools();
-                    if (binding.collageView.getStickers().size() <= 0) {
-                        binding.constraintSaveControl.setVisibility(View.VISIBLE);
-                        binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-                        binding.relativeLayoutAddSticker.setVisibility(View.GONE);
-                        binding.collageView.setHandlingSticker(null);
-                        binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-                        binding.constraintLayoutSticker.setVisibility(View.GONE);
-                        binding.rvSecondaryToolContainer.setVisibility(View.GONE);
-                        binding.collageView.setLocked(true);
-                        moduleToolsId = Module.NONE;
-                    } else if (binding.relativeLayoutAddSticker.getVisibility() == View.VISIBLE) {
-                        binding.collageView.removeCurrentSticker();
-                        binding.relativeLayoutAddSticker.setVisibility(View.GONE);
-                        binding.collageView.setHandlingSticker(null);
-                        binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-                        binding.rvSecondaryToolContainer.setVisibility(View.GONE);
-                        binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-                        binding.constraintLayoutSticker.setVisibility(View.GONE);
-                        binding.collageView.setLocked(true);
-                        binding.collageView.setTouchEnable(true);
-                        moduleToolsId = Module.NONE;
-                    } else {
-                        binding.linearLayoutWrapperStickerList.setVisibility(View.GONE);
-                        binding.relativeLayoutAddSticker.setVisibility(View.VISIBLE);
-                        binding.rvSecondaryToolContainer.setVisibility(View.GONE);
-                        binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-                    }
+                    binding.collageView.setHandlingSticker(null);
+                    binding.collageView.setLocked(true);
+                    moduleToolsId = Module.NONE;
                     viewModel.rvPrimaryToolShow();
                     return;
                 case GRADIENT:
-                    setGuideLineTools();
                     viewModel.rvPrimaryToolShow();
 
                     binding.collageView.setLocked(true);
@@ -1235,26 +1141,28 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         int[] calculateWidthAndHeight = calculateWidthAndHeight(aspectRatio, point);
         binding.collageView.setLayoutParams(new ConstraintLayout.LayoutParams(calculateWidthAndHeight[0], calculateWidthAndHeight[1]));
         binding.collageView.setAspectRatio(aspectRatio);
-        ConstraintSet constraintSet = new ConstraintSet();
-        constraintSet.clone(binding.constraintLayoutWrapperCollageView);
-        constraintSet.connect(binding.collageView.getId(), 3, binding.constraintLayoutWrapperCollageView.getId(), 3, 0);
-        constraintSet.connect(binding.collageView.getId(), 1, binding.constraintLayoutWrapperCollageView.getId(), 1, 0);
-        constraintSet.connect(binding.collageView.getId(), 4, binding.constraintLayoutWrapperCollageView.getId(), 4, 0);
-        constraintSet.connect(binding.collageView.getId(), 2, binding.constraintLayoutWrapperCollageView.getId(), 2, 0);
-        constraintSet.applyTo(binding.constraintLayoutWrapperCollageView);
     }
 
     public void replaceCurrentPiece(String str) {
         new OnLoadBitmapFromUri().execute(str);
     }
 
+    public BitmapDrawable resizeBitmapDrawable(BitmapDrawable originalDrawable, int newHeight, int newWidth) {
+        int imageWidth = newHeight / 3;
+        int imageHeight = imageWidth * originalDrawable.getBitmap().getHeight() / originalDrawable.getBitmap().getWidth();
+
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(originalDrawable.getBitmap(), imageWidth, imageHeight, true);
+
+        BitmapDrawable resizedDrawable = new BitmapDrawable(getResources(), resizedBitmap);
+        return resizedDrawable;
+    }
     public void resultAddImage(String str) {
 
         if (!str.isEmpty()) {
             try {
-                Uri fromFile = Uri.fromFile(new File(str));
-                Bitmap bitmap = SystemUtil.rotateBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), fromFile), new ExifInterface(getContentResolver().openInputStream(fromFile)).getAttributeInt(ExifInterface.TAG_ORIENTATION, 1));
-                binding.collageView.addSticker(new DrawableSticker(new BitmapDrawable(getResources(), bitmap)));
+                BitmapDrawable bitmapDrawable = resizeBitmapDrawable(new BitmapDrawable(getResources(), str), binding.collageView.getMeasuredHeight(), binding.collageView.getMeasuredWidth());
+                Sticker sticker = new DrawableSticker(bitmapDrawable);
+                binding.collageView.addSticker(sticker);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1285,12 +1193,12 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         return new int[]{point.x, ratio2};
     }
 
+    @Override
     public void addSticker(Bitmap bitmap) {
         binding.collageView.addSticker(new DrawableSticker(new BitmapDrawable(getResources(), bitmap)));
-        binding.linearLayoutWrapperStickerList.setVisibility(View.GONE);
-        binding.relativeLayoutAddSticker.setVisibility(View.VISIBLE);
     }
 
+    @Override
     public void onBackgroundSelected(final BackgroundGridAdapter.SquareView squareView, int position) {
         if (squareView.isColor) {
             binding.collageView.setBackgroundColor(squareView.drawableId);
@@ -1335,12 +1243,15 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     public void onPieceFuncSelected(Module toolType) {
         switch (toolType) {
             case REPLACE:
+
                 Intent intent = new Intent(this, SingleImagePickerActivity.class);
                 Bundle optionsBundle = new Bundle();
                 optionsBundle.putInt("MAX_COUNT", 1);
                 optionsBundle.putBoolean("PREVIEW_ENABLED", false);
                 optionsBundle.putBoolean("SHOW_CAMERA", false);
                 optionsBundle.putBoolean("MAIN_ACTIVITY", true);
+                optionsBundle.putBoolean("ADD_IMAGE", false);
+                optionsBundle.putBoolean("FREE_STYLE_ADD_IMAGE", false);
                 intent.putExtras(optionsBundle);
                 startActivityForResult(intent, 233);
                 return;
@@ -1379,20 +1290,18 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         @SuppressLint("WrongThread")
         public Void doInBackground(Void... voidArr) {
             listFilterAll.clear();
-            listFilterAll.addAll(FilterCodeAsset.getListBitmapFilterAll(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrids().get(0).getDrawable()).getBitmap(), 100, 100)));
+            listFilterAll.addAll(FilterCodeAsset.getListBitmapFilterAll(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrids().get(0).getDrawable()).getBitmap(), 70, 70)));
             return null;
         }
 
         public void onPostExecute(Void voidR) {
             binding.recyclerViewFilterAll.setAdapter(new FilterAdapter(listFilterAll, CollageEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.ALL_FILTERS)));
             binding.constraintLayoutFilterLayout.setVisibility(View.VISIBLE);
-            binding.constraintLayoutConfirmSaveFilter.setVisibility(View.VISIBLE);
             binding.rvPrimaryTool.setVisibility(View.GONE);
             binding.rvSecondaryToolContainer.setVisibility(View.GONE);
             binding.collageView.setLocked(false);
             binding.collageView.setTouchEnable(false);
             setLoading(false);
-            setGuideLine();
         }
     }
 
@@ -1404,7 +1313,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         @SuppressLint("WrongThread")
         public Void doInBackground(Void... voidArr) {
             listFilterBW.clear();
-            listFilterBW.addAll(FilterCodeAsset.getListBitmapFilterBW(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrids().get(0).getDrawable()).getBitmap(), 100, 100)));
+            listFilterBW.addAll(FilterCodeAsset.getListBitmapFilterBW(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrids().get(0).getDrawable()).getBitmap(), 70, 70)));
             return null;
         }
 
@@ -1424,7 +1333,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         @SuppressLint("WrongThread")
         public Void doInBackground(Void... voidArr) {
             listFilterVintage.clear();
-            listFilterVintage.addAll(FilterCodeAsset.getListBitmapFilterVintage(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrids().get(0).getDrawable()).getBitmap(), 100, 100)));
+            listFilterVintage.addAll(FilterCodeAsset.getListBitmapFilterVintage(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrids().get(0).getDrawable()).getBitmap(), 70, 70)));
             return null;
         }
 
@@ -1444,7 +1353,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         @SuppressLint("WrongThread")
         public Void doInBackground(Void... voidArr) {
             listFilterSmooth.clear();
-            listFilterSmooth.addAll(FilterCodeAsset.getListBitmapFilterSmooth(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrids().get(0).getDrawable()).getBitmap(), 100, 100)));
+            listFilterSmooth.addAll(FilterCodeAsset.getListBitmapFilterSmooth(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrids().get(0).getDrawable()).getBitmap(), 70, 70)));
             return null;
         }
 
@@ -1464,7 +1373,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         @SuppressLint("WrongThread")
         public Void doInBackground(Void... voidArr) {
             listFilterCold.clear();
-            listFilterCold.addAll(FilterCodeAsset.getListBitmapFilterCold(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrids().get(0).getDrawable()).getBitmap(), 100, 100)));
+            listFilterCold.addAll(FilterCodeAsset.getListBitmapFilterCold(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrids().get(0).getDrawable()).getBitmap(), 70, 70)));
             return null;
         }
 
@@ -1484,7 +1393,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         @SuppressLint("WrongThread")
         public Void doInBackground(Void... voidArr) {
             listFilterWarm.clear();
-            listFilterWarm.addAll(FilterCodeAsset.getListBitmapFilterWarm(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrids().get(0).getDrawable()).getBitmap(), 100, 100)));
+            listFilterWarm.addAll(FilterCodeAsset.getListBitmapFilterWarm(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrids().get(0).getDrawable()).getBitmap(), 70, 70)));
             return null;
         }
 
@@ -1504,7 +1413,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         @SuppressLint("WrongThread")
         public Void doInBackground(Void... voidArr) {
             listFilterLegacy.clear();
-            listFilterLegacy.addAll(FilterCodeAsset.getListBitmapFilterLegacy(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrids().get(0).getDrawable()).getBitmap(), 100, 100)));
+            listFilterLegacy.addAll(FilterCodeAsset.getListBitmapFilterLegacy(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrids().get(0).getDrawable()).getBitmap(), 70, 70)));
             return null;
         }
 
@@ -1526,7 +1435,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
         @SuppressLint("WrongThread")
         public List<Bitmap> doInBackground(Void... voidArr) {
-            return FilterCodeAsset.getListBitmapFilterAll(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), 100, 100));
+            return FilterCodeAsset.getListBitmapFilterAll(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), 70, 70));
         }
 
         public void onPostExecute(List<Bitmap> list) {
@@ -1547,7 +1456,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
         @SuppressLint("WrongThread")
         public List<Bitmap> doInBackground(Void... voidArr) {
-            return EffectCodeAsset.getListBitmapDodgeEffect(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), 100, 100));
+            return EffectCodeAsset.getListBitmapDodgeEffect(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), 70, 70));
         }
 
         public void onPostExecute(List<Bitmap> list) {
@@ -1568,7 +1477,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
         @SuppressLint("WrongThread")
         public List<Bitmap> doInBackground(Void... voidArr) {
-            return EffectCodeAsset.getListBitmapDivideEffect(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), 100, 100));
+            return EffectCodeAsset.getListBitmapDivideEffect(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), 70, 70));
         }
 
         public void onPostExecute(List<Bitmap> list) {
@@ -1589,7 +1498,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
         @SuppressLint("WrongThread")
         public List<Bitmap> doInBackground(Void... voidArr) {
-            return EffectCodeAsset.getListBitmapColorEffect(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), 100, 100));
+            return EffectCodeAsset.getListBitmapColorEffect(ThumbnailUtils.extractThumbnail(((BitmapDrawable) binding.collageView.getQueShotGrid().getDrawable()).getBitmap(), 70, 70));
         }
 
         public void onPostExecute(List<Bitmap> list) {
@@ -1700,13 +1609,11 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         }
     }
 
-    public void setLoading(boolean z) {
-        if (z) {
-            getWindow().setFlags(16, 16);
+    public void setLoading(boolean isShowing) {
+        if (isShowing) {
             binding.relativeLayoutLoading.setVisibility(View.VISIBLE);
             return;
         }
-        getWindow().clearFlags(16);
         binding.relativeLayoutLoading.setVisibility(View.GONE);
     }
 

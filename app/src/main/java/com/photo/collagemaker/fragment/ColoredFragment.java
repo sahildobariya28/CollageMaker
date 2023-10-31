@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
@@ -105,8 +106,11 @@ public class ColoredFragment extends DialogFragment implements ColoredAdapter.Co
         super.onStart();
         Dialog dialog = getDialog();
         if (dialog != null) {
-            dialog.getWindow().setLayout(-1, -1);
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(-16777216));
+            WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+            layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+            dialog.getWindow().setAttributes(layoutParams);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xFF000000)); // Set your desired color
         }
     }
 
@@ -192,11 +196,9 @@ public class ColoredFragment extends DialogFragment implements ColoredAdapter.Co
 
     public void mLoading(boolean isLoading) {
         if (isLoading) {
-            getActivity().getWindow().setFlags(16, 16);
             binding.relativeLayoutLoading.setVisibility(View.VISIBLE);
             return;
         }
-        getActivity().getWindow().clearFlags(16);
         binding.relativeLayoutLoading.setVisibility(View.GONE);
     }
 

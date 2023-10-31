@@ -13,6 +13,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
 
@@ -132,8 +133,11 @@ public class RatioFragment extends DialogFragment implements AspectAdapter.OnNew
         super.onStart();
         Dialog dialog = getDialog();
         if (dialog != null) {
-            dialog.getWindow().setLayout(-1, -1);
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(-16777216));
+            WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+            layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+            dialog.getWindow().setAttributes(layoutParams);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xFF000000)); // Set your desired color
         }
     }
 
@@ -251,13 +255,11 @@ public class RatioFragment extends DialogFragment implements AspectAdapter.OnNew
         return bitmap;
     }
 
-    public void mLoading(boolean z) {
-        if (z) {
-            getActivity().getWindow().setFlags(16, 16);
+    public void mLoading(boolean isShowing) {
+        if (isShowing) {
             binding.relativeLayoutLoading.setVisibility(View.VISIBLE);
             return;
         }
-        getActivity().getWindow().clearFlags(16);
         binding.relativeLayoutLoading.setVisibility(View.GONE);
     }
 }

@@ -27,7 +27,6 @@ public class PhotoAdapter extends ArrayAdapter<ImageModel> {
     ArrayList<ImageModel> data;
     int layoutResourceId;
     OnPhoto onPhoto;
-    int pHeightItem = 0;
     ArrayList<ImageModel> selectedPhotoList = new ArrayList<>();
 
     static class RecordHolder {
@@ -46,7 +45,6 @@ public class PhotoAdapter extends ArrayAdapter<ImageModel> {
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = arrayList;
-        this.pHeightItem = getDisplayInfo((Activity) context).widthPixels / 3;
         this.onPhoto = onPhoto;
     }
 
@@ -66,7 +64,6 @@ public class PhotoAdapter extends ArrayAdapter<ImageModel> {
 
             int selectedCount = 0;
             for (int j = 0; j < selectedPhotoList.size(); j++) {
-//                Log.d("fdsfwewrwerw", "itemSelect: " + selectedPhotoList.get(j).getPathFile() + "  " + imageModel.getPathFile());
                 if (selectedPhotoList.get(j).getPathFile().equals(imageModel.getPathFile())){
                     selectedCount++;
                 }
@@ -80,12 +77,6 @@ public class PhotoAdapter extends ArrayAdapter<ImageModel> {
                 recordHolder.selectedCount.setText("" + selectedCount);
             }
 
-
-            recordHolder.layoutRoot.getLayoutParams().height = pHeightItem;
-            recordHolder.imageItem.getLayoutParams().width = pHeightItem;
-            recordHolder.imageItem.getLayoutParams().height = pHeightItem;
-            recordHolder.click.getLayoutParams().width = pHeightItem;
-            recordHolder.click.getLayoutParams().height = pHeightItem;
             view.setTag(recordHolder);
         } else {
             recordHolder = (RecordHolder) view.getTag();
@@ -102,19 +93,9 @@ public class PhotoAdapter extends ArrayAdapter<ImageModel> {
         return view;
     }
 
-
-    public void setOnListAlbum(OnPhoto onPhoto2) {
-        this.onPhoto = onPhoto2;
-    }
-
     public void updateSelectionList(ArrayList<ImageModel> selectedPhotoList) {
         this.selectedPhotoList = selectedPhotoList;
         notifyDataSetChanged();
     }
 
-    public static DisplayMetrics getDisplayInfo(Activity activity) {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        activity.getWindow().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        return displayMetrics;
-    }
 }

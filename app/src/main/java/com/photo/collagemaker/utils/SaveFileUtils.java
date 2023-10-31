@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 
 import com.photo.collagemaker.custom_view.CustomGridView;
+import com.photo.collagemaker.custom_view.StickerView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -99,6 +100,13 @@ public class SaveFileUtils {
 
     public static Bitmap createBitmap(CustomGridView quShotCollageView, int i) {
         quShotCollageView.clearHandling();
+        quShotCollageView.invalidate();
+        Bitmap createBitmap = Bitmap.createBitmap(i, (int) (((float) i) / (((float) quShotCollageView.getWidth()) / ((float) quShotCollageView.getHeight()))), Bitmap.Config.ARGB_8888);
+        quShotCollageView.draw(new Canvas(createBitmap));
+        return createBitmap;
+    }
+
+    public static Bitmap createBitmap(StickerView quShotCollageView, int i) {
         quShotCollageView.invalidate();
         Bitmap createBitmap = Bitmap.createBitmap(i, (int) (((float) i) / (((float) quShotCollageView.getWidth()) / ((float) quShotCollageView.getHeight()))), Bitmap.Config.ARGB_8888);
         quShotCollageView.draw(new Canvas(createBitmap));

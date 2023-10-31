@@ -102,13 +102,11 @@ public class MultipleImagePickerActivity extends AppCompatActivity
                     startActivity(intent);
                 } else if (tracker.equals("ScrapBook")) {
                     Intent intent = new Intent(this, FreeStyle.class);
-//                    Intent intent = new Intent(this, NewScrapBookActivity.class);
-//                    Intent intent = new Intent(this, ScrapBookActivity.class);
                     intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
                     startActivity(intent);
                 }
             } else {
-                Toast.makeText(this, "Please select at least " + limitImageMax + " images", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please select at least " + limitImageMin + " images", Toast.LENGTH_SHORT).show();
             }
         });
 

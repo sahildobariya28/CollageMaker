@@ -10,7 +10,6 @@ import android.view.View;
 import androidx.lifecycle.ViewModel;
 
 import com.photo.collagemaker.databinding.ActivityFreeStyleBinding;
-import com.photo.collagemaker.databinding.ActivityNewScrapBookBinding;
 
 public class FreeStyleViewModel extends ViewModel {
 

@@ -136,19 +136,20 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         SquareView squareView = squareViewList.get(i);
+
         if (squareView.isColor) {
             viewHolder.binding.squareView.setBackgroundColor(squareView.drawableId);
         } else if (squareView.drawable != null) {
-            viewHolder.binding.squareView.setVisibility(View.GONE);
-            viewHolder.binding.imageViewSquare.setVisibility(View.VISIBLE);
-            viewHolder.binding.imageViewSquare.setImageDrawable(squareView.drawable);
+            viewHolder.binding.squareView.setVisibility(View.VISIBLE);
+            viewHolder.binding.squareView.setBackgroundDrawable(squareView.drawable);
         } else {
             viewHolder.binding.squareView.setBackgroundResource(squareView.drawableId);
         }
+
         if (selectedIndex == i) {
-            viewHolder.binding.constraintLayoutWrapperSquareView.setBackground(context.getDrawable(R.drawable.border_view));
+            viewHolder.binding.imageViewSquare.setImageResource(R.drawable.border_view);
         } else {
-            viewHolder.binding.constraintLayoutWrapperSquareView.setBackground(context.getDrawable(R.drawable.border_transparent_view));
+            viewHolder.binding.imageViewSquare.setImageResource(R.drawable.border_transparent_view);
         }
     }
 
@@ -160,23 +161,18 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
         return squareViewList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         ItemSquareGridBinding binding;
         public ViewHolder(ItemSquareGridBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-
-            binding.imageViewSquare.setVisibility(View.GONE);
             binding.getRoot().setOnClickListener(view -> {
-                selectedIndex = getAdapterPosition();
+                notifyItemChanged(selectedIndex);
+                selectedIndex = getLayoutPosition();
                 backgroundListener.onBackgroundSelected((SquareView) squareViewList.get(selectedIndex), selectedIndex);
-                notifyDataSetChanged();
+                notifyItemChanged(getLayoutPosition());
             });
-        }
-
-        public void onClick(View view) {
-
         }
     }
 

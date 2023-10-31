@@ -38,7 +38,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.photo.collagemaker.custom_view.CustomEditText
-            android:id="@+id/add_text_edit_text"
+            android:id="@+id/addTextEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"

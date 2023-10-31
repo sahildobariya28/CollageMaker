@@ -32,7 +32,7 @@
             android:fontFamily="@font/roboto_medium"
             android:text="Collage Maker"
             android:textColor="@color/text_color_dark"
-            android:textSize="16sp"
+            android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnBack"
             app:layout_constraintTop_toTopOf="parent" />
@@ -136,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center">
 
-                <com.photo.collagemaker.activities.stitch.CustomGridView
+                <com.photo.collagemaker.custom_view.CustomGridView
                     android:id="@+id/verticalCollageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

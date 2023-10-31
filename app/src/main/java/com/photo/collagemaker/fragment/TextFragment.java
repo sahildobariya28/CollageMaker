@@ -15,6 +15,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,37 +116,6 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
         binding.rvTextColor.setHasFixedSize(true);
         binding.rvTextColor.setAdapter(textColorPickerAdapter);
 
-
-//        binding.colorCarouselPicker.setAdapter(new QuShotCarouselPicker.CarouselViewAdapter(getContext(), colorItems, 0));
-//        binding.colorCarouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            public void onPageScrollStateChanged(int i) {
-//            }
-//
-//            public void onPageSelected(int i) {
-//            }
-//
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                if (positionOffset > 0.0f) {
-//                    if (binding.imageViewColorDown.getVisibility() == View.INVISIBLE) {
-//                        binding.imageViewColorDown.setVisibility(View.VISIBLE);
-//                        binding.viewHighlightTextColor.setVisibility(View.VISIBLE);
-//                        binding.imageViewTextTexture.setVisibility(View.INVISIBLE);
-//                        binding.viewHighlightTexture.setVisibility(View.GONE);
-//                    }
-//                    binding.textViewPreviewEffect.getPaint().setShader(null);
-//                    int colorId = -1;
-//                    float f2 = ((float) position) + positionOffset;
-//                    if (Math.round(f2) < colorItems.size()) {
-//                        colorId = Color.parseColor((colorItems.get(Math.round(f2))).getColor());
-//                    }
-//                    binding.textViewPreviewEffect.setTextColor(colorId);
-//                    quShotText.setQuShotTextColorIndex(Math.round(f2));
-//                    quShotText.setQuShotTextColor(colorId);
-//                    quShotText.setQuShotTextShader(null);
-//                }
-//            }
-//        });
-
         binding.textureCarouselPicker.setAdapter(new QuShotCarouselPicker.CarouselViewAdapter(getContext(), textTextureItems, 0));
         binding.textureCarouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             public void onPageScrollStateChanged(int i) {
@@ -231,46 +201,6 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
         binding.rvTextBackgroundColor.setHasFixedSize(true);
         binding.rvTextBackgroundColor.setAdapter(textBackgroundColorPickerAdapter);
 
-//        binding.backgroundCarouselPicker.setAdapter(new QuShotCarouselPicker.CarouselViewAdapter(getContext(), colorItems, 0));
-//        binding.backgroundCarouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            public void onPageScrollStateChanged(int i) {
-//            }
-//
-//            public void onPageSelected(int i) {
-//            }
-//
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                if (positionOffset > 0.0f) {
-//                    int colorId = 0;
-//                    if (binding.imageViewBackground.getVisibility() == View.INVISIBLE) {
-//                        binding.imageViewBackground.setVisibility(View.VISIBLE);
-//                        binding.viewHighlightBackgroundColor.setVisibility(View.VISIBLE);
-//                    }
-//                    quShotText.setQuShotShowBackground(true);
-//                    if (!binding.checkboxBackground.isChecked()) {
-//                        binding.checkboxBackground.setChecked(true);
-//                    }
-//                    float f2 = ((float) position) + positionOffset;
-//                    int round = Math.round(f2);
-//                    if (round >= colorItems.size()) {
-//                        colorId = colorItems.size() - 1;
-//                    } else if (round >= 0) {
-//                        colorId = round;
-//                    }
-//                    int parseColor = Color.parseColor((colorItems.get(colorId)).getColor());
-//                    int red = Color.red(parseColor);
-//                    int green = Color.green(parseColor);
-//                    int blue = Color.blue(parseColor);
-//                    GradientDrawable gradientDrawable = new GradientDrawable();
-//                    gradientDrawable.setColor(Color.argb(quShotText.getQuShotBackgroundAlpha(), red, green, blue));
-//                    gradientDrawable.setCornerRadius((float) SystemUtil.dpToPx(requireContext(), quShotText.getQuShotBackgroundBorder()));
-//                    binding.textViewPreviewEffect.setBackground(gradientDrawable);
-//                    quShotText.setQuShotBackgroundColor(parseColor);
-//                    quShotText.setQuShotBackgroundColorIndex(Math.round(f2));
-//                    binding.seekbarRadius.setEnabled(true);
-//                }
-//            }
-//        });
         binding.seekbarWidth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
@@ -324,12 +254,11 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
             }
 
             public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
-                int i2 = 15;
                 if (i >= 15) {
-                    i2 = i;
+                    binding.textViewPreviewEffect.setTextSize((float) i);
+                    quShotText.setQuShotTextSize(i);
                 }
-                binding.textViewPreviewEffect.setTextSize((float) i2);
-                quShotText.setQuShotTextSize(i2);
+
             }
         });
         binding.seekbarRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -389,6 +318,7 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
 
     public void onStart() {
         super.onStart();
+
         Dialog dialog = getDialog();
         if (dialog != null) {
             dialog.getWindow().setLayout(-1, -1);
@@ -500,7 +430,6 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
             binding.scrollViewChangeFontLayout.invalidate();
             binding.scrollViewChangeColorAdjust.invalidate();
             binding.scrollViewChangeColorLayout.invalidate();
-            Log.i("HIHIH", i + "");
         });
     }
 

@@ -21,7 +21,6 @@ public class CollageEditorViewModel extends ViewModel {
         //save
         binding.constraintSaveControl.setVisibility(View.GONE);
         binding.constraintLayoutConfirmSaveAddImage.setVisibility(View.GONE);
-        binding.constraintLayoutConfirmSaveFilter.setVisibility(View.GONE);
 
         //Tools list
         binding.rvPrimaryTool.setVisibility(View.GONE);
@@ -155,7 +154,6 @@ public class CollageEditorViewModel extends ViewModel {
 
     public void filterAllShow() {
         hideAllView();
-        binding.constraintLayoutConfirmSaveFilter.setVisibility(View.VISIBLE);
         binding.constraintLayoutFilterLayout.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterAll.setVisibility(View.VISIBLE);
         binding.viewAll.setVisibility(View.VISIBLE);
@@ -163,7 +161,6 @@ public class CollageEditorViewModel extends ViewModel {
 
     public void filterBWShow() {
         hideAllView();
-        binding.constraintLayoutConfirmSaveFilter.setVisibility(View.VISIBLE);
         binding.constraintLayoutFilterLayout.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterBW.setVisibility(View.VISIBLE);
         binding.viewBW.setVisibility(View.VISIBLE);
@@ -171,7 +168,6 @@ public class CollageEditorViewModel extends ViewModel {
 
     public void filterVintageShow() {
         hideAllView();
-        binding.constraintLayoutConfirmSaveFilter.setVisibility(View.VISIBLE);
         binding.constraintLayoutFilterLayout.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterVintage.setVisibility(View.VISIBLE);
         binding.viewVintage.setVisibility(View.VISIBLE);
@@ -179,7 +175,6 @@ public class CollageEditorViewModel extends ViewModel {
 
     public void filterSmoothShow() {
         hideAllView();
-        binding.constraintLayoutConfirmSaveFilter.setVisibility(View.VISIBLE);
         binding.constraintLayoutFilterLayout.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterSmooth.setVisibility(View.VISIBLE);
         binding.viewSmooth.setVisibility(View.VISIBLE);
@@ -187,7 +182,6 @@ public class CollageEditorViewModel extends ViewModel {
 
     public void filterColdShow() {
         hideAllView();
-        binding.constraintLayoutConfirmSaveFilter.setVisibility(View.VISIBLE);
         binding.constraintLayoutFilterLayout.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterCold.setVisibility(View.VISIBLE);
         binding.viewCold.setVisibility(View.VISIBLE);
@@ -195,7 +189,6 @@ public class CollageEditorViewModel extends ViewModel {
 
     public void filterWarmShow() {
         hideAllView();
-        binding.constraintLayoutConfirmSaveFilter.setVisibility(View.VISIBLE);
         binding.constraintLayoutFilterLayout.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterWarm.setVisibility(View.VISIBLE);
         binding.viewWarm.setVisibility(View.VISIBLE);
@@ -203,7 +196,6 @@ public class CollageEditorViewModel extends ViewModel {
 
     public void filterLegacyShow() {
         hideAllView();
-        binding.constraintLayoutConfirmSaveFilter.setVisibility(View.VISIBLE);
         binding.constraintLayoutFilterLayout.setVisibility(View.VISIBLE);
         binding.recyclerViewFilterLegacy.setVisibility(View.VISIBLE);
         binding.viewLegacy.setVisibility(View.VISIBLE);

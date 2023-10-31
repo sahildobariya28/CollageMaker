@@ -41,7 +41,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:text="Albums"
                 android:textColor="@color/text_color_dark"
-                android:textSize="18sp" />
+                android:textSize="17sp" />
 
             <ImageView
                 android:layout_width="12dp"

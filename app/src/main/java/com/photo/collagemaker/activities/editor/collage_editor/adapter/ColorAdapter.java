@@ -21,9 +21,9 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> 
     private Context context;
     public int selectedColorIndex;
 
-    public ColorAdapter(Context context2, BrushColorListener brushColorListener2) {
-        this.context = context2;
-        this.brushColorListener = brushColorListener2;
+    public ColorAdapter(Context context, BrushColorListener brushColorListener) {
+        this.context = context;
+        this.brushColorListener = brushColorListener;
     }
 
     @NonNull
@@ -52,6 +52,7 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> 
             this.binding = binding;
 
             binding.getRoot().setOnClickListener(view -> {
+                notifyItemChanged(selectedColorIndex);
                 selectedColorIndex = getLayoutPosition();
                 brushColorListener.onColorChanged(colors.get(selectedColorIndex));
                 notifyItemChanged(getLayoutPosition());
@@ -63,4 +64,5 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> 
     public void setSelectedColorIndex(int i) {
         selectedColorIndex = i;
     }
+
 }
