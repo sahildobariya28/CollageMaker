@@ -39,6 +39,63 @@ public class StickerTabAdapter extends RecyclerTabLayout.Adapter<StickerTabAdapt
             case 2:
                 viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.img_boom));
                 break;
+            case 3:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_hair));
+                break;
+            case 4:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_glasses));
+                break;
+            case 5:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_moustache));
+                break;
+            case 6:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_lhya));
+                break;
+            case 7:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_scarf));
+                break;
+            case 8:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_tie));
+                break;
+            case 9:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_tatoo));
+                break;
+            case 10:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_chain));
+                break;
+            case 11:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_crowns));
+                break;
+            case 12:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_snsla));
+                break;
+            case 13:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_hala9at));
+                break;
+            case 14:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_flow));
+                break;
+            case 15:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_glasses));
+                break;
+            case 16:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_chap));
+                break;
+            case 17:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_hairs));
+                break;
+            case 18:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_smil));
+                break;
+            case 19:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_hjban));
+                break;
+            case 20:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_chfer));
+                break;
+            case 21:
+                viewHolder.binding.image.setImageDrawable(context.getDrawable(R.drawable.ic_zwaq));
+                break;
         }
         viewHolder.binding.image.setSelected(i == getCurrentIndicatorPosition());
     }

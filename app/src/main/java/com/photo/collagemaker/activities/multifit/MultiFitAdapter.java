@@ -65,6 +65,8 @@ public class MultiFitAdapter extends RecyclerView.Adapter<MultiFitAdapter.ViewHo
         }
     }
 
+
+
     @Override
     public int getItemCount() {
         return imageList.size();

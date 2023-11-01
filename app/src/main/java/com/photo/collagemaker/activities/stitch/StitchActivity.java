@@ -100,8 +100,6 @@ public class StitchActivity extends AppCompatActivity implements ImageStitchingV
         binding.verticalCollageView.setNeedDrawLine(false);
         binding.verticalCollageView.setNeedDrawOuterLine(false);
         binding.verticalCollageView.setLineSize(4);
-        binding.verticalCollageView.setCollagePadding(6.0f);
-        binding.verticalCollageView.setCollageRadian(15.0f);
         binding.verticalCollageView.setLineColor(ContextCompat.getColor(this, R.color.theme_color_dark));
         binding.verticalCollageView.setSelectedLineColor(ContextCompat.getColor(this, R.color.theme_color));
         binding.verticalCollageView.setHandleBarColor(ContextCompat.getColor(this, R.color.theme_color));
@@ -121,8 +119,6 @@ public class StitchActivity extends AppCompatActivity implements ImageStitchingV
         binding.horizontalCollageView.setNeedDrawLine(false);
         binding.horizontalCollageView.setNeedDrawOuterLine(false);
         binding.horizontalCollageView.setLineSize(4);
-        binding.horizontalCollageView.setCollagePadding(6.0f);
-        binding.horizontalCollageView.setCollageRadian(15.0f);
         binding.horizontalCollageView.setLineColor(ContextCompat.getColor(this, R.color.theme_color_dark));
         binding.horizontalCollageView.setSelectedLineColor(ContextCompat.getColor(this, R.color.theme_color));
         binding.horizontalCollageView.setHandleBarColor(ContextCompat.getColor(this, R.color.theme_color));

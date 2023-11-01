@@ -30,7 +30,7 @@ public class QueShotToolsAdapter extends RecyclerView.Adapter<QueShotToolsAdapte
         toolModelArrayList.add(new ModuleModel("Overlay", R.drawable.ic_overlay, Module.OVERLAY));
         toolModelArrayList.add(new ModuleModel("Ratio", R.drawable.ic_ratio, Module.RATIO));
         toolModelArrayList.add(new ModuleModel("Text", R.drawable.ic_text, Module.TEXT));
-        toolModelArrayList.add(new ModuleModel("Sticker", R.drawable.icon_sticker, Module.EMOJI));
+        toolModelArrayList.add(new ModuleModel("Sticker", R.drawable.icon_sticker, Module.STICKER));
         toolModelArrayList.add(new ModuleModel("Blur", R.drawable.ic_blur, Module.BLUR));
         toolModelArrayList.add(new ModuleModel("Rotate", R.drawable.img_rotate, Module.ROTATE));
         toolModelArrayList.add(new ModuleModel("s-Splash", R.drawable.ic_splash_square, Module.SQUARESPLASH));

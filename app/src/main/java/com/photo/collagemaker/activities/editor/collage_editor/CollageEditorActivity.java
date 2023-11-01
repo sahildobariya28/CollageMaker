@@ -258,7 +258,6 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
                 Bitmap createBitmap2 = binding.collageView.createBitmap();
                 new SaveCollageAsFile().execute(createBitmap, createBitmap2);
             }
-
         });
     }
 

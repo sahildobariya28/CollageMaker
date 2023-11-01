@@ -12,17 +12,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
 import com.photo.collagemaker.activities.editor.collage_editor.adapter.BackgroundGridAdapter;
 import com.photo.collagemaker.activities.picker.MultipleImagePickerActivity;
 import com.photo.collagemaker.databinding.ActivityMultiFitBinding;
 import com.photo.collagemaker.grid.QueShotLayout;
+import com.photo.collagemaker.picker.PermissionsUtils;
+import com.photo.collagemaker.utils.SaveFileUtils;
 import com.skydoves.colorpickerview.listeners.ColorListener;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiFitActivity extends AppCompatActivity implements BackgroundGridAdapter.BackgroundGridListener{
+public class MultiFitActivity extends AppCompatActivity implements BackgroundGridAdapter.BackgroundGridListener {
 
     public ArrayList<String> imageList;
     public ArrayList<BackgroundGridAdapter.SquareView> imageModelsList = new ArrayList<>();
@@ -48,7 +51,6 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
 
             imageModelsList.add(new BackgroundGridAdapter.SquareView(Color.parseColor("#ffffff"), "", true));
         }
-
 
 
         initMultiFitView();
@@ -81,14 +83,15 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
             imageModelsList.get(selectedPosition).setDrawableId(binding.colorPickerView.getColor());
             imageModelsList.get(selectedPosition).setColor(true);
             multiFitAdapter.notifyItemChanged(selectedPosition);
+        });
+
+        binding.btnSave.setOnClickListener(view -> {
 
         });
 
-
-
     }
 
-    public void initMultiFitView(){
+    public void initMultiFitView() {
         multiFitAdapter = new MultiFitAdapter(this, imageList, imageModelsList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         binding.carouselView.setLayoutManager(linearLayoutManager);
@@ -174,7 +177,6 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
     }
 
 
-
     public void setLoading(boolean z) {
         if (z) {
             binding.relativeLayoutLoading.setVisibility(View.VISIBLE);
@@ -192,7 +194,7 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
     @Override
     public void onBackPressed() {
 
-        if (binding.backgroundContainer.recyclerViewColor.getVisibility() == View.VISIBLE || binding.backgroundContainer.recyclerViewGradient.getVisibility() == View.VISIBLE || binding.backgroundContainer.recyclerViewBlur.getVisibility() == View.VISIBLE || binding.colorPickerView.getVisibility() == View.VISIBLE){
+        if (binding.backgroundContainer.recyclerViewColor.getVisibility() == View.VISIBLE || binding.backgroundContainer.recyclerViewGradient.getVisibility() == View.VISIBLE || binding.backgroundContainer.recyclerViewBlur.getVisibility() == View.VISIBLE || binding.colorPickerView.getVisibility() == View.VISIBLE) {
             binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
             binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
             binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
@@ -200,7 +202,7 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
             binding.btnDone.setVisibility(View.GONE);
             binding.backgroundContainer.backgroundTools.setVisibility(View.VISIBLE);
             binding.carouselView.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             super.onBackPressed();
         }
 

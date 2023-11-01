@@ -22,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -31,7 +30,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.core.internal.view.SupportMenu;
 import androidx.exifinterface.media.ExifInterface;
@@ -46,11 +44,8 @@ import com.photo.collagemaker.activities.PhotoShareActivity;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.AdjustAdapter;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.HardmixAdapter;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.MenBeautyAdapter;
-import com.photo.collagemaker.activities.editor.single_editor.adapter.MenTabAdapter;
-import com.photo.collagemaker.activities.editor.single_editor.adapter.QueShotStickersToolsAdapter;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.QueShotToolsAdapter;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.WomenBeautyAdapter;
-import com.photo.collagemaker.activities.editor.single_editor.adapter.WomenTabAdapter;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.ColorAdapter;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.QueShotDrawToolsAdapter;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.StickerAdapter;
@@ -122,7 +117,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         SplashFragment.SplashListener, SplashBlurSquareFragment.SplashDialogListener,
         MosaicFragment.MosaicListener, ColoredFragment.ColoredListener,
         QueShotToolsAdapter.OnQuShotItemSelected, QueShotDrawToolsAdapter.OnQuShotDrawItemSelected,
-        QueShotStickersToolsAdapter.OnQuShotStickerItemSelected, FilterListener, AdjustListener, HardmixListener {
+        FilterListener, AdjustListener, HardmixListener {
 
     private static final String TAG = "QuShotEditorActivity";
     // Tools
@@ -134,8 +129,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     public AdjustAdapter adjustAdapter;
     public ColorAdapter colorAdapter;
     private final QueShotToolsAdapter mEditingToolsAdapter = new QueShotToolsAdapter(this);
-    private final QueShotDrawToolsAdapter mEditingEffectToolsAdapter = new QueShotDrawToolsAdapter(this);
-    private final QueShotStickersToolsAdapter mEditingStickersToolsAdapter = new QueShotStickersToolsAdapter(this);
     // QuShot
     public CustomEditor quShotCustomEditor;
     // BitmapStickerIcon
@@ -242,19 +235,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             showLoading(true);
             quShotCustomEditor.setBrushDrawingMode(false);
 
-//            binding.imageViewUndo.setVisibility(View.GONE);
-//            binding.imageViewRedo.setVisibility(View.GONE);
-//            binding.recyclerViewTools.setVisibility(View.VISIBLE);
-//            binding.constraintLayoutConfirmSavePaint.setVisibility(View.GONE);
-//            binding.constraintLayoutPaint.setVisibility(View.GONE);
             viewModel.rvPrimaryToolShow();
-
-//            ConstraintSet constraintSet = new ConstraintSet();
-//            constraintSet.clone(binding.constraintLayoutRootView);
-//            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-//            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-//            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-//            constraintSet.applyTo(binding.constraintLayoutRootView);
 
             binding.photoEditorView.setImageSource(quShotCustomEditor.getBrushDrawingView().getDrawBitmap(binding.photoEditorView.getCurrentBitmap()));
             quShotCustomEditor.clearBrushAllViews();
@@ -269,19 +250,14 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             binding.btnColor.setColorFilter(this.getColor(R.color.icon_color_dark));
             binding.btnEraser.setColorFilter(this.getColor(R.color.icon_color_dark));
             moduleToolsId = Module.NEON;
-            ConstraintSet constraintSet;
+
             setColorNeon();
             quShotCustomEditor.setBrushDrawingMode(true);
 
             quShotCustomEditor.setBrushDrawingMode(false);
             viewModel.neonShow();
 
-            constraintSet = new ConstraintSet();
-            constraintSet.clone(binding.constraintLayoutRootView);
-            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.constraintLayoutNeon.getId(), 3, 0);
-            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-            constraintSet.applyTo(binding.constraintLayoutRootView);
+
             quShotCustomEditor.setBrushMode(2);
             reloadingLayout();
         });
@@ -290,18 +266,13 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             binding.btnColor.setColorFilter(this.getColor(R.color.icon_color_theme));
             binding.btnEraser.setColorFilter(this.getColor(R.color.icon_color_dark));
             moduleToolsId = Module.PAINT;
-            ConstraintSet constraintSet;
+
             setColorPaint();
             quShotCustomEditor.setBrushDrawingMode(true);
             viewModel.paintShow();
             quShotCustomEditor.setBrushDrawingMode(false);
 
-            constraintSet = new ConstraintSet();
-            constraintSet.clone(binding.constraintLayoutRootView);
-            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-            constraintSet.applyTo(binding.constraintLayoutRootView);
+
             quShotCustomEditor.setBrushMode(1);
             reloadingLayout();
         });
@@ -362,32 +333,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
 
         binding.relativeLayoutLoading.setVisibility(View.VISIBLE);
         binding.photoEditorView.setVisibility(View.INVISIBLE);
-        binding.recyclerViewFilterBW.setVisibility(View.GONE);
-        binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
-        binding.recyclerViewFilterCold.setVisibility(View.GONE);
-        binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-
-        binding.viewBW.setVisibility(View.INVISIBLE);
-        binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewVintage.setVisibility(View.INVISIBLE);
-        binding.viewSmooth.setVisibility(View.INVISIBLE);
-        binding.viewWarm.setVisibility(View.INVISIBLE);
-        binding.viewLegacy.setVisibility(View.INVISIBLE);
-
-
-        binding.recyclerViewDodge.setVisibility(View.GONE);
-        binding.recyclerViewDivide.setVisibility(View.GONE);
-        binding.recyclerViewHardmix.setVisibility(View.GONE);
-        binding.recyclerViewBurn.setVisibility(View.GONE);
-
-
-        binding.seekbarStickerMenAlpha.setVisibility(View.GONE);
-        binding.seekbarStickerWomenAlpha.setVisibility(View.GONE);
-        binding.seekbarStickerAlpha.setVisibility(View.GONE);
-        binding.imageViewUndo.setVisibility(View.GONE);
-        binding.imageViewRedo.setVisibility(View.GONE);
 
 
         binding.imageViewCompareAdjust.setOnTouchListener(onTouchListener);
@@ -396,7 +341,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.imageViewCompareFilter.setVisibility(View.GONE);
         binding.imageViewCompareEffect.setOnTouchListener(onTouchListener);
         binding.imageViewCompareEffect.setVisibility(View.GONE);
-        binding.relativeLayoutAddText.setVisibility(View.GONE);
+
     }
 
     private void setOnBackPressDialog() {
@@ -415,7 +360,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                 dialogOnBackPressed.dismiss();
                 moduleToolsId = null;
                 finish();
-                finish();
         });
     }
 
@@ -423,9 +367,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewTools.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewTools.setAdapter(mEditingToolsAdapter);
         binding.recyclerViewTools.setHasFixedSize(true);
-        binding.recyclerViewemoji.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
-        binding.recyclerViewemoji.setAdapter(mEditingStickersToolsAdapter);
-        binding.recyclerViewemoji.setHasFixedSize(true);
         binding.recyclerViewFilterAll.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewFilterAll.setHasFixedSize(true);
         binding.recyclerViewFilterBW.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
@@ -461,76 +402,9 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerViewColorNeon.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recyclerViewColorNeon.setHasFixedSize(true);
         binding.recyclerViewColorNeon.setAdapter(new ColorAdapter(getApplicationContext(), this));
-
-        binding.stickerWomenViewpager.setAdapter(new PagerAdapter() {
-            public int getCount() {
-                return 11;
-            }
-
-            public boolean isViewFromObject(@NonNull View view, @NonNull Object obj) {
-                return view.equals(obj);
-            }
-
-            @Override
-            public void destroyItem(@NonNull @NotNull ViewGroup container, int position, @NonNull @NotNull Object object) {
-                (container).removeView((View) object);
-            }
-
-            @NonNull
-            public Object instantiateItem(@NonNull ViewGroup viewGroup, int i) {
-                View inflate = LayoutInflater.from(getBaseContext()).inflate(R.layout.list_women_beauty, null, false);
-                RecyclerView recycler_view_sticker = inflate.findViewById(R.id.recyclerViewSticker);
-                recycler_view_sticker.setHasFixedSize(true);
-                recycler_view_sticker.setLayoutManager(new GridLayoutManager(getApplicationContext(), 7));
-                switch (i) {
-                    case 0:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListCrown(), i, SingleEditorActivity.this));
-                        break;
-                    case 1:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListSnsla(), i, SingleEditorActivity.this));
-                        break;
-                    case 2:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHalat(), i, SingleEditorActivity.this));
-                        break;
-                    case 3:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListFlower(), i, SingleEditorActivity.this));
-                        break;
-                    case 4:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListGlass(), i, SingleEditorActivity.this));
-                        break;
-                    case 5:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListChap(), i, SingleEditorActivity.this));
-                        break;
-                    case 6:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHairs(), i, SingleEditorActivity.this));
-                        break;
-                    case 7:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListSmile(), i, SingleEditorActivity.this));
-                        break;
-                    case 8:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHjban(), i, SingleEditorActivity.this));
-                        break;
-                    case 9:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListChfer(), i, SingleEditorActivity.this));
-                        break;
-                    case 10:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListZwaq(), i, SingleEditorActivity.this));
-                        break;
-
-                }
-
-                viewGroup.addView(inflate);
-                return inflate;
-            }
-        });
-
-        binding.recyclerTabLayoutWomen.setUpWithAdapter(new WomenTabAdapter(binding.stickerWomenViewpager, getApplicationContext()));
-        binding.recyclerTabLayoutWomen.setPositionThreshold(0.5f);
-        binding.recyclerTabLayoutWomen.setBackgroundColor(ContextCompat.getColor(this, R.color.theme_color_dark));
-
         binding.stickerViewpager.setAdapter(new PagerAdapter() {
             public int getCount() {
-                return 3;
+                return 22;
             }
 
             public boolean isViewFromObject(@NonNull View view, @NonNull Object obj) {
@@ -558,6 +432,63 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                     case 2:
                         recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListBoom(), i, SingleEditorActivity.this));
                         break;
+                    case 3:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListhair(), i, SingleEditorActivity.this));
+                        break;
+                    case 4:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListGlasses(), i, SingleEditorActivity.this));
+                        break;
+                    case 5:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListMostach(), i, SingleEditorActivity.this));
+                        break;
+                    case 6:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListLhya(), i, SingleEditorActivity.this));
+                        break;
+                    case 7:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListScarf(), i, SingleEditorActivity.this));
+                        break;
+                    case 8:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListTie(), i, SingleEditorActivity.this));
+                        break;
+                    case 9:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListTatoo(), i, SingleEditorActivity.this));
+                        break;
+                    case 10:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListChain(), i, SingleEditorActivity.this));
+                        break;
+                    case 11:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListCrown(), i, SingleEditorActivity.this));
+                        break;
+                    case 12:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListSnsla(), i, SingleEditorActivity.this));
+                        break;
+                    case 13:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHalat(), i, SingleEditorActivity.this));
+                        break;
+                    case 14:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListFlower(), i, SingleEditorActivity.this));
+                        break;
+                    case 15:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListGlass(), i, SingleEditorActivity.this));
+                        break;
+                    case 16:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListChap(), i, SingleEditorActivity.this));
+                        break;
+                    case 17:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHairs(), i, SingleEditorActivity.this));
+                        break;
+                    case 18:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListSmile(), i, SingleEditorActivity.this));
+                        break;
+                    case 19:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListHjban(), i, SingleEditorActivity.this));
+                        break;
+                    case 20:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListChfer(), i, SingleEditorActivity.this));
+                        break;
+                    case 21:
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), WomenBeautyAssets.mListZwaq(), i, SingleEditorActivity.this));
+                        break;
 
                 }
 
@@ -569,63 +500,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         binding.recyclerTabLayout.setUpWithAdapter(new StickerTabAdapter(binding.stickerViewpager, getApplicationContext()));
         binding.recyclerTabLayout.setPositionThreshold(0.5f);
         binding.recyclerTabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
-
-        binding.stickerMenViewpager.setAdapter(new PagerAdapter() {
-            public int getCount() {
-                return 8;
-            }
-
-            public boolean isViewFromObject(@NonNull View view, @NonNull Object obj) {
-                return view.equals(obj);
-            }
-
-            @Override
-            public void destroyItem(@NonNull @NotNull ViewGroup container, int position, @NonNull @NotNull Object object) {
-                (container).removeView((View) object);
-            }
-
-            @NonNull
-            public Object instantiateItem(@NonNull ViewGroup viewGroup, int i) {
-                View inflate = LayoutInflater.from(getBaseContext()).inflate(R.layout.list_women_beauty, null, false);
-                RecyclerView recycler_view_sticker = inflate.findViewById(R.id.recyclerViewSticker);
-                recycler_view_sticker.setHasFixedSize(true);
-                recycler_view_sticker.setLayoutManager(new GridLayoutManager(getApplicationContext(), 6));
-                switch (i) {
-                    case 0:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListhair(), i, SingleEditorActivity.this));
-                        break;
-                    case 1:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListGlasses(), i, SingleEditorActivity.this));
-                        break;
-                    case 2:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListMostach(), i, SingleEditorActivity.this));
-                        break;
-                    case 3:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListLhya(), i, SingleEditorActivity.this));
-                        break;
-                    case 4:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListScarf(), i, SingleEditorActivity.this));
-                        break;
-                    case 5:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListTie(), i, SingleEditorActivity.this));
-                        break;
-                    case 6:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListTatoo(), i, SingleEditorActivity.this));
-                        break;
-                    case 7:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), MenBeautyAssets.mListChain(), i, SingleEditorActivity.this));
-                        break;
-
-                }
-
-                viewGroup.addView(inflate);
-                return inflate;
-            }
-        });
-        binding.recyclerTabLayoutMen.setUpWithAdapter(new MenTabAdapter(binding.stickerMenViewpager, getApplicationContext()));
-        binding.recyclerTabLayoutMen.setPositionThreshold(0.5f);
-        binding.recyclerTabLayoutMen.setBackgroundColor(ContextCompat.getColor(this, R.color.theme_color_dark));
-
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -698,18 +572,19 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                 quShotCustomEditor.setBrushSize((float) (i + 10));
             }
         });
-        binding.linearLayoutAll.setOnClickListener(view -> setAllFilter());
-        binding.linearLayoutBW.setOnClickListener(view -> setBwFilter());
-        binding.linearLayoutVintage.setOnClickListener(view -> setVintageFilter());
-        binding.linearLayoutSmooth.setOnClickListener(view -> setSmoothFilter());
-        binding.linearLayoutCold.setOnClickListener(view -> setColdFilter());
-        binding.linearLayoutWarm.setOnClickListener(view -> setWarmFilter());
-        binding.linearLayoutLegacy.setOnClickListener(view -> setLegacyFilter());
-        binding.linearLayoutHardmix.setOnClickListener(view -> setHardmixEffect());
-        binding.linearLayoutOverlay.setOnClickListener(view -> setOverlayEffect());
-        binding.linearLayoutDodge.setOnClickListener(view -> setDodgeEffect());
-        binding.linearLayoutDivide.setOnClickListener(view -> setDivideEffect());
-        binding.linearLayoutBurn.setOnClickListener(view -> setBurnEffect());
+        binding.linearLayoutAll.setOnClickListener(view -> viewModel.allFilterShow());
+        binding.linearLayoutSmooth.setOnClickListener(view -> viewModel.filterSmoothShow());
+        binding.linearLayoutBW.setOnClickListener(view -> viewModel.filterBWShow());
+        binding.linearLayoutVintage.setOnClickListener(view -> viewModel.filterVintageShow());
+        binding.linearLayoutCold.setOnClickListener(view -> viewModel.filterColdShow());
+        binding.linearLayoutWarm.setOnClickListener(view -> viewModel.filterWarmShow());
+        binding.linearLayoutLegacy.setOnClickListener(view -> viewModel.filterLegacyShow());
+
+        binding.linearLayoutOverlay.setOnClickListener(view -> viewModel.overlayEffectShow());
+        binding.linearLayoutHardmix.setOnClickListener(view -> viewModel.overLayHardMixShow());
+        binding.linearLayoutDodge.setOnClickListener(view -> viewModel.overLayDodgeShow());
+        binding.linearLayoutDivide.setOnClickListener(view -> viewModel.overLayDivideShow());
+        binding.linearLayoutBurn.setOnClickListener(view -> viewModel.overLayBurnShow());
         binding.seekbarStickerAlpha.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
@@ -724,47 +599,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                 }
             }
         });
-        binding.seekbarStickerMenAlpha.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
 
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-
-            public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
-                Sticker currentSticker = binding.photoEditorView.getCurrentSticker();
-                if (currentSticker != null) {
-                    currentSticker.setAlpha(i);
-                }
-            }
-        });
-        binding.seekbarStickerWomenAlpha.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-
-            public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
-                Sticker currentSticker = binding.photoEditorView.getCurrentSticker();
-                if (currentSticker != null) {
-                    currentSticker.setAlpha(i);
-                }
-            }
-        });
-
-        binding.imageViewAddStickerWomen.setVisibility(View.GONE);
-        binding.imageViewAddStickerWomen.setOnClickListener(view -> {
-            binding.imageViewAddStickerWomen.setVisibility(View.GONE);
-            binding.linearLayoutWrapperStickerWomenList.setVisibility(View.VISIBLE);
-        });
-
-
-        binding.imageViewAddStickerMen.setOnClickListener(view -> {
-            binding.imageViewAddStickerMen.setVisibility(View.GONE);
-            binding.linearLayoutWrapperStickerMenList.setVisibility(View.VISIBLE);
-            binding.imageViewAddStickerMen.setVisibility(View.GONE);
-        });
         binding.imageViewAddSticker.setVisibility(View.GONE);
         binding.imageViewAddSticker.setOnClickListener(view -> {
             binding.imageViewAddSticker.setVisibility(View.GONE);
@@ -828,10 +663,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             public void onAddSticker(@NonNull Sticker sticker) {
                 binding.seekbarStickerAlpha.setVisibility(View.VISIBLE);
                 binding.seekbarStickerAlpha.setProgress(sticker.getAlpha());
-                binding.seekbarStickerMenAlpha.setVisibility(View.VISIBLE);
-                binding.seekbarStickerMenAlpha.setProgress(sticker.getAlpha());
-                binding.seekbarStickerWomenAlpha.setVisibility(View.VISIBLE);
-                binding.seekbarStickerWomenAlpha.setProgress(sticker.getAlpha());
             }
 
             @SuppressLint("RestrictedApi")
@@ -843,22 +674,14 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                 }
                 binding.seekbarStickerAlpha.setVisibility(View.VISIBLE);
                 binding.seekbarStickerAlpha.setProgress(sticker.getAlpha());
-                binding.seekbarStickerMenAlpha.setVisibility(View.VISIBLE);
-                binding.seekbarStickerMenAlpha.setProgress(sticker.getAlpha());
-                binding.seekbarStickerWomenAlpha.setVisibility(View.VISIBLE);
-                binding.seekbarStickerWomenAlpha.setProgress(sticker.getAlpha());
             }
 
             public void onStickerDeleted(@NonNull Sticker sticker) {
                 binding.seekbarStickerAlpha.setVisibility(View.GONE);
-                binding.seekbarStickerMenAlpha.setVisibility(View.GONE);
-                binding.seekbarStickerWomenAlpha.setVisibility(View.GONE);
             }
 
             public void onStickerTouchOutside() {
                 binding.seekbarStickerAlpha.setVisibility(View.GONE);
-                binding.seekbarStickerMenAlpha.setVisibility(View.GONE);
-                binding.seekbarStickerWomenAlpha.setVisibility(View.GONE);
             }
 
             public void onStickerDoubleTap(@NonNull Sticker sticker) {
@@ -903,239 +726,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             }
         });
       }
-
-    public void setOverlayEffect() {
-        binding.recyclerViewOverlay.setVisibility(View.VISIBLE);
-        binding.recyclerViewHardmix.setVisibility(View.GONE);
-        binding.recyclerViewDodge.setVisibility(View.GONE);
-        binding.recyclerViewDivide.setVisibility(View.GONE);
-        binding.recyclerViewBurn.setVisibility(View.GONE);
-        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
-        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-    }
-
-    public void setHardmixEffect() {
-        binding.recyclerViewHardmix.setVisibility(View.VISIBLE);
-        binding.recyclerViewDodge.setVisibility(View.GONE);
-        binding.recyclerViewOverlay.setVisibility(View.GONE);
-        binding.recyclerViewDivide.setVisibility(View.GONE);
-        binding.recyclerViewBurn.setVisibility(View.GONE);
-        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
-        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-    }
-
-    public void setDodgeEffect() {
-        binding.recyclerViewHardmix.setVisibility(View.GONE);
-        binding.recyclerViewDodge.setVisibility(View.VISIBLE);
-        binding.recyclerViewDivide.setVisibility(View.GONE);
-        binding.recyclerViewOverlay.setVisibility(View.GONE);
-        binding.recyclerViewBurn.setVisibility(View.GONE);
-        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
-        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-    }
-
-    public void setDivideEffect() {
-        binding.recyclerViewHardmix.setVisibility(View.GONE);
-        binding.recyclerViewDodge.setVisibility(View.GONE);
-        binding.recyclerViewOverlay.setVisibility(View.GONE);
-        binding.recyclerViewDivide.setVisibility(View.VISIBLE);
-        binding.recyclerViewBurn.setVisibility(View.GONE);
-        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
-        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-    }
-
-    public void setBurnEffect() {
-        binding.recyclerViewHardmix.setVisibility(View.GONE);
-        binding.recyclerViewDodge.setVisibility(View.GONE);
-        binding.recyclerViewOverlay.setVisibility(View.GONE);
-        binding.recyclerViewDivide.setVisibility(View.GONE);
-        binding.recyclerViewBurn.setVisibility(View.VISIBLE);
-        binding.textViewListOverlay.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListHardmix.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListDodge.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListDivide.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListBurn.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
-    }
-
-    public void setAllFilter() {
-        binding.recyclerViewFilterAll.setVisibility(View.VISIBLE);
-        binding.recyclerViewFilterBW.setVisibility(View.GONE);
-        binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
-        binding.recyclerViewFilterCold.setVisibility(View.GONE);
-        binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
-        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.viewAll.setVisibility(View.VISIBLE);
-        binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBW.setVisibility(View.INVISIBLE);
-        binding.viewVintage.setVisibility(View.INVISIBLE);
-        binding.viewSmooth.setVisibility(View.INVISIBLE);
-        binding.viewWarm.setVisibility(View.INVISIBLE);
-        binding.viewLegacy.setVisibility(View.INVISIBLE);
-    }
-
-    public void setBwFilter() {
-        binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBW.setVisibility(View.VISIBLE);
-        binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
-        binding.recyclerViewFilterCold.setVisibility(View.GONE);
-        binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
-        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.viewAll.setVisibility(View.INVISIBLE);
-        binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBW.setVisibility(View.VISIBLE);
-        binding.viewVintage.setVisibility(View.INVISIBLE);
-        binding.viewSmooth.setVisibility(View.INVISIBLE);
-        binding.viewWarm.setVisibility(View.INVISIBLE);
-        binding.viewLegacy.setVisibility(View.INVISIBLE);
-    }
-
-    public void setVintageFilter() {
-        binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBW.setVisibility(View.GONE);
-        binding.recyclerViewFilterVintage.setVisibility(View.VISIBLE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
-        binding.recyclerViewFilterCold.setVisibility(View.GONE);
-        binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
-        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.viewAll.setVisibility(View.INVISIBLE);
-        binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBW.setVisibility(View.INVISIBLE);
-        binding.viewVintage.setVisibility(View.VISIBLE);
-        binding.viewSmooth.setVisibility(View.INVISIBLE);
-        binding.viewWarm.setVisibility(View.INVISIBLE);
-        binding.viewLegacy.setVisibility(View.INVISIBLE);
-    }
-
-    public void setSmoothFilter() {
-        binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBW.setVisibility(View.GONE);
-        binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.VISIBLE);
-        binding.recyclerViewFilterCold.setVisibility(View.GONE);
-        binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
-        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.viewAll.setVisibility(View.INVISIBLE);
-        binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBW.setVisibility(View.INVISIBLE);
-        binding.viewVintage.setVisibility(View.INVISIBLE);
-        binding.viewSmooth.setVisibility(View.VISIBLE);
-        binding.viewWarm.setVisibility(View.INVISIBLE);
-        binding.viewLegacy.setVisibility(View.INVISIBLE);
-    }
-
-    public void setColdFilter() {
-        binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBW.setVisibility(View.GONE);
-        binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
-        binding.recyclerViewFilterCold.setVisibility(View.VISIBLE);
-        binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
-        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.viewAll.setVisibility(View.INVISIBLE);
-        binding.viewCold.setVisibility(View.VISIBLE);
-        binding.viewBW.setVisibility(View.INVISIBLE);
-        binding.viewVintage.setVisibility(View.INVISIBLE);
-        binding.viewSmooth.setVisibility(View.INVISIBLE);
-        binding.viewWarm.setVisibility(View.INVISIBLE);
-        binding.viewLegacy.setVisibility(View.INVISIBLE);
-    }
-
-    public void setWarmFilter() {
-        binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBW.setVisibility(View.GONE);
-        binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
-        binding.recyclerViewFilterCold.setVisibility(View.GONE);
-        binding.recyclerViewFilterWarm.setVisibility(View.VISIBLE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
-        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
-        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.viewAll.setVisibility(View.INVISIBLE);
-        binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBW.setVisibility(View.INVISIBLE);
-        binding.viewVintage.setVisibility(View.INVISIBLE);
-        binding.viewSmooth.setVisibility(View.INVISIBLE);
-        binding.viewWarm.setVisibility(View.VISIBLE);
-        binding.viewLegacy.setVisibility(View.INVISIBLE);
-    }
-
-    public void setLegacyFilter() {
-        binding.recyclerViewFilterAll.setVisibility(View.GONE);
-        binding.recyclerViewFilterBW.setVisibility(View.GONE);
-        binding.recyclerViewFilterVintage.setVisibility(View.GONE);
-        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
-        binding.recyclerViewFilterCold.setVisibility(View.GONE);
-        binding.recyclerViewFilterWarm.setVisibility(View.GONE);
-        binding.recyclerViewFilterLegacy.setVisibility(View.VISIBLE);
-        binding.textViewListAll.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListCold.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListBw.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListVintage.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListSmooth.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListWarm.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
-        binding.textViewListLegacy.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
-        binding.viewAll.setVisibility(View.INVISIBLE);
-        binding.viewCold.setVisibility(View.INVISIBLE);
-        binding.viewBW.setVisibility(View.INVISIBLE);
-        binding.viewVintage.setVisibility(View.INVISIBLE);
-        binding.viewSmooth.setVisibility(View.INVISIBLE);
-        binding.viewWarm.setVisibility(View.INVISIBLE);
-        binding.viewLegacy.setVisibility(View.VISIBLE);
-    }
 
     private void setBottomToolbar(boolean z) {
         int mVisibility = !z ? View.GONE : View.VISIBLE;
@@ -1197,170 +787,45 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
 
     public void onClick(View view) {
         int id = view.getId();
-        if (id == R.id.imageViewCloseAdjust || id == binding.imageViewClosePaint.getId() || id == binding.imageViewCloseNeon.getId() || id == binding.imageViewCloseStickerMen.getId() || id == binding.imageViewCloseStickerWomen.getId() || id == R.id.imageViewCloseSticker || id == R.id.imageViewCloseText || id == binding.imageViewCloseFilter.getId() || id == binding.imageViewCloseHardmix.getId()) {
+        if (id == R.id.imageViewCloseAdjust || id == R.id.imageViewCloseSticker || id == R.id.imageViewCloseText) {
             setVisibleSave();
             onBackPressed();
             
         } else if (id == R.id.imageViewSaveAdjust) {
+            viewModel.rvPrimaryToolShow();
             new SaveFilter().execute();
-            binding.imageViewCompareAdjust.setVisibility(View.GONE);
-            binding.constraintLayoutAdjust.setVisibility(View.GONE);
-            binding.recyclerViewTools.setVisibility(View.VISIBLE);
-            binding.constraintLayoutSave.setVisibility(View.VISIBLE);
-            ConstraintSet constraintsetAdjust = new ConstraintSet();
-            constraintsetAdjust.clone(binding.constraintLayoutRootView);
-            constraintsetAdjust.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-            constraintsetAdjust.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-            constraintsetAdjust.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-            constraintsetAdjust.applyTo(binding.constraintLayoutRootView);
-            setVisibleSave();
-            moduleToolsId = Module.NONE;
-            
-        } else if (id == binding.imageViewSavePaint.getId()) {
-            showLoading(true);
-            runOnUiThread(() -> {
-                quShotCustomEditor.setBrushDrawingMode(false);
-                binding.imageViewUndo.setVisibility(View.GONE);
-                binding.imageViewRedo.setVisibility(View.GONE);
-                binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                binding.constraintLayoutConfirmSavePaint.setVisibility(View.GONE);
-                binding.constraintLayoutPaint.setVisibility(View.GONE);
-                ConstraintSet constraintSet = new ConstraintSet();
-                constraintSet.clone(binding.constraintLayoutRootView);
-                constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-                constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-                constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-                constraintSet.applyTo(binding.constraintLayoutRootView);
-                binding.photoEditorView.setImageSource(quShotCustomEditor.getBrushDrawingView().getDrawBitmap(binding.photoEditorView.getCurrentBitmap()));
-                quShotCustomEditor.clearBrushAllViews();
-                showLoading(false);
-                reloadingLayout();
-            });
-            setVisibleSave();
-            moduleToolsId = Module.NONE;
-            
-        } else if (id == binding.imageViewSaveNeon.getId()) {
-            showLoading(true);
-            runOnUiThread(() -> {
-                quShotCustomEditor.setBrushDrawingMode(false);
-                binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                binding.constraintLayoutConfirmSaveNeon.setVisibility(View.GONE);
-                binding.constraintLayoutNeon.setVisibility(View.GONE);
-                ConstraintSet constraintSet = new ConstraintSet();
-                constraintSet.clone(binding.constraintLayoutRootView);
-                constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-                constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-                constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-                constraintSet.applyTo(binding.constraintLayoutRootView);
-                binding.photoEditorView.setImageSource(quShotCustomEditor.getBrushDrawingView().getDrawBitmap(binding.photoEditorView.getCurrentBitmap()));
-                quShotCustomEditor.clearBrushAllViews();
-                showLoading(false);
-                reloadingLayout();
-            });
-            setVisibleSave();
             moduleToolsId = Module.NONE;
             
         } else if (id == binding.imageViewSaveFilter.getId()) {
+            viewModel.rvPrimaryToolShow();
             new SaveFilter().execute();
-            binding.imageViewCompareFilter.setVisibility(View.GONE);
-            binding.constraintLayoutFilter.setVisibility(View.GONE);
-            binding.constraintLayoutConfirmSaveFilter.setVisibility(View.GONE);
-            binding.recyclerViewTools.setVisibility(View.VISIBLE);
-            setVisibleSave();
-            ConstraintSet constraintsete = new ConstraintSet();
-            constraintsete.clone(binding.constraintLayoutRootView);
-            constraintsete.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-            constraintsete.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-            constraintsete.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-            constraintsete.applyTo(binding.constraintLayoutRootView);
             moduleToolsId = Module.NONE;
            
         } else if (id == binding.imageViewSaveHardmix.getId()) {
+            viewModel.rvPrimaryToolShow();
             new SaveFilter().execute();
-            binding.imageViewCompareEffect.setVisibility(View.GONE);
-            binding.constraintLayoutEffect.setVisibility(View.GONE);
-            binding.constraintLayoutConfirmSaveHardmix.setVisibility(View.GONE);
-            binding.recyclerViewTools.setVisibility(View.VISIBLE);
-            moduleToolsId = Module.NONE;
-            ConstraintSet constraintsetEffect = new ConstraintSet();
-            constraintsetEffect.clone(binding.constraintLayoutRootView);
-            constraintsetEffect.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-            constraintsetEffect.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-            constraintsetEffect.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-            constraintsetEffect.applyTo(binding.constraintLayoutRootView);
-            setVisibleSave();
             moduleToolsId = Module.NONE;
         } else if (id == R.id.imageViewSaveSticker) {
+            viewModel.rvPrimaryToolShow();
+
             binding.photoEditorView.setHandlingSticker(null);
             binding.photoEditorView.setLocked(true);
-            binding.seekbarStickerAlpha.setVisibility(View.GONE);
-            binding.imageViewAddSticker.setVisibility(View.GONE);
-            binding.recyclerViewTools.setVisibility(View.VISIBLE);
             if (!binding.photoEditorView.getStickers().isEmpty()) {
                 new SaveSticker().execute();
             }
-            binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-            binding.constraintLayoutSticker.setVisibility(View.GONE);
-            setVisibleSave();
-            moduleToolsId = Module.NONE;
-            
-        } else if (id == binding.imageViewSaveStickerMen.getId()) {
-            binding.photoEditorView.setHandlingSticker(null);
-            binding.photoEditorView.setLocked(true);
-            binding.seekbarStickerMenAlpha.setVisibility(View.GONE);
-            binding.recyclerViewTools.setVisibility(View.VISIBLE);
-            binding.imageViewAddStickerMen.setVisibility(View.GONE);
-            if (!binding.photoEditorView.getStickers().isEmpty()) {
-                new SaveSticker().execute();
-            }
-            binding.linearLayoutWrapperStickerMenList.setVisibility(View.VISIBLE);
-            binding.constraintLayoutStickerMen.setVisibility(View.GONE);
-            setVisibleSave();
-            moduleToolsId = Module.NONE;
-            
-        } else if (id == binding.imageViewSaveStickerWomen.getId()) {
-            binding.photoEditorView.setHandlingSticker(null);
-            binding.photoEditorView.setLocked(true);
-            binding.seekbarStickerWomenAlpha.setVisibility(View.GONE);
-            binding.imageViewAddStickerWomen.setVisibility(View.GONE);
-            binding.recyclerViewTools.setVisibility(View.VISIBLE);
-            if (!binding.photoEditorView.getStickers().isEmpty()) {
-                new SaveSticker().execute();
-            }
-            binding.linearLayoutWrapperStickerWomenList.setVisibility(View.VISIBLE);
-            binding.constraintLayoutStickerWomen.setVisibility(View.GONE);
-            setVisibleSave();
             moduleToolsId = Module.NONE;
             
         } else if (id == R.id.imageViewSaveText) {
+            viewModel.rvPrimaryToolShow();
+
             binding.photoEditorView.setHandlingSticker(null);
             binding.photoEditorView.setLocked(true);
-            binding.constraintLayoutConfirmText.setVisibility(View.GONE);
-            binding.relativeLayoutAddText.setVisibility(View.GONE);
             if (!binding.photoEditorView.getStickers().isEmpty()) {
                 new SaveSticker().execute();
             }
-            ConstraintSet constraintsetText = new ConstraintSet();
-            constraintsetText.clone(binding.constraintLayoutRootView);
-            constraintsetText.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-            constraintsetText.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-            constraintsetText.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-            constraintsetText.applyTo(binding.constraintLayoutRootView);
-            binding.recyclerViewTools.setVisibility(View.VISIBLE);
-            setVisibleSave();
             moduleToolsId = Module.NONE;
         }
     }
-
-    public void isPermissionGranted(boolean z, String string) {
-        if (z) {
-            new SaveEditingBitmap().execute();
-        }
-    }
-
-
-
-
     public void onFilterSelected(String string) {
         quShotCustomEditor.setFilterEffect(string);
         binding.seekbarFilter.setProgress(50);
@@ -1392,15 +857,13 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
 
     public void onQuShotToolSelected(Module module) {
         moduleToolsId = module;
-        ConstraintSet constraintSet;
         switch (module) {
             case TEXT:
-                setGoneSave();
+                viewModel.textShow();
                 binding.photoEditorView.setLocked(false);
                 textFragment();
-                binding.recyclerViewTools.setVisibility(View.GONE);
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
+
+
                 binding.photoEditorView.setHandlingSticker(null);
                 binding.photoEditorView.getStickers().clear();
                 quShotCustomEditor.setFilterEffect("");
@@ -1411,39 +874,15 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                 quShotCustomEditor.setFilterEffect("");
                 quShotCustomEditor.clearBrushAllViews();
                 quShotCustomEditor.setBrushDrawingMode(false);
-                ConstraintSet constraintsetEffect = new ConstraintSet();
-                constraintsetEffect.clone(binding.constraintLayoutRootView);
-                constraintsetEffect.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-                constraintsetEffect.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-                constraintsetEffect.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-                constraintsetEffect.applyTo(binding.constraintLayoutRootView);
-                binding.constraintLayoutConfirmText.setVisibility(View.VISIBLE);
-                binding.relativeLayoutAddText.setVisibility(View.VISIBLE);
                 break;
             case ADJUST:
-                setGoneSave();
-                binding.imageViewCompareAdjust.setVisibility(View.VISIBLE);
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
-                binding.constraintLayoutAdjust.setVisibility(View.VISIBLE);
-                binding.constraintLayoutNeon.setVisibility(View.GONE);
-                binding.constraintLayoutFilter.setVisibility(View.GONE);
-                binding.constraintLayoutPaint.setVisibility(View.GONE);
+                viewModel.adjustShow();
+
                 if (!binding.photoEditorView.getStickers().isEmpty()) {
                     binding.photoEditorView.getStickers().clear();
                     binding.photoEditorView.setHandlingSticker(null);
                 }
 
-                ConstraintSet constraintsetAdjust = new ConstraintSet();
-                constraintsetAdjust.clone(binding.constraintLayoutRootView);
-                constraintsetAdjust.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-                constraintsetAdjust.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guidelinePaint.getId(), 3, 0);
-                constraintsetAdjust.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-                constraintsetAdjust.applyTo(binding.constraintLayoutRootView);
-                binding.recyclerViewTools.setVisibility(View.GONE);
-                binding.constraintLayoutSave.setVisibility(View.GONE);
-                binding.relativeLayoutAddText.setVisibility(View.GONE);
-                binding.constraintLayoutConfirmText.setVisibility(View.GONE);
                 quShotCustomEditor.clearBrushAllViews();
                 quShotCustomEditor.setBrushDrawingMode(false);
                 adjustAdapter = new AdjustAdapter(getApplicationContext(), this);
@@ -1452,15 +891,11 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                 quShotCustomEditor.setAdjustFilter(adjustAdapter.getFilterConfig());
                 break;
             case FILTER:
-                setGoneSave();
                 if (!binding.photoEditorView.getStickers().isEmpty()) {
                     binding.photoEditorView.getStickers().clear();
                     binding.photoEditorView.setHandlingSticker(null);
                 }
-                binding.relativeLayoutAddText.setVisibility(View.GONE);
-                binding.constraintLayoutConfirmText.setVisibility(View.GONE);
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
+
                 new allFilters().execute();
                 new bwFilters().execute();
                 new vintageFilters().execute();
@@ -1469,136 +904,62 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                 new warmFilters().execute();
                 new legacyFilters().execute();
                 break;
-            case EMOJI:
-                binding.constraintLayoutEmoji.setVisibility(View.VISIBLE);
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
+            case STICKER:
+                viewModel.stickerShow();
+                binding.photoEditorView.setLocked(false);
+
+                quShotCustomEditor.setFilterEffect("");
+                quShotCustomEditor.clearBrushAllViews();
+                quShotCustomEditor.setBrushDrawingMode(false);
+                if (!binding.photoEditorView.getStickers().isEmpty()) {
+                    binding.photoEditorView.getStickers().clear();
+                    binding.photoEditorView.setHandlingSticker(null);
+                }
+
                 break;
             case DRAW:
                 viewModel.drawShow();
                 break;
             case OVERLAY:
-                setGoneSave();
+
                 new effectOvarlay().execute();
                 new effectHardmix().execute();
                 new effectDodge().execute();
                 new effectBurn().execute();
                 new effectDivide().execute();
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
+
                 break;
             case RATIO:
                 new openBlurFragment().execute();
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 goneLayout();
                 break;
             case BACKGROUND:
                 new openFrameFragment().execute();
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 goneLayout();
                 break;
             case SPLASH:
                 new openSplashBrushFragment(true).execute();
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 break;
             case SQUARESPLASH:
                 new openSplashSquareFragment(true).execute();
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 break;
             case BLUR:
                 new openSplashBrushFragment(false).execute();
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 break;
             case SQUAEBLUR:
                 new openSplashSquareFragment(false).execute();
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 break;
             case COLOR:
                 ColorSplashFragment.show(this, binding.photoEditorView.getCurrentBitmap());
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 goneLayout();
                 break;
             case CROP:
                 CropFragment.show(this, this, binding.photoEditorView.getCurrentBitmap());
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 goneLayout();
                 break;
             case ROTATE:
                 RotateFragment.show(this, this, binding.photoEditorView.getCurrentBitmap());
-                binding.constraintLayoutDraw.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
                 goneLayout();
-                break;
-        }
-        binding.photoEditorView.setHandlingSticker(null);
-    }
-
-    public void onQuShotStickerToolSelected(Module module) {
-        moduleToolsId = module;
-        switch (module) {
-            case STICKER:
-                setGoneSave();
-                binding.photoEditorView.setLocked(false);
-                binding.constraintLayoutSticker.setVisibility(View.VISIBLE);
-                binding.constraintLayoutAdjust.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
-                binding.constraintLayoutNeon.setVisibility(View.GONE);
-                binding.constraintLayoutFilter.setVisibility(View.GONE);
-                binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-                quShotCustomEditor.setFilterEffect("");
-                quShotCustomEditor.clearBrushAllViews();
-                quShotCustomEditor.setBrushDrawingMode(false);
-                if (!binding.photoEditorView.getStickers().isEmpty()) {
-                    binding.photoEditorView.getStickers().clear();
-                    binding.photoEditorView.setHandlingSticker(null);
-                }
-                binding.relativeLayoutAddText.setVisibility(View.GONE);
-                binding.constraintLayoutConfirmText.setVisibility(View.GONE);
-                break;
-            case MACKUER:
-                setGoneSave();
-                binding.photoEditorView.setLocked(false);
-                binding.constraintLayoutStickerMen.setVisibility(View.VISIBLE);
-                binding.constraintLayoutAdjust.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
-                binding.constraintLayoutNeon.setVisibility(View.GONE);
-                binding.constraintLayoutFilter.setVisibility(View.GONE);
-                binding.linearLayoutWrapperStickerMenList.setVisibility(View.VISIBLE);
-                quShotCustomEditor.setFilterEffect("");
-                quShotCustomEditor.clearBrushAllViews();
-                quShotCustomEditor.setBrushDrawingMode(false);
-                if (!binding.photoEditorView.getStickers().isEmpty()) {
-                    binding.photoEditorView.getStickers().clear();
-                    binding.photoEditorView.setHandlingSticker(null);
-                }
-                binding.relativeLayoutAddText.setVisibility(View.GONE);
-                binding.constraintLayoutConfirmText.setVisibility(View.GONE);
-                break;
-            case BEAUTY:
-                setGoneSave();
-                binding.photoEditorView.setLocked(false);
-                binding.constraintLayoutStickerWomen.setVisibility(View.VISIBLE);
-                binding.linearLayoutWrapperStickerWomenList.setVisibility(View.VISIBLE);
-                binding.constraintLayoutAdjust.setVisibility(View.GONE);
-                binding.constraintLayoutEmoji.setVisibility(View.GONE);
-                binding.constraintLayoutNeon.setVisibility(View.GONE);
-                binding.constraintLayoutFilter.setVisibility(View.GONE);
-                quShotCustomEditor.setFilterEffect("");
-                quShotCustomEditor.clearBrushAllViews();
-                quShotCustomEditor.setBrushDrawingMode(false);
-                if (!binding.photoEditorView.getStickers().isEmpty()) {
-                    binding.photoEditorView.getStickers().clear();
-                    binding.photoEditorView.setHandlingSticker(null);
-                }
-                binding.relativeLayoutAddText.setVisibility(View.GONE);
-                binding.constraintLayoutConfirmText.setVisibility(View.GONE);
                 break;
         }
         binding.photoEditorView.setHandlingSticker(null);
@@ -1606,18 +967,15 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
 
     public void onQuShotDrawToolSelected(Module module) {
         moduleToolsId = module;
-        ConstraintSet constraintSet;
         switch (module) {
             case PAINT:
+            case NEON:
 
                 break;
             case COLORED:
                 new openColoredFragment().execute();
                 binding.constraintLayoutDraw.setVisibility(View.GONE);
                 goneLayout();
-                break;
-            case NEON:
-
                 break;
             case MOSAIC:
                 new openShapeFragment().execute();
@@ -1632,9 +990,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         setVisibleSave();
     }
 
-    public void setGoneSave() {
-        binding.constraintLayoutSaveEditing.setVisibility(View.GONE);
-    }
+
 
     public void setVisibleSave() {
         binding.constraintLayoutSaveEditing.setVisibility(View.VISIBLE);
@@ -1652,52 +1008,28 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                         moduleToolsId = Module.NONE;
                         break;
                     case TEXT:
+                        viewModel.rvPrimaryToolShow();
                         if (!binding.photoEditorView.getStickers().isEmpty()) {
                             binding.photoEditorView.getStickers().clear();
                             binding.photoEditorView.setHandlingSticker(null);
                         }
-                        binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                        binding.relativeLayoutAddText.setVisibility(View.GONE);
-                        binding.constraintLayoutConfirmText.setVisibility(View.GONE);
                         binding.photoEditorView.setHandlingSticker(null);
                         binding.photoEditorView.setLocked(true);
-                        ConstraintSet constraintsetEffect = new ConstraintSet();
-                        constraintsetEffect.clone(binding.constraintLayoutRootView);
-                        constraintsetEffect.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-                        constraintsetEffect.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-                        constraintsetEffect.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-                        constraintsetEffect.applyTo(binding.constraintLayoutRootView);
+
                         setVisibleSave();
                         moduleToolsId = Module.NONE;
                         return;
                     case ADJUST:
+                        viewModel.rvPrimaryToolShow();
                         quShotCustomEditor.setFilterEffect("");
-                        binding.imageViewCompareAdjust.setVisibility(View.GONE);
-                        binding.constraintLayoutAdjust.setVisibility(View.GONE);
-                        ConstraintSet constraintsetAdjust = new ConstraintSet();
-                        constraintsetAdjust.clone(binding.constraintLayoutRootView);
-                        constraintsetAdjust.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-                        constraintsetAdjust.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-                        constraintsetAdjust.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-                        constraintsetAdjust.applyTo(binding.constraintLayoutRootView);
-                        binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                        binding.constraintLayoutSave.setVisibility(View.VISIBLE);
                         setVisibleSave();
                         moduleToolsId = Module.NONE;
                         return;
                     case FILTER:
-                        binding.constraintLayoutFilter.setVisibility(View.GONE);
-                        binding.constraintLayoutConfirmSaveFilter.setVisibility(View.GONE);
-                        binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                        ConstraintSet constraintsete = new ConstraintSet();
-                        constraintsete.clone(binding.constraintLayoutRootView);
-                        constraintsete.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-                        constraintsete.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-                        constraintsete.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-                        constraintsete.applyTo(binding.constraintLayoutRootView);
+                        viewModel.rvPrimaryToolShow();
+
                         setVisibleSave();
                         quShotCustomEditor.setFilterEffect("");
-                        binding.imageViewCompareFilter.setVisibility(View.GONE);
                         listAllFilter.clear();
                         if (binding.recyclerViewFilterAll.getAdapter() != null) {
                             binding.recyclerViewFilterAll.getAdapter().notifyDataSetChanged();
@@ -1705,21 +1037,15 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                         moduleToolsId = Module.NONE;
                         return;
                     case STICKER:
-                        if (binding.photoEditorView.getStickers().size() <= 0) {
-                            binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-                            binding.constraintLayoutSticker.setVisibility(View.GONE);
-                            binding.imageViewAddSticker.setVisibility(View.GONE);
+                        if (binding.photoEditorView.getStickers().size() == 0) {
+                            viewModel.rvPrimaryToolShow();
                             binding.photoEditorView.setHandlingSticker(null);
-                            binding.recyclerViewTools.setVisibility(View.VISIBLE);
                             binding.photoEditorView.setLocked(true);
                             moduleToolsId = Module.NONE;
                         } else if (binding.imageViewAddSticker.getVisibility() == View.VISIBLE) {
+                            viewModel.rvPrimaryToolShow();
                             binding.photoEditorView.getStickers().clear();
-                            binding.imageViewAddSticker.setVisibility(View.GONE);
                             binding.photoEditorView.setHandlingSticker(null);
-                            binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-                            binding.constraintLayoutSticker.setVisibility(View.GONE);
-                            binding.recyclerViewTools.setVisibility(View.VISIBLE);
                             moduleToolsId = Module.NONE;
                         } else {
                             binding.linearLayoutWrapperStickerList.setVisibility(View.GONE);
@@ -1729,73 +1055,15 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
                         moduleToolsId = Module.NONE;
                         setVisibleSave();
                         return;
-                    case MACKUER:
-                        binding.linearLayoutWrapperStickerMenList.setVisibility(View.VISIBLE);
-                        if (binding.photoEditorView.getStickers().size() <= 0) {
-                            binding.linearLayoutWrapperStickerMenList.setVisibility(View.VISIBLE);
-                            binding.constraintLayoutStickerMen.setVisibility(View.GONE);
-                            binding.photoEditorView.setHandlingSticker(null);
-                            binding.imageViewAddStickerMen.setVisibility(View.GONE);
-                            binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                            binding.photoEditorView.setLocked(true);
-                            moduleToolsId = Module.NONE;
-                        } else if (binding.imageViewAddStickerMen.getVisibility() == View.VISIBLE) {
-                            binding.photoEditorView.getStickers().clear();
-                            binding.photoEditorView.setHandlingSticker(null);
-                            binding.imageViewAddStickerMen.setVisibility(View.GONE);
-                            binding.linearLayoutWrapperStickerMenList.setVisibility(View.VISIBLE);
-                            binding.constraintLayoutStickerMen.setVisibility(View.GONE);
-                            binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                            moduleToolsId = Module.NONE;
-                        } else {
-                            binding.linearLayoutWrapperStickerMenList.setVisibility(View.GONE);
-                        }
-                        binding.imageViewAddStickerMen.setVisibility(View.VISIBLE);
-                        moduleToolsId = Module.NONE;
-                        setVisibleSave();
-                        return;
-                    case BEAUTY:
-                        if (binding.photoEditorView.getStickers().size() <= 0) {
-                            binding.linearLayoutWrapperStickerWomenList.setVisibility(View.VISIBLE);
-                            binding.constraintLayoutStickerWomen.setVisibility(View.GONE);
-                            binding.imageViewAddStickerWomen.setVisibility(View.GONE);
-                            binding.photoEditorView.setHandlingSticker(null);
-                            binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                            binding.photoEditorView.setLocked(true);
-                            moduleToolsId = Module.NONE;
-                        } else if (binding.imageViewAddStickerWomen.getVisibility() == View.VISIBLE) {
-                            binding.photoEditorView.getStickers().clear();
-                            binding.imageViewAddStickerWomen.setVisibility(View.GONE);
-                            binding.photoEditorView.setHandlingSticker(null);
-                            binding.linearLayoutWrapperStickerWomenList.setVisibility(View.VISIBLE);
-                            binding.constraintLayoutStickerWomen.setVisibility(View.GONE);
-                            binding.recyclerViewTools.setVisibility(View.VISIBLE);
-                            moduleToolsId = Module.NONE;
-                        } else {
-                            binding.linearLayoutWrapperStickerWomenList.setVisibility(View.GONE);
-                            binding.imageViewAddStickerWomen.setVisibility(View.VISIBLE);
-                        }
-                        binding.linearLayoutWrapperStickerWomenList.setVisibility(View.VISIBLE);
-                        moduleToolsId = Module.NONE;
-                        setVisibleSave();
-                        return;
                     case OVERLAY:
+                        viewModel.rvPrimaryToolShow();
+
                         quShotCustomEditor.setFilterEffect("");
-                        binding.imageViewCompareEffect.setVisibility(View.GONE);
-                        binding.constraintLayoutEffect.setVisibility(View.GONE);
                         listOverlay.clear();
                         if (binding.recyclerViewOverlay.getAdapter() != null) {
                             binding.recyclerViewOverlay.getAdapter().notifyDataSetChanged();
                         }
-                        ConstraintSet constraintsetOverlay = new ConstraintSet();
-                        constraintsetOverlay.clone(binding.constraintLayoutRootView);
-                        constraintsetOverlay.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-                        constraintsetOverlay.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guideline.getId(), 3, 0);
-                        constraintsetOverlay.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-                        constraintsetOverlay.applyTo(binding.constraintLayoutRootView);
                         setVisibleSave();
-                        binding.constraintLayoutConfirmSaveHardmix.setVisibility(View.GONE);
-                        binding.recyclerViewTools.setVisibility(View.VISIBLE);
                         moduleToolsId = Module.NONE;
                         return;
                     case SPLASH:
@@ -1826,11 +1094,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     public void addSticker(Bitmap bitmap) {
         binding.photoEditorView.addSticker(new DrawableSticker(new BitmapDrawable(getResources(), bitmap)));
         binding.linearLayoutWrapperStickerList.setVisibility(View.GONE);
-        binding.linearLayoutWrapperStickerMenList.setVisibility(View.GONE);
-        binding.linearLayoutWrapperStickerWomenList.setVisibility(View.GONE);
         binding.imageViewAddSticker.setVisibility(View.VISIBLE);
-        binding.imageViewAddStickerWomen.setVisibility(View.VISIBLE);
-        binding.imageViewAddStickerMen.setVisibility(View.VISIBLE);
     }
 
     public void finishCrop(Bitmap bitmap) {
@@ -1872,11 +1136,8 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
         }
 
         public void onPostExecute(Void voids) {
+            viewModel.filterShow();
             binding.recyclerViewFilterAll.setAdapter(new FilterAdapter(listAllFilter, SingleEditorActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.ALL_FILTERS)));
-            binding.imageViewCompareFilter.setVisibility(View.VISIBLE);
-            binding.constraintLayoutFilter.setVisibility(View.VISIBLE);
-            binding.constraintLayoutConfirmSaveFilter.setVisibility(View.VISIBLE);
-            binding.recyclerViewTools.setVisibility(View.GONE);
             binding.photoEditorView.setHandlingSticker(null);
             binding.photoEditorView.getStickers().clear();
             binding.seekbarFilter.setProgress(100);
@@ -1885,12 +1146,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             quShotCustomEditor.clearBrushAllViews();
             quShotCustomEditor.setBrushDrawingMode(false);
 
-            ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.clone(binding.constraintLayoutRootView);
-            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guidelinePaint.getId(), 3, 0);
-            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-            constraintSet.applyTo(binding.constraintLayoutRootView);
         }
     }
 
@@ -2156,19 +1411,11 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
 
         public void onPostExecute(Void voids) {
             binding.recyclerViewOverlay.setAdapter(new HardmixAdapter(listOverlay, SingleEditorActivity.this, getApplicationContext(), Arrays.asList(EffectCodeAsset.OVERLAY_EFFECTS)));
-            binding.constraintLayoutEffect.setVisibility(View.VISIBLE);
-            binding.constraintLayoutConfirmSaveHardmix.setVisibility(View.VISIBLE);
-            binding.recyclerViewTools.setVisibility(View.GONE);
-            binding.imageViewCompareEffect.setVisibility(View.VISIBLE);
+
+            viewModel.overLayShow();
+
             binding.seekbarEffect.setProgress(100);
             showLoading(false);
-
-            ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.clone(binding.constraintLayoutRootView);
-            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 1, binding.constraintLayoutRootView.getId(), 1, 0);
-            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 4, binding.guidelinePaint.getId(), 3, 0);
-            constraintSet.connect(binding.relativeLayoutWrapperPhoto.getId(), 2, binding.constraintLayoutRootView.getId(), 2, 0);
-            constraintSet.applyTo(binding.constraintLayoutRootView);
         }
     }
 
