@@ -1,4 +1,4 @@
-package com.photo.collagemaker.activities.multifit;
+package com.photo.collagemaker.activities.material;
 
 import android.content.Context;
 import android.graphics.Bitmap;

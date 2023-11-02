@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -41,6 +44,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.activities.PhotoShareActivity;
+import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.AdjustAdapter;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.HardmixAdapter;
 import com.photo.collagemaker.activities.editor.single_editor.adapter.MenBeautyAdapter;
@@ -237,8 +241,8 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
 
             viewModel.rvPrimaryToolShow();
 
-            binding.photoEditorView.setImageSource(quShotCustomEditor.getBrushDrawingView().getDrawBitmap(binding.photoEditorView.getCurrentBitmap()));
-            quShotCustomEditor.clearBrushAllViews();
+//            binding.photoEditorView.setImageSource(quShotCustomEditor.getBrushDrawingView().getDrawBitmap(binding.photoEditorView.getCurrentBitmap()));
+//            quShotCustomEditor.clearBrushAllViews();
             showLoading(false);
             reloadingLayout();
             setVisibleSave();
@@ -252,7 +256,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             moduleToolsId = Module.NEON;
 
             setColorNeon();
-            quShotCustomEditor.setBrushDrawingMode(true);
 
             quShotCustomEditor.setBrushDrawingMode(false);
             viewModel.neonShow();
@@ -270,7 +273,6 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             setColorPaint();
             quShotCustomEditor.setBrushDrawingMode(true);
             viewModel.paintShow();
-            quShotCustomEditor.setBrushDrawingMode(false);
 
 
             quShotCustomEditor.setBrushMode(1);
@@ -533,7 +535,10 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
     private void  onClickListener(){
         binding.textViewSave.setOnClickListener(view -> {
             if (PermissionsUtils.checkWriteStoragePermission(SingleEditorActivity.this)) {
-                new SaveEditingBitmap().execute();
+                Bitmap createBitmap = binding.photoEditorView.getCurrentBitmap();
+                Bitmap createBitmap2 = binding.photoEditorView.createBitmap();
+                new SaveCollageAsFile().execute(createBitmap, createBitmap2);
+//                new SaveEditingBitmap().execute();
             }
         });
         binding.imageViewExit.setOnClickListener(view -> onBackPressed());
@@ -542,6 +547,7 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             }
 
             public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
+                quShotCustomEditor.setBrushEraserSize((float) i);
                 quShotCustomEditor.setBrushEraserSize((float) i);
             }
 
@@ -918,6 +924,9 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
 
                 break;
             case DRAW:
+                quShotCustomEditor.setBrushDrawingMode(true);
+                quShotCustomEditor.setBrushMode(1);
+                quShotCustomEditor.setBrushColor(Color.parseColor("#ffffff"));
                 viewModel.drawShow();
                 break;
             case OVERLAY:
@@ -1650,6 +1659,45 @@ public class SingleEditorActivity extends AppCompatActivity implements OnQuShotE
             }
             showLoading(false);
         }, 300);
+    }
+
+    class SaveCollageAsFile extends AsyncTask<Bitmap, String, String> {
+        SaveCollageAsFile() {
+        }
+
+        @Override
+        public void onPreExecute() {
+            showLoading(true);
+        }
+
+        @Override
+        public String doInBackground(Bitmap... bitmapArr) {
+            Bitmap bitmap = bitmapArr[0];
+            Bitmap bitmap2 = bitmapArr[1];
+            Bitmap createBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(createBitmap);
+            Paint paint = null;
+            canvas.drawBitmap(bitmap, null, new RectF(0.0f, 0.0f, (float) bitmap.getWidth(), (float) bitmap.getHeight()), paint);
+            canvas.drawBitmap(bitmap2, null, new RectF(0.0f, 0.0f, (float) bitmap.getWidth(), (float) bitmap.getHeight()), paint);
+            bitmap.recycle();
+            bitmap2.recycle();
+            try {
+                File image = SaveFileUtils.saveBitmapFileCollage(SingleEditorActivity.this, createBitmap, new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date()));
+                createBitmap.recycle();
+                return image.getAbsolutePath();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        public void onPostExecute(String str) {
+            showLoading(false);
+            Intent intent = new Intent(SingleEditorActivity.this, PhotoShareActivity.class);
+            intent.putExtra("path", str);
+            startActivity(intent);
+        }
     }
 
     class SaveEditingBitmap extends AsyncTask<Void, String, String> {

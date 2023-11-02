@@ -1,55 +1,84 @@
 package com.photo.collagemaker.activities.multifit;
 
+import static com.photo.collagemaker.activities.multifit.MultiFitAdapter.getBitmapFromView;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.photo.collagemaker.R;
+import com.photo.collagemaker.activities.PhotoShareActivity;
 import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
+import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorViewModel;
+import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorViewModelFactory;
 import com.photo.collagemaker.activities.editor.collage_editor.adapter.BackgroundGridAdapter;
 import com.photo.collagemaker.activities.picker.MultipleImagePickerActivity;
 import com.photo.collagemaker.databinding.ActivityMultiFitBinding;
 import com.photo.collagemaker.grid.QueShotLayout;
 import com.photo.collagemaker.picker.PermissionsUtils;
+import com.photo.collagemaker.utils.FilterUtils;
 import com.photo.collagemaker.utils.SaveFileUtils;
 import com.skydoves.colorpickerview.listeners.ColorListener;
 import com.squareup.picasso.Target;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MultiFitActivity extends AppCompatActivity implements BackgroundGridAdapter.BackgroundGridListener {
 
-    public ArrayList<String> imageList;
-    public ArrayList<BackgroundGridAdapter.SquareView> imageModelsList = new ArrayList<>();
+    //    public ArrayList<String> imageList;
+//    public ArrayList<BackgroundGridAdapter.SquareView> imageModelsList = new ArrayList<>();
     public ArrayList<QueShotLayout> queShotLayout = new ArrayList<>();
     public List<Target> targets = new ArrayList();
+
+    Activity activity;
 
     public int selectedPosition = 0;
     MultiFitAdapter multiFitAdapter;
 
     ActivityMultiFitBinding binding;
+    MultiFitViewModel viewModel;
+
+    int currentSavePosition = 0;
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMultiFitBinding.inflate(getLayoutInflater());
+        viewModel = new ViewModelProvider(this, new MultiFitViewModelFactory(this)).get(MultiFitViewModel.class);
         setContentView(binding.getRoot());
 
-        imageList = getIntent().getStringArrayListExtra(MultipleImagePickerActivity.KEY_DATA_RESULT);
+        viewModel.imageList = getIntent().getStringArrayListExtra(MultipleImagePickerActivity.KEY_DATA_RESULT);
 
-        for (int i = 0; i < imageList.size(); i++) {
+        for (int i = 0; i < viewModel.imageList.size(); i++) {
             Bitmap bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
             bitmap.setPixel(0, 0, Color.RED);
 
-            imageModelsList.add(new BackgroundGridAdapter.SquareView(Color.parseColor("#ffffff"), "", true));
+            viewModel.imageModelsList.add(new BackgroundGridAdapter.SquareView(Color.parseColor("#ffffff"), "", true));
         }
 
 
@@ -61,13 +90,13 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
         binding.backgroundContainer.btnBlur.setOnClickListener(view -> selectBackgroundBlur());
         binding.backgroundContainer.btnSelect.setOnClickListener(view -> selectColorPicker());
         binding.backgroundContainer.btnWhite.setOnClickListener(view -> {
-            imageModelsList.get(selectedPosition).setDrawableId(Color.parseColor("#ffffff"));
-            imageModelsList.get(selectedPosition).setColor(true);
+            viewModel.imageModelsList.get(selectedPosition).setDrawableId(Color.parseColor("#ffffff"));
+            viewModel.imageModelsList.get(selectedPosition).setColor(true);
             multiFitAdapter.notifyItemChanged(selectedPosition);
         });
         binding.backgroundContainer.btnBlack.setOnClickListener(view -> {
-            imageModelsList.get(selectedPosition).setDrawableId(Color.parseColor("#000000"));
-            imageModelsList.get(selectedPosition).setColor(true);
+            viewModel.imageModelsList.get(selectedPosition).setDrawableId(Color.parseColor("#000000"));
+            viewModel.imageModelsList.get(selectedPosition).setColor(true);
             multiFitAdapter.notifyItemChanged(selectedPosition);
         });
 
@@ -80,19 +109,117 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
             binding.backgroundContainer.backgroundTools.setVisibility(View.VISIBLE);
             binding.carouselView.setVisibility(View.VISIBLE);
 
-            imageModelsList.get(selectedPosition).setDrawableId(binding.colorPickerView.getColor());
-            imageModelsList.get(selectedPosition).setColor(true);
+            viewModel.imageModelsList.get(selectedPosition).setDrawableId(binding.colorPickerView.getColor());
+            viewModel.imageModelsList.get(selectedPosition).setColor(true);
             multiFitAdapter.notifyItemChanged(selectedPosition);
         });
 
         binding.btnSave.setOnClickListener(view -> {
 
+            dialog = new Dialog(this);
+            dialog.setContentView(R.layout.dialog_layout);
+            Window window = dialog.getWindow();
+            if (window != null) {
+                WindowManager.LayoutParams params = window.getAttributes();
+                params.width = binding.carouselView.getWidth();
+                params.height = binding.carouselView.getHeight();
+                window.setAttributes(params);
+            }
+
+//            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.setCancelable(false);
+
+            ImageView collageView = dialog.findViewById(R.id.collageView);
+//            ViewGroup.LayoutParams layoutParams = collageView.getLayoutParams();
+//            layoutParams.width = binding.carouselView.getWidth();
+//            layoutParams.height = binding.carouselView.getHeight();
+//            collageView.setLayoutParams(layoutParams);
+
+            showImage(collageView);
+
+            dialog.show();
+
+//            multiFitAdapter.isSave = true;
+//            multiFitAdapter.notifyDataSetChanged();
         });
 
     }
 
+    public void showImage(ImageView collageView) {
+        BackgroundGridAdapter.SquareView squareView = viewModel.imageModelsList.get(currentSavePosition);
+
+        BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), viewModel.imageList.get(currentSavePosition));
+        collageView.setImageDrawable(bitmapDrawable);
+
+
+        if (viewModel.imageModelsList.get(currentSavePosition).isColor) {
+            collageView.setBackgroundColor(squareView.drawableId);
+            collageView.post(() -> {
+                if (currentSavePosition == (viewModel.imageList.size() - 1)) {
+                    saveBitmap(collageView, true);
+                } else {
+                    saveBitmap(collageView, false);
+                }
+
+            });
+
+        } else if (viewModel.imageModelsList.get(currentSavePosition).drawable != null) {
+            AsyncTask<Void, Bitmap, Bitmap> asyncTask = new AsyncTask<Void, Bitmap, Bitmap>() {
+                @Override
+                protected Bitmap doInBackground(Void... voidArr) {
+                    return FilterUtils.getBlurImageFromBitmap(((BitmapDrawable) squareView.drawable).getBitmap(), 5.0f);
+                }
+
+                @Override
+                protected void onPostExecute(Bitmap bitmap) {
+                    collageView.setBackground(new BitmapDrawable(viewModel.activity.getResources(), bitmap));
+                    collageView.post(() -> {
+                        if (currentSavePosition == (viewModel.imageList.size() - 1)) {
+                            saveBitmap(collageView, true);
+                        } else {
+                            saveBitmap(collageView, false);
+                        }
+                    });
+
+                }
+            };
+            asyncTask.execute();
+        } else {
+            collageView.setBackgroundResource(squareView.drawableId);
+            collageView.post(() -> {
+                if (currentSavePosition == (viewModel.imageList.size() - 1)) {
+                    saveBitmap(collageView, true);
+                } else {
+                    saveBitmap(collageView, false);
+                }
+            });
+        }
+    }
+
+    public void saveBitmap(ImageView imageView, boolean isLast) {
+
+        try {
+            Bitmap savedBitmap = getBitmapFromView(imageView);
+            File image = SaveFileUtils.saveBitmapFileCollage(viewModel.activity, savedBitmap, new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date()));
+
+            if (isLast) {
+                Intent intent = new Intent(viewModel.activity, PhotoShareActivity.class);
+                intent.putExtra("path", image.getAbsolutePath());
+                viewModel.activity.startActivity(intent);
+                currentSavePosition = 0;
+                dialog.dismiss();
+            }else {
+                currentSavePosition++;
+                showImage(imageView);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void initMultiFitView() {
-        multiFitAdapter = new MultiFitAdapter(this, imageList, imageModelsList);
+        multiFitAdapter = new MultiFitAdapter(viewModel);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         binding.carouselView.setLayoutManager(linearLayoutManager);
         binding.carouselView.setAdapter(multiFitAdapter);
@@ -144,8 +271,8 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
 
 
         ArrayList arrayList = new ArrayList();
-        for (int i = 0; i < imageList.size(); i++) {
-            Drawable d = new BitmapDrawable(getResources(), imageList.get(i));
+        for (int i = 0; i < viewModel.imageList.size(); i++) {
+            Drawable d = new BitmapDrawable(getResources(), viewModel.imageList.get(i));
             arrayList.add(d);
         }
 
@@ -168,7 +295,7 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
         binding.colorPickerView.setSelectorPoint(viewX, viewY);
 
 
-        binding.colorPickerView.setPaletteDrawable(new BitmapDrawable(getResources(), imageList.get(selectedPosition)));
+        binding.colorPickerView.setPaletteDrawable(new BitmapDrawable(getResources(), viewModel.imageList.get(selectedPosition)));
         binding.colorPickerView.setColorListener((ColorListener) (color, fromUser) -> {
             binding.backgroundContainer.selectedColorPreview.setCardBackgroundColor(ColorStateList.valueOf(color));
             binding.backgroundContainer.selectedColorPreview.getBackground().setTint(color);
@@ -187,7 +314,7 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
 
     @Override
     public void onBackgroundSelected(BackgroundGridAdapter.SquareView squareView, int position) {
-        imageModelsList.set(selectedPosition, squareView);
+        viewModel.imageModelsList.set(selectedPosition, squareView);
         multiFitAdapter.notifyItemChanged(selectedPosition);
     }
 

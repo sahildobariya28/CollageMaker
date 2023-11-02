@@ -128,7 +128,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         binding.cardMaterial.setOnClickListener(view -> {
-            startActivity(new Intent(this, MaterialThemeList.class));
+//            startActivity(new Intent(this, MaterialThemeList.class));
         });
 
         binding.cardStitch.setOnClickListener(view -> {
