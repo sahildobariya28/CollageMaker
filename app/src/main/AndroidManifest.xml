@@ -35,6 +35,9 @@
         tools:replace="android:theme"
         tools:targetApi="31">
         <activity
+            android:name=".activities.material.TestCollageMaterialActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.material.MaterialThemeList"
             android:exported="false" />
         <activity
@@ -43,8 +46,6 @@
         <activity
             android:name=".activities.freestyle.FreeStyle"
             android:exported="false" />
-
-
         <activity
             android:name=".activities.picker.NewSingleImagePickerActivity"
             android:exported="false" />
@@ -94,8 +95,6 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".activities.multifit.MultiFitActivity"
             android:screenOrientation="portrait" />

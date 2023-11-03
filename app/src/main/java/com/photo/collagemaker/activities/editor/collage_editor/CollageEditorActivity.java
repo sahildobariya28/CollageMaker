@@ -41,6 +41,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.activities.picker.MultipleImagePickerActivity;
 import com.photo.collagemaker.activities.PhotoShareActivity;
@@ -93,8 +96,6 @@ import com.photo.collagemaker.utils.FilterUtils;
 import com.photo.collagemaker.utils.SaveFileUtils;
 import com.photo.collagemaker.utils.SystemUtil;
 import com.skydoves.colorpickerview.listeners.ColorListener;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.steelkiwi.cropiwa.AspectRatio;
 
 import org.jetbrains.annotations.NotNull;
@@ -139,7 +140,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     public ArrayList listFilterLegacy = new ArrayList<>();
     public List<Drawable> drawableList = new ArrayList<>();
     public List<String> imageList;
-    public List<Target> targets = new ArrayList();
+    public List<CustomTarget<Bitmap>> targets = new ArrayList<>();
 
     public CustomEditorForCollage quShotCustomEditor;
 
@@ -947,38 +948,42 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
     public void loadPhoto() {
         final int i;
-        final ArrayList arrayList = new ArrayList();
+        final ArrayList<Bitmap> arrayList = new ArrayList<>();
         if (imageList.size() > queShotLayout.getAreaCount()) {
             i = queShotLayout.getAreaCount();
         } else {
             i = imageList.size();
         }
         for (int i2 = 0; i2 < i; i2++) {
-            Target r4 = new Target() {
-                public void onBitmapFailed(Exception exc, Drawable drawable) {
-                }
-
-                public void onPrepareLoad(Drawable drawable) {
-                }
-
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-
+            CustomTarget<Bitmap> target = new CustomTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
                     arrayList.add(bitmap);
                     if (arrayList.size() == i) {
                         if (imageList.size() < queShotLayout.getAreaCount()) {
-                            for (int i = 0; i < queShotLayout.getAreaCount(); i++) {
-                                binding.collageView.addQuShotCollage((Bitmap) arrayList.get(i % i));
+                            for (int j = 0; j < queShotLayout.getAreaCount(); j++) {
+                                binding.collageView.addQuShotCollage(arrayList.get(j % i));
                             }
                         } else {
                             binding.collageView.addPieces(arrayList);
                         }
+                        targets.remove(this);
                     }
-                    targets.remove(this);
+                }
+
+                @Override
+                public void onLoadCleared(Drawable placeholder) {
+                    // Handle clearing if needed
                 }
             };
             int deviceWidth = getResources().getDisplayMetrics().widthPixels;
-            Picasso.get().load("file:///" + imageList.get(i2)).resize(deviceWidth, deviceWidth).centerInside().config(Bitmap.Config.RGB_565).into((Target) r4);
-            targets.add(r4);
+            Glide.with(this)
+                    .asBitmap()
+                    .load("file:///" + imageList.get(i2))
+                    .override(deviceWidth, deviceWidth)
+                    .centerInside()
+                    .into(target);
+            targets.add(target);
         }
     }
 

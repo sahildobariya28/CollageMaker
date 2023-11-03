@@ -16,17 +16,17 @@ import android.view.ViewGroup;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.activities.PhotoShareActivity;
-import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
 import com.photo.collagemaker.activities.picker.MultipleImagePickerActivity;
 import com.photo.collagemaker.databinding.ActivityStitchBinding;
 import com.photo.collagemaker.grid.QueShotLayout;
 import com.photo.collagemaker.picker.PermissionsUtils;
 import com.photo.collagemaker.utils.CollageUtils;
 import com.photo.collagemaker.utils.SaveFileUtils;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class StitchActivity extends AppCompatActivity implements ImageStitchingV
 
     public QueShotLayout queShotLayout;
     public List<String> imageList;
-    public List<Target> targets = new ArrayList();
+    public List<CustomTarget<Bitmap>> targets = new ArrayList<>();
     ActivityStitchBinding binding;
     int stitchWidth, stitchHeight;
 
@@ -170,78 +170,85 @@ public class StitchActivity extends AppCompatActivity implements ImageStitchingV
 
     public void loadVerticalPhoto() {
         final int i;
-        final ArrayList arrayList = new ArrayList();
+        final ArrayList<Bitmap> arrayList = new ArrayList<>();
         if (imageList.size() > queShotLayout.getAreaCount()) {
             i = queShotLayout.getAreaCount();
         } else {
             i = imageList.size();
         }
         for (int i2 = 0; i2 < i; i2++) {
-            Target r4 = new Target() {
-                public void onBitmapFailed(Exception exc, Drawable drawable) {
-                }
-
-                public void onPrepareLoad(Drawable drawable) {
-                }
-
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-
+            CustomTarget<Bitmap> target = new CustomTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
                     arrayList.add(bitmap);
                     if (arrayList.size() == i) {
                         if (imageList.size() < queShotLayout.getAreaCount()) {
                             for (int i = 0; i < queShotLayout.getAreaCount(); i++) {
-                                binding.verticalCollageView.addQuShotCollage((Bitmap) arrayList.get(i));
+                                binding.verticalCollageView.addQuShotCollage(arrayList.get(i));
                             }
                         } else {
                             binding.verticalCollageView.addPieces(arrayList);
                         }
+                        targets.remove(this);
                     }
-                    targets.remove(this);
+                }
+
+                @Override
+                public void onLoadCleared(Drawable placeholder) {
+                    // Handle clearing if needed
                 }
             };
             int deviceWidth = getResources().getDisplayMetrics().widthPixels;
-            Picasso.get().load("file:///" + imageList.get(i2)).resize(deviceWidth, deviceWidth).centerInside().config(Bitmap.Config.RGB_565).into(r4);
-            targets.add(r4);
+            Glide.with(this)
+                    .asBitmap()
+                    .load("file:///" + imageList.get(i2))
+                    .override(deviceWidth, deviceWidth)
+                    .centerInside()
+                    .into(target);
+            targets.add(target);
         }
     }
 
     public void loadHorizontalPhoto() {
         final int i;
-        final ArrayList arrayList = new ArrayList();
+        final ArrayList<Bitmap> arrayList = new ArrayList<>();
         if (imageList.size() > queShotLayout.getAreaCount()) {
             i = queShotLayout.getAreaCount();
         } else {
             i = imageList.size();
         }
         for (int i2 = 0; i2 < i; i2++) {
-            Target r4 = new Target() {
-                public void onBitmapFailed(Exception exc, Drawable drawable) {
-                }
-
-                public void onPrepareLoad(Drawable drawable) {
-                }
-
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-
+            CustomTarget<Bitmap> target = new CustomTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
                     arrayList.add(bitmap);
                     if (arrayList.size() == i) {
                         if (imageList.size() < queShotLayout.getAreaCount()) {
                             for (int i = 0; i < queShotLayout.getAreaCount(); i++) {
-                                binding.horizontalCollageView.addQuShotCollage((Bitmap) arrayList.get(i));
+                                binding.horizontalCollageView.addQuShotCollage(arrayList.get(i));
                             }
                         } else {
                             binding.horizontalCollageView.addPieces(arrayList);
                         }
+                        targets.remove(this);
                     }
-                    targets.remove(this);
+                }
+
+                @Override
+                public void onLoadCleared(Drawable placeholder) {
+                    // Handle clearing if needed
                 }
             };
             int deviceWidth = getResources().getDisplayMetrics().widthPixels;
-            Picasso.get().load("file:///" + imageList.get(i2)).resize(deviceWidth, deviceWidth).centerInside().config(Bitmap.Config.RGB_565).into(r4);
-            targets.add(r4);
+            Glide.with(this)
+                    .asBitmap()
+                    .load("file:///" + imageList.get(i2))
+                    .override(deviceWidth, deviceWidth)
+                    .centerInside()
+                    .into(target);
+            targets.add(target);
         }
     }
-
     public void setLoading(boolean isShowing) {
         if (isShowing) {
             binding.relativeLayoutLoading.setVisibility(View.VISIBLE);

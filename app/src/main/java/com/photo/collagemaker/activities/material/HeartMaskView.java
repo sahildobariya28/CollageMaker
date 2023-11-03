@@ -40,7 +40,7 @@ public class HeartMaskView extends View {
         paint.setAntiAlias(true);
         paint.setColor(Color.RED);
 
-        image1 = BitmapFactory.decodeResource(getResources(), R.drawable.allinone_logo);
+        image1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background);
         image2 = BitmapFactory.decodeResource(getResources(), R.drawable.background_blur);
 
         path1 = new Path();

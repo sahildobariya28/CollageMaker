@@ -2,7 +2,6 @@ package com.photo.collagemaker.activities.multifit;
 
 import static com.photo.collagemaker.activities.multifit.MultiFitAdapter.getBitmapFromView;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -10,11 +9,9 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -26,18 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.activities.PhotoShareActivity;
-import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
-import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorViewModel;
-import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorViewModelFactory;
 import com.photo.collagemaker.activities.editor.collage_editor.adapter.BackgroundGridAdapter;
 import com.photo.collagemaker.activities.picker.MultipleImagePickerActivity;
 import com.photo.collagemaker.databinding.ActivityMultiFitBinding;
-import com.photo.collagemaker.grid.QueShotLayout;
-import com.photo.collagemaker.picker.PermissionsUtils;
 import com.photo.collagemaker.utils.FilterUtils;
 import com.photo.collagemaker.utils.SaveFileUtils;
 import com.skydoves.colorpickerview.listeners.ColorListener;
-import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,13 +39,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class MultiFitActivity extends AppCompatActivity implements BackgroundGridAdapter.BackgroundGridListener {
-
-    //    public ArrayList<String> imageList;
-//    public ArrayList<BackgroundGridAdapter.SquareView> imageModelsList = new ArrayList<>();
-    public ArrayList<QueShotLayout> queShotLayout = new ArrayList<>();
-    public List<Target> targets = new ArrayList();
-
-    Activity activity;
 
     public int selectedPosition = 0;
     MultiFitAdapter multiFitAdapter;
