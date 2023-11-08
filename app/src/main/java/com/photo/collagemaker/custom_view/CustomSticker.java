@@ -2,10 +2,16 @@ package com.photo.collagemaker.custom_view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
@@ -39,6 +45,8 @@ public class CustomSticker extends Sticker {
 
 
     public void draw(@NonNull Canvas paramCanvas) {
+
+
         paramCanvas.save();
         paramCanvas.concat(getMatrix());
         this.drawable.setBounds(this.realBounds);

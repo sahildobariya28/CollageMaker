@@ -42,7 +42,6 @@ import android.widget.TextView;
 
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.activities.PhotoShareActivity;
-import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
 import com.photo.collagemaker.activities.editor.collage_editor.adapter.AspectAdapter;
 import com.photo.collagemaker.activities.editor.collage_editor.adapter.BackgroundGridAdapter;
 import com.photo.collagemaker.activities.editor.collage_editor.adapter.ColorAdapter;
@@ -54,7 +53,6 @@ import com.photo.collagemaker.activities.picker.MultipleImagePickerActivity;
 import com.photo.collagemaker.activities.picker.SingleImagePickerActivity;
 import com.photo.collagemaker.assets.FilterCodeAsset;
 import com.photo.collagemaker.assets.StickersAsset;
-import com.photo.collagemaker.custom_view.CustomEditorForCollage;
 import com.photo.collagemaker.custom_view.CustomText;
 import com.photo.collagemaker.custom_view.CustomTextView;
 import com.photo.collagemaker.custom_view.StickerIcons;
@@ -67,7 +65,6 @@ import com.photo.collagemaker.event.EditTextIconEvent;
 import com.photo.collagemaker.event.FlipHorizontallyEvent;
 import com.photo.collagemaker.event.ZoomIconEvent;
 import com.photo.collagemaker.fragment.TextFragment;
-import com.photo.collagemaker.grid.QueShotGrid;
 import com.photo.collagemaker.listener.BrushColorListener;
 import com.photo.collagemaker.listener.FilterListener;
 import com.photo.collagemaker.listener.OnQuShotEditorListener;
@@ -93,7 +90,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-public class FreeStyle extends AppCompatActivity implements FilterListener, GridToolsAdapter.OnItemSelected, StickerAdapter.OnClickSplashListener, AspectAdapter.OnNewSelectedListener, BackgroundGridAdapter.BackgroundGridListener, BrushColorListener {
+public class FreeStyleActivity extends AppCompatActivity implements FilterListener, GridToolsAdapter.OnItemSelected, StickerAdapter.OnClickSplashListener, AspectAdapter.OnNewSelectedListener, BackgroundGridAdapter.BackgroundGridListener, BrushColorListener {
 
     public int selectedStickerPosition = 0;
     public List<String> imageList;
@@ -104,7 +101,7 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
 
     ActivityFreeStyleBinding binding;
     FreeStyleViewModel viewModel;
-    public static FreeStyle freeStyleInstance;
+    public static FreeStyleActivity freeStyleInstance;
 
 
     //filter
@@ -136,6 +133,10 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
             binding.stickerView.requestLayout();
             initFilterView();
             setLoading(false);
+        });
+
+        binding.btnBack.setOnClickListener(view -> {
+            onBackPressed();
         });
         initToolBar();
     }
@@ -452,11 +453,11 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
                 if (sticker instanceof CustomTextView) {
                     sticker.setShow(false);
                     binding.stickerView.setHandlingSticker(null);
-                    addTextFragment = TextFragment.show(FreeStyle.this, ((CustomTextView) sticker).getQuShotText());
+                    addTextFragment = TextFragment.show(FreeStyleActivity.this, ((CustomTextView) sticker).getQuShotText());
                     textEditor = new TextFragment.TextEditor() {
                         public void onDone(CustomText addTextProperties) {
                             binding.stickerView.getStickers().remove(binding.stickerView.getLastHandlingSticker());
-                            binding.stickerView.addSticker(new CustomTextView(FreeStyle.this, addTextProperties));
+                            binding.stickerView.addSticker(new CustomTextView(FreeStyleActivity.this, addTextProperties));
                         }
 
                         public void onBackButton() {
@@ -515,7 +516,7 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
             binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
         });
         binding.btnDone.setOnClickListener(view -> {
-            if (PermissionsUtils.checkWriteStoragePermission(FreeStyle.this)) {
+            if (PermissionsUtils.checkWriteStoragePermission(FreeStyleActivity.this)) {
                 Bitmap createBitmap = SaveFileUtils.createBitmap(binding.stickerView, 1920);
                 Bitmap createBitmap2 = binding.stickerView.createBitmap();
                 new SaveCollageAsFile().execute(createBitmap, createBitmap2);
@@ -565,13 +566,13 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
                 recycler_view_sticker.setLayoutManager(new GridLayoutManager(getApplicationContext(), 7));
                 switch (i) {
                     case 0:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListEmojy(), i, FreeStyle.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListEmojy(), i, FreeStyleActivity.this));
                         break;
                     case 1:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListFlag(), i, FreeStyle.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListFlag(), i, FreeStyleActivity.this));
                         break;
                     case 2:
-                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListBoom(), i, FreeStyle.this));
+                        recycler_view_sticker.setAdapter(new StickerAdapter(getApplicationContext(), StickersAsset.mListBoom(), i, FreeStyleActivity.this));
                         break;
 
                 }
@@ -673,11 +674,20 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
 
         public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
             int id = seekBar.getId();
-//            if (id == R.id.seekbarBorder) {
-//                binding.stickerView.setCollagePadding((float) i);
-//            } else if (id == R.id.seekbarRadius) {
-//                binding.stickerView.setCollageRadian((float) i);
-//            }
+            if (id == R.id.seekbarBorder) {
+                if (binding.stickerView.getCurrentSticker() != null){
+                    binding.stickerView.getCurrentSticker().setExtraBorderWidth((float) i);
+                }else {
+                    binding.stickerView.getStickers().get(0).setExtraBorderWidth((float) i);
+                }
+
+            } else if (id == R.id.seekbarRadius) {
+                if (binding.stickerView.getCurrentSticker() != null) {
+                    binding.stickerView.getCurrentSticker().setCornerRadius((float) i);
+                }else {
+                    binding.stickerView.getStickers().get(0).setCornerRadius((float) i);
+                }
+            }
             binding.stickerView.invalidate();
         }
     };
@@ -752,7 +762,8 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
 
             BitmapDrawable bitmapDrawable = resizeBitmapDrawable(new BitmapDrawable(getResources(), imageList.get(i)), binding.stickerView.getMeasuredHeight(), binding.stickerView.getMeasuredWidth());
 
-            Sticker sticker = new DrawableSticker(viewModel.addWhiteBorder(getResources(), bitmapDrawable.getBitmap(), 10, Color.GREEN));
+//            Sticker sticker = new DrawableSticker(viewModel.addWhiteBorder(getResources(), bitmapDrawable.getBitmap(), 10, Color.GREEN));
+            Sticker sticker = new DrawableSticker(bitmapDrawable);
             drawableList.add(sticker);
             binding.stickerView.addSticker(sticker);
             binding.stickerView.setHandlingSticker(null);
@@ -907,7 +918,7 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
                     break;
                 case NONE:
                     TextView textViewCancel, textViewDiscard;
-                    final Dialog dialogOnBackPressed = new Dialog(FreeStyle.this, R.style.UploadDialog);
+                    final Dialog dialogOnBackPressed = new Dialog(FreeStyleActivity.this, R.style.UploadDialog);
                     dialogOnBackPressed.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialogOnBackPressed.setContentView(R.layout.dialog_exit);
                     dialogOnBackPressed.setCancelable(true);
@@ -1013,7 +1024,7 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterAll.setAdapter(new FilterAdapter(listFilterAll, FreeStyle.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.ALL_FILTERS)));
+            binding.recyclerViewFilterAll.setAdapter(new FilterAdapter(listFilterAll, FreeStyleActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.ALL_FILTERS)));
             binding.constraintLayoutFilterLayout.setVisibility(View.VISIBLE);
             binding.constraintLayoutConfirmSaveFilter.setVisibility(View.VISIBLE);
             binding.rvPrimaryTool.setVisibility(View.GONE);
@@ -1034,7 +1045,7 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterBW.setAdapter(new FilterAdapter(listFilterBW, FreeStyle.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
+            binding.recyclerViewFilterBW.setAdapter(new FilterAdapter(listFilterBW, FreeStyleActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
             setLoading(false);
         }
     }
@@ -1052,7 +1063,7 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterVintage.setAdapter(new FilterAdapter(listFilterVintage, FreeStyle.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.VINTAGE_FILTERS)));
+            binding.recyclerViewFilterVintage.setAdapter(new FilterAdapter(listFilterVintage, FreeStyleActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.VINTAGE_FILTERS)));
 
             setLoading(false);
         }
@@ -1071,7 +1082,7 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterSmooth.setAdapter(new FilterAdapter(listFilterSmooth, FreeStyle.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.SMOOTH_FILTERS)));
+            binding.recyclerViewFilterSmooth.setAdapter(new FilterAdapter(listFilterSmooth, FreeStyleActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.SMOOTH_FILTERS)));
             setLoading(false);
         }
     }
@@ -1089,7 +1100,7 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterCold.setAdapter(new FilterAdapter(listFilterCold, FreeStyle.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.COLD_FILTERS)));
+            binding.recyclerViewFilterCold.setAdapter(new FilterAdapter(listFilterCold, FreeStyleActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.COLD_FILTERS)));
             setLoading(false);
         }
     }
@@ -1107,7 +1118,7 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterWarm.setAdapter(new FilterAdapter(listFilterWarm, FreeStyle.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.WARM_FILTERS)));
+            binding.recyclerViewFilterWarm.setAdapter(new FilterAdapter(listFilterWarm, FreeStyleActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.WARM_FILTERS)));
             setLoading(false);
         }
     }
@@ -1125,12 +1136,12 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
         }
 
         public void onPostExecute(Void voidR) {
-            binding.recyclerViewFilterLegacy.setAdapter(new FilterAdapter(listFilterLegacy, FreeStyle.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.LEGACY_FILTERS)));
+            binding.recyclerViewFilterLegacy.setAdapter(new FilterAdapter(listFilterLegacy, FreeStyleActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.LEGACY_FILTERS)));
             setLoading(false);
         }
     }
 
-    public static FreeStyle getQueShotGridActivityInstance() {
+    public static FreeStyleActivity getQueShotGridActivityInstance() {
         return freeStyleInstance;
     }
 
@@ -1251,7 +1262,7 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
             bitmap.recycle();
             bitmap2.recycle();
             try {
-                File image = SaveFileUtils.saveBitmapFileCollage(FreeStyle.this, createBitmap, new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date()));
+                File image = SaveFileUtils.saveBitmapFileCollage(FreeStyleActivity.this, createBitmap, new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date()));
                 createBitmap.recycle();
                 return image.getAbsolutePath();
             } catch (IOException e) {
@@ -1263,7 +1274,7 @@ public class FreeStyle extends AppCompatActivity implements FilterListener, Grid
         @Override
         public void onPostExecute(String str) {
             setLoading(false);
-            Intent intent = new Intent(FreeStyle.this, PhotoShareActivity.class);
+            Intent intent = new Intent(FreeStyleActivity.this, PhotoShareActivity.class);
             intent.putExtra("path", str);
             startActivity(intent);
         }

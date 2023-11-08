@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
-import com.photo.collagemaker.activities.freestyle.FreeStyle;
+import com.photo.collagemaker.activities.freestyle.FreeStyleActivity;
 import com.photo.collagemaker.activities.material.CollageMaterialActivity;
 import com.photo.collagemaker.activities.multifit.MultiFitActivity;
 import com.photo.collagemaker.activities.stitch.StitchActivity;
@@ -101,7 +101,7 @@ public class MultipleImagePickerActivity extends AppCompatActivity
                     intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
                     startActivity(intent);
                 } else if (tracker.equals("ScrapBook")) {
-                    Intent intent = new Intent(this, FreeStyle.class);
+                    Intent intent = new Intent(this, FreeStyleActivity.class);
                     intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
                     startActivity(intent);
                 }

@@ -2,15 +2,13 @@ package com.photo.collagemaker.activities.picker;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.photo.collagemaker.activities.editor.single_editor.SingleEditorActivity;
 import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActivity;
-import com.photo.collagemaker.activities.freestyle.FreeStyle;
+import com.photo.collagemaker.activities.freestyle.FreeStyleActivity;
 import com.photo.collagemaker.databinding.ActivitySingleImagePickerBinding;
-import com.photo.collagemaker.fragment.ImagePagerFragment;
 import com.photo.collagemaker.fragment.PhotoPickerFragment;
 
 import java.util.ArrayList;
@@ -53,7 +51,7 @@ public class SingleImagePickerActivity extends AppCompatActivity {
             if (isAddImage) {
                 CollageEditorActivity.getQueShotGridActivityInstance().resultAddImage(photo.getPath());
             } else if (isFreeStyleAddImage) {
-                FreeStyle.getQueShotGridActivityInstance().resultAddImage(photo.getPath());
+                FreeStyleActivity.getQueShotGridActivityInstance().resultAddImage(photo.getPath());
             } else {
                 CollageEditorActivity.getQueShotGridActivityInstance().replaceCurrentPiece(photo.getPath());
             }

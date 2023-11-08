@@ -157,7 +157,7 @@ public class CustomTextView extends Sticker {
         if (str != null) {
             if (str.length() <= 0)
                 return this;
-           this.textPaint.setTextAlign(Paint.Align.LEFT);
+            this.textPaint.setTextAlign(Paint.Align.LEFT);
             this.textPaint.setARGB(this.textAlpha, Color.red(this.textColor), Color.green(this.textColor), Color.blue(this.textColor));
             int i = this.textWidth - this.paddingWidth * 2;
             if (i <= 0)

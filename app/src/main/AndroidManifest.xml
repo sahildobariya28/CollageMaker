@@ -44,7 +44,7 @@
             android:name=".activities.material.CollageMaterialActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.freestyle.FreeStyle"
+            android:name=".activities.freestyle.FreeStyleActivity"
             android:exported="false" />
         <activity
             android:name=".activities.picker.NewSingleImagePickerActivity"

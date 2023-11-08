@@ -1,6 +1,7 @@
 package com.photo.collagemaker.sticker;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -33,6 +34,10 @@ public abstract class Sticker {
 
     private final float[] unrotatedWrapperCorner = new float[8];
 
+    private int extraBorderColor = Color.BLACK; // Change to your desired color
+    private float extraBorderWidth = 0f;
+    float cornerRadius = 0f;
+
     public boolean contains(float paramFloat1, float paramFloat2) {
         return contains(new float[]{paramFloat1, paramFloat2});
     }
@@ -51,6 +56,29 @@ public abstract class Sticker {
     public abstract void draw(@NonNull Canvas paramCanvas);
 
     public abstract int getAlpha();
+
+    public void setExtraBorderColor(int extraBorderColor) {
+        this.extraBorderColor = extraBorderColor;
+    }
+
+    public void setExtraBorderWidth(float extraBorderWidth) {
+        this.extraBorderWidth = extraBorderWidth;
+    }
+
+    public void setCornerRadius(float cornerRadius) {
+        this.cornerRadius = cornerRadius;
+    }
+
+    public int getExtraBorderColor(){
+        return extraBorderColor;
+    }
+
+    public float getExtraBorderWidth() {
+        return extraBorderWidth;
+    }
+    public float getCornerRadius() {
+        return cornerRadius;
+    }
 
     @NonNull
     public RectF getBound() {

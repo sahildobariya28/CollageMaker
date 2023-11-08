@@ -6,10 +6,16 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -85,6 +91,13 @@ public class StickerView extends RelativeLayout {
     private int frameSize;
     private int frameColor;
     private int selectedStickerPosition = 0;
+
+
+    private boolean isExtraBorder = false;
+    private int extraBorderColor = Color.BLACK; // Change to your desired color
+    private float extraBorderWidth = 0f;
+    float cornerRadius = 0f;
+
 
     public interface OnStickerOperationListener {
         void onAddSticker(Sticker sticker);
@@ -268,7 +281,10 @@ public class StickerView extends RelativeLayout {
         }
     }
 
-
+//    private Paint extraBorderPaint = new Paint();
+//    private int extraBorderColor = Color.RED; // Change to your desired color
+//    private float extraBorderWidth = 5f;
+//    float cornerRadius = 20f;
     public void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         if (drawCirclePoint && onMoving) {
@@ -278,11 +294,10 @@ public class StickerView extends RelativeLayout {
         drawStickers(canvas);
     }
 
+
+
+
     public void drawStickers(Canvas canvas) {
-        float f;
-        float f2;
-        float f3;
-        float f4;
         Canvas canvas2 = canvas;
 
         for (int i = 0; i < stickers.size(); i++) {
@@ -1016,5 +1031,35 @@ public class StickerView extends RelativeLayout {
 
     public void setFrameColor(int frameColor) {
         this.frameColor = frameColor;
+    }
+
+    public void setExtraBorder(boolean extraBorder) {
+        isExtraBorder = extraBorder;
+    }
+
+    public void setExtraBorderColor(int extraBorderColor) {
+        this.extraBorderColor = extraBorderColor;
+    }
+
+    public void setExtraBorderWidth(float extraBorderWidth) {
+        this.extraBorderWidth = extraBorderWidth;
+    }
+
+    public void setCornerRadius(float cornerRadius) {
+        this.cornerRadius = cornerRadius;
+    }
+
+    public int getExtraBorderColor(){
+        return extraBorderColor;
+    }
+    public boolean isExtraBorder(){
+        return isExtraBorder;
+    }
+
+    public float getExtraBorderWidth() {
+        return extraBorderWidth;
+    }
+    public float getCornerRadius() {
+        return cornerRadius;
     }
 }
