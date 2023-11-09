@@ -104,7 +104,7 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
         binding.recyclerViewFonts.setAdapter(fontAdapter);
         Log.d("dkfldsfkjsjnif", "onViewCreated: " + colorItems.size() + "    " + colorItems.get(1).getColor());
 
-        textColorPickerAdapter = new BackgroundGridAdapter(getContext(), (squareView, position) -> {
+        textColorPickerAdapter = new BackgroundGridAdapter(getContext(), (squareView, position, isBlur) -> {
             if (squareView.isColor){
                 binding.textViewPreviewEffect.setTextColor(squareView.drawableId);
                 quShotText.setQuShotTextColorIndex(position);
@@ -182,7 +182,7 @@ public class TextFragment extends DialogFragment implements View.OnClickListener
             }
         });
 
-        textBackgroundColorPickerAdapter = new BackgroundGridAdapter(getContext(), (squareView, position) -> {
+        textBackgroundColorPickerAdapter = new BackgroundGridAdapter(getContext(), (squareView, position, isBlur) -> {
             if (squareView.isColor){
                 quShotText.setQuShotShowBackground(true);
                 if (!binding.checkboxBackground.isChecked()) {

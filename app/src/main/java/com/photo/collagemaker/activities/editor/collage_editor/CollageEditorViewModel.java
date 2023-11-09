@@ -60,6 +60,7 @@ public class CollageEditorViewModel extends ViewModel {
         //background
         binding.backgroundContainer.backgroundTools.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewCustom.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
         binding.colorPickerView.setVisibility(View.GONE);
@@ -77,7 +78,6 @@ public class CollageEditorViewModel extends ViewModel {
         binding.viewCold.setVisibility(View.INVISIBLE);
         binding.viewWarm.setVisibility(View.INVISIBLE);
         binding.viewLegacy.setVisibility(View.INVISIBLE);
-
 
 
     }
@@ -219,6 +219,12 @@ public class CollageEditorViewModel extends ViewModel {
         hideAllView();
         binding.backgroundContainer.getRoot().setVisibility(View.VISIBLE);
         binding.backgroundContainer.recyclerViewBlur.setVisibility(View.VISIBLE);
+    }
+
+    public void bgCustomShow() {
+        hideAllView();
+        binding.backgroundContainer.getRoot().setVisibility(View.VISIBLE);
+        binding.backgroundContainer.recyclerViewCustom.setVisibility(View.VISIBLE);
     }
 
     public void bgColorSelectShow() {

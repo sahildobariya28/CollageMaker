@@ -297,7 +297,7 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
     }
 
     @Override
-    public void onBackgroundSelected(BackgroundGridAdapter.SquareView squareView, int position) {
+    public void onBackgroundSelected(BackgroundGridAdapter.SquareView squareView, int position, boolean isBlur) {
         viewModel.imageModelsList.set(selectedPosition, squareView);
         multiFitAdapter.notifyItemChanged(selectedPosition);
     }

@@ -43,6 +43,7 @@ public class FreeStyleViewModel extends ViewModel {
         //background
         binding.backgroundContainer.backgroundTools.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewCustom.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
         binding.colorPickerView.setVisibility(View.GONE);

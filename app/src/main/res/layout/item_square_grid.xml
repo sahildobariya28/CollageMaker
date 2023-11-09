@@ -15,11 +15,12 @@
         app:cardCornerRadius="10dp"
         app:cardElevation="0dp">
 
-        <View
+        <ImageView
             android:id="@+id/square_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/theme_color" />
+            android:scaleType="fitCenter"
+            android:background="@color/black" />
 
     </androidx.cardview.widget.CardView>
 

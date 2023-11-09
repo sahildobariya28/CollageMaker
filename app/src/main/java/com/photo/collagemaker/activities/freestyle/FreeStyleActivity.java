@@ -17,6 +17,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -90,7 +91,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-public class FreeStyleActivity extends AppCompatActivity implements FilterListener, GridToolsAdapter.OnItemSelected, StickerAdapter.OnClickSplashListener, AspectAdapter.OnNewSelectedListener, BackgroundGridAdapter.BackgroundGridListener, BrushColorListener {
+public class FreeStyleActivity extends AppCompatActivity implements FilterListener, GridToolsAdapter.OnItemSelected, StickerAdapter.OnClickSplashListener, AspectAdapter.OnNewSelectedListener, BackgroundGridAdapter.BackgroundGridListener, BrushColorListener, BorderColorAdapter.BorderColorListener {
 
     public int selectedStickerPosition = 0;
     public List<String> imageList;
@@ -524,7 +525,6 @@ public class FreeStyleActivity extends AppCompatActivity implements FilterListen
         });
 
 
-
         binding.imageViewSaveSticker.setOnClickListener(view -> {
             binding.stickerView.setHandlingSticker(null);
             binding.constraintLayoutSticker.setVisibility(View.GONE);
@@ -599,20 +599,28 @@ public class FreeStyleActivity extends AppCompatActivity implements FilterListen
 
         binding.recyclerBorderColor.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.HORIZONTAL, false));
         binding.recyclerBorderColor.setHasFixedSize(true);
-        binding.recyclerBorderColor.setAdapter(new BackgroundGridAdapter(getApplicationContext(), this));
+        binding.recyclerBorderColor.setAdapter(new BorderColorAdapter(getApplicationContext(), this));
 
         binding.backgroundContainer.recyclerViewColor.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.HORIZONTAL, false));
         binding.backgroundContainer.recyclerViewColor.setHasFixedSize(true);
         binding.backgroundContainer.recyclerViewColor.setAdapter(new BackgroundGridAdapter(getApplicationContext(), this));
-        this.onBackgroundSelected((BackgroundGridAdapter.SquareView) new BackgroundGridAdapter.SquareView(Color.parseColor("#ffffff"), "", true), 0);
+        this.onBackgroundSelected(new BackgroundGridAdapter.SquareView(Color.parseColor("#ffffff"), "", true), 0, false);
 
         binding.backgroundContainer.recyclerViewGradient.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.HORIZONTAL, false));
         binding.backgroundContainer.recyclerViewGradient.setHasFixedSize(true);
         binding.backgroundContainer.recyclerViewGradient.setAdapter(new BackgroundGridAdapter(getApplicationContext(), this, true));
 
+        BackgroundGridAdapter backgroundGridAdapter = new BackgroundGridAdapter(getApplicationContext(), this, true);
         binding.backgroundContainer.recyclerViewBlur.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.HORIZONTAL, false));
         binding.backgroundContainer.recyclerViewBlur.setHasFixedSize(true);
-        binding.backgroundContainer.recyclerViewBlur.setAdapter(new BackgroundGridAdapter(getApplicationContext(), this, true));
+        backgroundGridAdapter.setBlur(true);
+        binding.backgroundContainer.recyclerViewBlur.setAdapter(backgroundGridAdapter);
+
+        BackgroundGridAdapter backgroundCustomGridAdapter = new BackgroundGridAdapter(getApplicationContext(), this, true);
+        binding.backgroundContainer.recyclerViewCustom.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.HORIZONTAL, false));
+        binding.backgroundContainer.recyclerViewCustom.setHasFixedSize(true);
+        backgroundCustomGridAdapter.setBlur(false);
+        binding.backgroundContainer.recyclerViewCustom.setAdapter(backgroundCustomGridAdapter);
 
         binding.linearLayoutBorder.setOnClickListener(view -> viewModel.borderShow());
         binding.linearLayoutRatio.setOnClickListener(view -> viewModel.ratioShow());
@@ -620,6 +628,7 @@ public class FreeStyleActivity extends AppCompatActivity implements FilterListen
 
         binding.backgroundContainer.btnColor.setOnClickListener(view -> setBackgroundColor());
         binding.backgroundContainer.btnGradient.setOnClickListener(view -> setBackgroundGradient());
+        binding.backgroundContainer.btnCustom.setOnClickListener(view -> selectBackgroundCustom());
         binding.backgroundContainer.btnBlur.setOnClickListener(view -> selectBackgroundBlur());
         binding.backgroundContainer.btnSelect.setOnClickListener(view -> selectColorPicker());
         binding.backgroundContainer.btnWhite.setOnClickListener(view -> binding.stickerView.setBackgroundColor(ContextCompat.getColor(this, R.color.white)));
@@ -675,17 +684,13 @@ public class FreeStyleActivity extends AppCompatActivity implements FilterListen
         public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
             int id = seekBar.getId();
             if (id == R.id.seekbarBorder) {
-                if (binding.stickerView.getCurrentSticker() != null){
-                    binding.stickerView.getCurrentSticker().setExtraBorderWidth((float) i);
-                }else {
-                    binding.stickerView.getStickers().get(0).setExtraBorderWidth((float) i);
+                for (int j = 0; j < binding.stickerView.getStickers().size(); j++) {
+                    binding.stickerView.getStickers().get(j).setExtraBorderWidth((float) i);
                 }
 
             } else if (id == R.id.seekbarRadius) {
-                if (binding.stickerView.getCurrentSticker() != null) {
-                    binding.stickerView.getCurrentSticker().setCornerRadius((float) i);
-                }else {
-                    binding.stickerView.getStickers().get(0).setCornerRadius((float) i);
+                for (int j = 0; j < binding.stickerView.getStickers().size(); j++) {
+                    binding.stickerView.getStickers().get(j).setCornerRadius((float) i);
                 }
             }
             binding.stickerView.invalidate();
@@ -694,6 +699,11 @@ public class FreeStyleActivity extends AppCompatActivity implements FilterListen
 
     public void selectBackgroundBlur() {
         binding.backgroundContainer.backgroundTools.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewCustom.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.VISIBLE);
+
 
         ArrayList arrayList = new ArrayList();
         for (String drawable : imageList) {
@@ -701,10 +711,28 @@ public class FreeStyleActivity extends AppCompatActivity implements FilterListen
         }
         BackgroundGridAdapter backgroundGridAdapter = new BackgroundGridAdapter(getApplicationContext(), this, (List<Drawable>) arrayList);
         backgroundGridAdapter.setSelectedIndex(-1);
+        backgroundGridAdapter.setBlur(true);
         binding.backgroundContainer.recyclerViewBlur.setAdapter(backgroundGridAdapter);
+
+    }
+
+    public void selectBackgroundCustom() {
+        binding.backgroundContainer.backgroundTools.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
-        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.VISIBLE);
+        binding.backgroundContainer.recyclerViewCustom.setVisibility(View.VISIBLE);
+
+
+        ArrayList arrayList = new ArrayList();
+        for (String drawable : imageList) {
+            arrayList.add(new BitmapDrawable(getResources(), drawable));
+        }
+        BackgroundGridAdapter backgroundGridAdapter = new BackgroundGridAdapter(getApplicationContext(), this, (List<Drawable>) arrayList);
+        backgroundGridAdapter.setSelectedIndex(-1);
+        backgroundGridAdapter.setBlur(false);
+        binding.backgroundContainer.recyclerViewCustom.setAdapter(backgroundGridAdapter);
+
     }
 
     public void selectColorPicker() {
@@ -726,25 +754,30 @@ public class FreeStyleActivity extends AppCompatActivity implements FilterListen
 
     public void setBackgroundGradient() {
         binding.backgroundContainer.backgroundTools.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewCustom.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewGradient.setVisibility(View.VISIBLE);
+        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
 
         binding.backgroundContainer.recyclerViewGradient.scrollToPosition(0);
         ((BackgroundGridAdapter) binding.backgroundContainer.recyclerViewGradient.getAdapter()).setSelectedIndex(-1);
         binding.backgroundContainer.recyclerViewGradient.getAdapter().notifyDataSetChanged();
 
-        binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
-        binding.backgroundContainer.recyclerViewGradient.setVisibility(View.VISIBLE);
-        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
+
     }
 
 
     public void setBackgroundColor() {
         binding.backgroundContainer.backgroundTools.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewColor.setVisibility(View.VISIBLE);
+        binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewCustom.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
+
         binding.backgroundContainer.recyclerViewColor.scrollToPosition(0);
         ((BackgroundGridAdapter) binding.backgroundContainer.recyclerViewColor.getAdapter()).setSelectedIndex(-1);
         binding.backgroundContainer.recyclerViewColor.getAdapter().notifyDataSetChanged();
-        binding.backgroundContainer.recyclerViewColor.setVisibility(View.VISIBLE);
-        binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
-        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
+
     }
 
     public BitmapDrawable resizeBitmapDrawable(BitmapDrawable originalDrawable, int newHeight, int newWidth) {
@@ -867,8 +900,7 @@ public class FreeStyleActivity extends AppCompatActivity implements FilterListen
                     moduleToolsId = Module.NONE;
                     break;
                 case GRADIENT:
-                    binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-                    binding.constraintSaveControl.setVisibility(View.VISIBLE);
+                    viewModel.rvPrimaryToolShow();
 
                     if (currentBackgroundState.isColor) {
                         binding.stickerView.setBackgroundResourceMode(0);
@@ -888,33 +920,10 @@ public class FreeStyleActivity extends AppCompatActivity implements FilterListen
                     moduleToolsId = Module.NONE;
                     break;
                 case STICKER:
-                    if (binding.stickerView.getStickers().size() <= 0) {
-                        binding.constraintSaveControl.setVisibility(View.VISIBLE);
-                        binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-                        binding.relativeLayoutAddSticker.setVisibility(View.GONE);
-                        binding.stickerView.setHandlingSticker(null);
-                        binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-                        binding.constraintLayoutSticker.setVisibility(View.GONE);
-                        moduleToolsId = Module.NONE;
-                    } else if (binding.relativeLayoutAddSticker.getVisibility() == View.VISIBLE) {
-                        binding.stickerView.removeCurrentSticker();
-                        binding.relativeLayoutAddSticker.setVisibility(View.GONE);
-                        binding.stickerView.setHandlingSticker(null);
-                        binding.linearLayoutWrapperStickerList.setVisibility(View.VISIBLE);
-                        binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-                        binding.constraintLayoutSticker.setVisibility(View.GONE);
-                        moduleToolsId = Module.NONE;
-                    } else {
-                        binding.linearLayoutWrapperStickerList.setVisibility(View.GONE);
-                        binding.relativeLayoutAddSticker.setVisibility(View.VISIBLE);
-                        binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-                        moduleToolsId = Module.NONE;
-                    }
-
-                    binding.constraintLayoutSticker.setVisibility(View.GONE);
-                    binding.linearLayoutWrapperStickerList.setVisibility(View.GONE);
-                    binding.rvPrimaryTool.setVisibility(View.VISIBLE);
-                    binding.constraintSaveControl.setVisibility(View.VISIBLE);
+                    binding.stickerView.setHandlingSticker(null);
+                    binding.stickerView.setLocked(true);
+                    moduleToolsId = Module.NONE;
+                    viewModel.rvPrimaryToolShow();
                     break;
                 case NONE:
                     TextView textViewCancel, textViewDiscard;
@@ -947,6 +956,13 @@ public class FreeStyleActivity extends AppCompatActivity implements FilterListen
     @Override
     public void onFilterSelected(String str) {
         new LoadBitmapWithFilter().execute(str);
+    }
+
+    @Override
+    public void onBorderColorSelected(BorderColorAdapter.SquareView squareView, int position) {
+        for (int i = 0; i < binding.stickerView.getStickers().size(); i++) {
+            binding.stickerView.getStickers().get(i).setExtraBorderColor(squareView.drawableId);
+        }
     }
 
     class LoadBitmapWithFilter extends AsyncTask<String, List<Bitmap>, List<Bitmap>> {
@@ -1202,7 +1218,7 @@ public class FreeStyleActivity extends AppCompatActivity implements FilterListen
     }
 
     @Override
-    public void onBackgroundSelected(BackgroundGridAdapter.SquareView squareView, int position) {
+    public void onBackgroundSelected(BackgroundGridAdapter.SquareView squareView, int position, boolean isBlur) {
         if (squareView.isColor) {
             binding.stickerView.setBackgroundColor(squareView.drawableId);
             binding.stickerView.setBackgroundResourceMode(0);
@@ -1212,12 +1228,39 @@ public class FreeStyleActivity extends AppCompatActivity implements FilterListen
             AsyncTask<Void, Bitmap, Bitmap> asyncTask = new AsyncTask<Void, Bitmap, Bitmap>() {
                 @Override
                 protected Bitmap doInBackground(Void... voidArr) {
-                    return FilterUtils.getBlurImageFromBitmap(((BitmapDrawable) squareView.drawable).getBitmap(), 5.0f);
+                    if (isBlur) {
+                        return FilterUtils.getBlurImageFromBitmap(((BitmapDrawable) squareView.drawable).getBitmap(), 5.0f);
+                    } else {
+                        return FilterUtils.getBlurImageFromBitmap(((BitmapDrawable) squareView.drawable).getBitmap(), 0f);
+                    }
                 }
 
                 @Override
                 protected void onPostExecute(Bitmap bitmap) {
-                    binding.stickerView.setBackground(new BitmapDrawable(getResources(), bitmap));
+                    int targetWidth = binding.stickerView.getWidth();  // Replace with the desired x position
+                    int targetHeight = binding.stickerView.getHeight();
+                    Bitmap originalBitmap = bitmap;
+
+                    if (originalBitmap != null) {
+                        int originalWidth = originalBitmap.getWidth();
+                        int originalHeight = originalBitmap.getHeight();
+
+                        float scaleX = (float) targetWidth / originalWidth;
+                        float scaleY = (float) targetHeight / originalHeight;
+                        float scaleFactor = Math.max(scaleX, scaleY);
+
+                        int newWidth = (int) (originalWidth * scaleFactor);
+                        int newHeight = (int) (originalHeight * scaleFactor);
+
+                        int left = (newWidth - targetWidth) / 2;
+                        int top = (newHeight - targetHeight) / 2;
+
+                        Bitmap scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, true);
+                        Bitmap croppedBitmap = Bitmap.createBitmap(scaledBitmap, left, top, targetWidth, targetHeight);
+                        binding.stickerView.setBackground(new BitmapDrawable(getResources(), croppedBitmap));
+                        originalBitmap.recycle(); // Release the original bitmap to free up memory
+                    }
+//                    binding.stickerView.setBackground(new BitmapDrawable(getResources(), bitmap));
                 }
             };
 

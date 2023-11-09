@@ -306,9 +306,17 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         binding.backgroundContainer.recyclerViewGradient.setHasFixedSize(true);
         binding.backgroundContainer.recyclerViewGradient.setAdapter(new BackgroundGridAdapter(getApplicationContext(), this, true));
 
+        BackgroundGridAdapter backgroundGridAdapter = new BackgroundGridAdapter(getApplicationContext(), this, true);
         binding.backgroundContainer.recyclerViewBlur.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.HORIZONTAL, false));
         binding.backgroundContainer.recyclerViewBlur.setHasFixedSize(true);
-        binding.backgroundContainer.recyclerViewBlur.setAdapter(new BackgroundGridAdapter(getApplicationContext(), this, true));
+        backgroundGridAdapter.setBlur(true);
+        binding.backgroundContainer.recyclerViewBlur.setAdapter(backgroundGridAdapter);
+
+        BackgroundGridAdapter backgroundGridAdapter1 = new BackgroundGridAdapter(getApplicationContext(), this, true);
+        binding.backgroundContainer.recyclerViewCustom.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.HORIZONTAL, false));
+        binding.backgroundContainer.recyclerViewCustom.setHasFixedSize(true);
+        backgroundGridAdapter1.setBlur(false);
+        binding.backgroundContainer.recyclerViewCustom.setAdapter(backgroundGridAdapter1);
 
 
         binding.linearLayoutCollage.setOnClickListener(view -> viewModel.collageShow());
@@ -318,6 +326,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
         binding.backgroundContainer.btnColor.setOnClickListener(view -> setBackgroundColor());
         binding.backgroundContainer.btnGradient.setOnClickListener(view -> setBackgroundGradient());
+        binding.backgroundContainer.btnCustom.setOnClickListener(view -> selectBackgroundCustom());
         binding.backgroundContainer.btnBlur.setOnClickListener(view -> selectBackgroundBlur());
         binding.backgroundContainer.btnSelect.setOnClickListener(view -> selectColorPicker());
         binding.backgroundContainer.btnWhite.setOnClickListener(view -> binding.collageView.setBackgroundColor(ContextCompat.getColor(this, R.color.white)));
@@ -336,7 +345,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             aspectRatio = binding.collageView.getAspectRatio();
             moduleToolsId = Module.NONE;
 
-            binding.collageView.setBackgroundColor(binding.colorPickerView.getColor());
+
 
             binding.backgroundContainer.backgroundTools.setVisibility(View.VISIBLE);
             binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
@@ -344,20 +353,25 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
             binding.backgroundContainer.getRoot().setVisibility(View.GONE);
             binding.colorPickerView.setVisibility(View.GONE);
-            if (binding.collageView.getBackgroundResourceMode() == 0) {
-                currentBackgroundState.isColor = true;
-                currentBackgroundState.isBitmap = false;
-                currentBackgroundState.drawableId = ((ColorDrawable) binding.collageView.getBackground()).getColor();
-                currentBackgroundState.drawable = null;
-            } else if (binding.collageView.getBackgroundResourceMode() == 1) {
-                currentBackgroundState.isColor = false;
-                currentBackgroundState.isBitmap = false;
-                currentBackgroundState.drawable = binding.collageView.getBackground();
-            } else {
-                currentBackgroundState.isColor = false;
-                currentBackgroundState.isBitmap = true;
-                currentBackgroundState.drawable = binding.collageView.getBackground();
+            if (binding.colorPickerView.isSelected()){
+                binding.collageView.setBackgroundColor(binding.colorPickerView.getColor());
+            }else {
+                if (binding.collageView.getBackgroundResourceMode() == 0) {
+                    currentBackgroundState.isColor = true;
+                    currentBackgroundState.isBitmap = false;
+                    currentBackgroundState.drawableId = ((ColorDrawable) binding.collageView.getBackground()).getColor();
+                    currentBackgroundState.drawable = null;
+                } else if (binding.collageView.getBackgroundResourceMode() == 1) {
+                    currentBackgroundState.isColor = false;
+                    currentBackgroundState.isBitmap = false;
+                    currentBackgroundState.drawable = binding.collageView.getBackground();
+                } else {
+                    currentBackgroundState.isColor = false;
+                    currentBackgroundState.isBitmap = true;
+                    currentBackgroundState.drawable = binding.collageView.getBackground();
+                }
             }
+
         });
 
         Display defaultDisplay = getWindowManager().getDefaultDisplay();
@@ -768,28 +782,35 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
 
     public void setBackgroundColor() {
         binding.backgroundContainer.backgroundTools.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewColor.setVisibility(View.VISIBLE);
+        binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewCustom.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
+
         binding.backgroundContainer.recyclerViewColor.scrollToPosition(0);
         ((BackgroundGridAdapter) binding.backgroundContainer.recyclerViewColor.getAdapter()).setSelectedIndex(-1);
         binding.backgroundContainer.recyclerViewColor.getAdapter().notifyDataSetChanged();
-        binding.backgroundContainer.recyclerViewColor.setVisibility(View.VISIBLE);
-        binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
-        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
     }
 
     public void setBackgroundGradient() {
         binding.backgroundContainer.backgroundTools.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewCustom.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewGradient.setVisibility(View.VISIBLE);
+        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
 
         binding.backgroundContainer.recyclerViewGradient.scrollToPosition(0);
         ((BackgroundGridAdapter) binding.backgroundContainer.recyclerViewGradient.getAdapter()).setSelectedIndex(-1);
         binding.backgroundContainer.recyclerViewGradient.getAdapter().notifyDataSetChanged();
 
-        binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
-        binding.backgroundContainer.recyclerViewGradient.setVisibility(View.VISIBLE);
-        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
     }
 
     public void selectBackgroundBlur() {
         binding.backgroundContainer.backgroundTools.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewCustom.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.VISIBLE);
 
         ArrayList arrayList = new ArrayList();
         for (QueShotGrid drawable : binding.collageView.getQueShotGrids()) {
@@ -797,10 +818,27 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         }
         BackgroundGridAdapter backgroundGridAdapter = new BackgroundGridAdapter(getApplicationContext(), this, (List<Drawable>) arrayList);
         backgroundGridAdapter.setSelectedIndex(-1);
+        backgroundGridAdapter.setBlur(true);
         binding.backgroundContainer.recyclerViewBlur.setAdapter(backgroundGridAdapter);
+    }
+
+    public void selectBackgroundCustom() {
+        binding.backgroundContainer.backgroundTools.setVisibility(View.GONE);
+        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
         binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
-        binding.backgroundContainer.recyclerViewBlur.setVisibility(View.VISIBLE);
+        binding.backgroundContainer.recyclerViewCustom.setVisibility(View.VISIBLE);
+
+
+        ArrayList arrayList = new ArrayList();
+        for (String drawable : imageList) {
+            arrayList.add(new BitmapDrawable(getResources(), drawable));
+        }
+        BackgroundGridAdapter backgroundGridAdapter = new BackgroundGridAdapter(getApplicationContext(), this, (List<Drawable>) arrayList);
+        backgroundGridAdapter.setSelectedIndex(-1);
+        backgroundGridAdapter.setBlur(false);
+        binding.backgroundContainer.recyclerViewCustom.setAdapter(backgroundGridAdapter);
+
     }
 
     public void selectColorPicker() {
@@ -1160,6 +1198,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
         BitmapDrawable resizedDrawable = new BitmapDrawable(getResources(), resizedBitmap);
         return resizedDrawable;
     }
+
     public void resultAddImage(String str) {
 
         if (!str.isEmpty()) {
@@ -1203,7 +1242,7 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
     }
 
     @Override
-    public void onBackgroundSelected(final BackgroundGridAdapter.SquareView squareView, int position) {
+    public void onBackgroundSelected(final BackgroundGridAdapter.SquareView squareView, int position, boolean isBlur) {
         if (squareView.isColor) {
             binding.collageView.setBackgroundColor(squareView.drawableId);
             binding.collageView.setBackgroundResourceMode(0);
@@ -1213,12 +1252,38 @@ public class CollageEditorActivity extends AppCompatActivity implements GridTool
             AsyncTask<Void, Bitmap, Bitmap> asyncTask = new AsyncTask<Void, Bitmap, Bitmap>() {
                 @Override
                 protected Bitmap doInBackground(Void... voidArr) {
-                    return FilterUtils.getBlurImageFromBitmap(((BitmapDrawable) squareView.drawable).getBitmap(), 5.0f);
+                    if (isBlur) {
+                        return FilterUtils.getBlurImageFromBitmap(((BitmapDrawable) squareView.drawable).getBitmap(), 5.0f);
+                    } else {
+                        return FilterUtils.getBlurImageFromBitmap(((BitmapDrawable) squareView.drawable).getBitmap(), 0f);
+                    }
                 }
 
                 @Override
                 protected void onPostExecute(Bitmap bitmap) {
-                    binding.collageView.setBackground(new BitmapDrawable(getResources(), bitmap));
+                    int targetWidth = binding.collageView.getWidth();  // Replace with the desired x position
+                    int targetHeight = binding.collageView.getHeight();
+                    Bitmap originalBitmap = bitmap;
+
+                    if (originalBitmap != null) {
+                        int originalWidth = originalBitmap.getWidth();
+                        int originalHeight = originalBitmap.getHeight();
+
+                        float scaleX = (float) targetWidth / originalWidth;
+                        float scaleY = (float) targetHeight / originalHeight;
+                        float scaleFactor = Math.max(scaleX, scaleY);
+
+                        int newWidth = (int) (originalWidth * scaleFactor);
+                        int newHeight = (int) (originalHeight * scaleFactor);
+
+                        int left = (newWidth - targetWidth) / 2;
+                        int top = (newHeight - targetHeight) / 2;
+
+                        Bitmap scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, true);
+                        Bitmap croppedBitmap = Bitmap.createBitmap(scaledBitmap, left, top, targetWidth, targetHeight);
+                        binding.collageView.setBackground(new BitmapDrawable(getResources(), croppedBitmap));
+                        originalBitmap.recycle(); // Release the original bitmap to free up memory
+                    }
                 }
             };
 

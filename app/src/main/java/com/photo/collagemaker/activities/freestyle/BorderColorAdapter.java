@@ -1,4 +1,4 @@
-package com.photo.collagemaker.activities.editor.collage_editor.adapter;
+package com.photo.collagemaker.activities.freestyle;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -18,25 +18,22 @@ import com.photo.collagemaker.databinding.ItemSquareGridBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAdapter.ViewHolder> {
+public class BorderColorAdapter extends RecyclerView.Adapter<BorderColorAdapter.ViewHolder> {
 
-    public BackgroundGridListener backgroundListener;
+    public BorderColorListener backgroundListener;
     private Context context;
 
     public int selectedIndex;
 
     public List<SquareView> squareViewList = new ArrayList();
 
-    boolean isBlur = false;
-
-    public interface BackgroundGridListener {
-        void onBackgroundSelected(SquareView squareView, int position, boolean isBlur);
+    public interface BorderColorListener {
+        void onBorderColorSelected(SquareView squareView, int position);
     }
 
-    public BackgroundGridAdapter(Context context, BackgroundGridListener backgroundListener) {
+    public BorderColorAdapter(Context context, BorderColorListener backgroundListener) {
         this.context = context;
         this.backgroundListener = backgroundListener;
-        this.isBlur = isBlur;
         this.squareViewList.add(new SquareView(context.getColor(R.color.transparent), "Transparent", true));
         List<String> lstColorForBrush = BrushColorAsset.listColorBrush();
         for (int i = 0; i < lstColorForBrush.size() - 2; i++) {
@@ -45,7 +42,7 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
 
     }
 
-    public BackgroundGridAdapter(Context context2, BackgroundGridListener backgroundChangeListener2, boolean z) {
+    public BorderColorAdapter(Context context2, BorderColorListener backgroundChangeListener2, boolean z) {
         this.context = context2;
         this.backgroundListener = backgroundChangeListener2;
         squareViewList.add(new SquareView(R.drawable.gradient_1, "Gradient_1"));
@@ -115,7 +112,7 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
         squareViewList.add(new SquareView(R.drawable.gradient_65, "Gradient_65"));
     }
 
-    public BackgroundGridAdapter(Context context2, BackgroundGridListener backgroundChangeListener2, List<Drawable> list) {
+    public BorderColorAdapter(Context context2, BorderColorListener backgroundChangeListener2, List<Drawable> list) {
         this.context = context2;
         this.backgroundListener = backgroundChangeListener2;
         for (Drawable squareView : list) {
@@ -123,7 +120,7 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
         }
     }
 
-    public BackgroundGridAdapter(Context context2, BackgroundGridListener backgroundChangeListener2, List<BitmapDrawable> list, Boolean isboolean) {
+    public BorderColorAdapter(Context context2, BorderColorListener backgroundChangeListener2, List<BitmapDrawable> list, Boolean isboolean) {
         this.context = context2;
         this.backgroundListener = backgroundChangeListener2;
         for (Drawable squareView : list) {
@@ -144,7 +141,7 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
             viewHolder.binding.squareView.setBackgroundColor(squareView.drawableId);
         } else if (squareView.drawable != null) {
             viewHolder.binding.squareView.setVisibility(View.VISIBLE);
-            viewHolder.binding.squareView.setImageDrawable(squareView.drawable);
+            viewHolder.binding.squareView.setBackgroundDrawable(squareView.drawable);
         } else {
             viewHolder.binding.squareView.setBackgroundResource(squareView.drawableId);
         }
@@ -164,10 +161,6 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
         return squareViewList.size();
     }
 
-    public void setBlur(boolean isBlur){
-        this.isBlur = isBlur;
-    }
-
     class ViewHolder extends RecyclerView.ViewHolder {
 
         ItemSquareGridBinding binding;
@@ -177,7 +170,7 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
             binding.getRoot().setOnClickListener(view -> {
                 notifyItemChanged(selectedIndex);
                 selectedIndex = getLayoutPosition();
-                backgroundListener.onBackgroundSelected((SquareView) squareViewList.get(selectedIndex), selectedIndex, isBlur);
+                backgroundListener.onBorderColorSelected((SquareView) squareViewList.get(selectedIndex), selectedIndex);
                 notifyItemChanged(getLayoutPosition());
             });
         }
@@ -249,6 +242,4 @@ public class BackgroundGridAdapter extends RecyclerView.Adapter<BackgroundGridAd
             this.text = text;
         }
     }
-
-
 }
