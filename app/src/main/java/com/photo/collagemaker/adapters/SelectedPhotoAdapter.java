@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.photo.collagemaker.R;
+import com.photo.collagemaker.databinding.ItemAlbumSelectedBinding;
+import com.photo.collagemaker.databinding.ItemSquareGridBinding;
 import com.photo.collagemaker.interfac.OnSelectedPhoto;
 import com.photo.collagemaker.model.ImageModel;
 
@@ -35,16 +37,16 @@ public class SelectedPhotoAdapter extends RecyclerView.Adapter<SelectedPhotoAdap
     @NonNull
     @Override
     public SelectedPhotoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_album_selected, parent, false);
-        return new ViewHolder(view);
+        ItemAlbumSelectedBinding binding = ItemAlbumSelectedBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SelectedPhotoAdapter.ViewHolder holder, int position) {
         ImageModel imageModel = listPhoto.get(position);
 
-        Glide.with(context).load(imageModel.getPathFile()).placeholder(R.drawable.image_show).into(holder.image_view_item);
-        holder.image_view_remove.setOnClickListener(view -> {
+        Glide.with(context).load(imageModel.getPathFile()).placeholder(R.drawable.image_show).into(holder.binding.imageViewItem);
+        holder.binding.imageViewRemove.setOnClickListener(view -> {
             onSelectedPhoto.OnSelectedItemDelete(imageModel);
         });
     }
@@ -57,14 +59,11 @@ public class SelectedPhotoAdapter extends RecyclerView.Adapter<SelectedPhotoAdap
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image_view_remove;
-        ImageView image_view_item;
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            image_view_remove = itemView.findViewById(R.id.image_view_remove);
-            image_view_item = itemView.findViewById(R.id.image_view_item);
+        ItemAlbumSelectedBinding binding;
+        public ViewHolder(ItemAlbumSelectedBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

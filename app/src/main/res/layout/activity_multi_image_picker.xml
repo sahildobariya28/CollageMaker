@@ -145,9 +145,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerSelectedItem"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
         android:visibility="gone"
-        android:background="@color/white"
+        android:paddingStart="15dp"
+        android:clipToPadding="false"
+        android:background="#AAffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/theme_gray_bg"
-    tools:context=".activities.stitch.StitchActivity">
+    android:background="@color/theme_gray_bg">
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintSaveControl"
@@ -73,103 +73,58 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <HorizontalScrollView
+        android:id="@+id/horizontalStitchScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:nestedScrollingEnabled="true"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <!--Editor View-->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayoutWrapperCollageView"
+        <LinearLayout
+            android:id="@+id/horizontalStitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/verticalStitchScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/theme_gray_bg"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:paddingVertical="20dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/bottomBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintSaveControl">
 
-
-        <HorizontalScrollView
-            android:id="@+id/horizontalStitchScrollView"
+        <LinearLayout
+            android:id="@+id/verticalStitch"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="true"
-            android:orientation="horizontal"
-            android:paddingHorizontal="20dp"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <com.photo.collagemaker.custom_view.CustomGridView
-                    android:id="@+id/horizontalCollageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="@color/theme_gray_bg"
-                    app:showBorder="true"
-                    app:showIcons="true" />
-
-            </LinearLayout>
-
-        </HorizontalScrollView>
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/verticalStitchScrollView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:orientation="horizontal"
-            android:paddingVertical="20dp"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-
-                <com.photo.collagemaker.custom_view.CustomGridView
-                    android:id="@+id/verticalCollageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/theme_gray_bg"
-                    app:showBorder="true"
-                    app:showIcons="true" />
-
-            </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
 
-        </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
 
-<!--        <androidx.core.widget.NestedScrollView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:fillViewport="true">-->
+    </androidx.core.widget.NestedScrollView>
 
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent">-->
 
-<!--                <com.photo.collagemaker.activities.stitch.ImageStitchingView-->
-<!--                    android:id="@+id/isv_test"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--        </androidx.core.widget.NestedScrollView>-->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/bottomBar"
@@ -247,10 +202,10 @@
         android:layout_height="120dp"
         android:background="@android:color/transparent"
         android:elevation="200dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/constraintLayoutWrapperCollageView">
+        app:layout_constraintTop_toBottomOf="@+id/constraintSaveControl">
 
         <com.photo.collagemaker.loading.LoadingView
             android:layout_width="120dp"
@@ -259,5 +214,4 @@
             app:loading_renderer="DanceLoading" />
 
     </RelativeLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

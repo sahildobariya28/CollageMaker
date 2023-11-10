@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -55,6 +56,11 @@ public class StitchActivity extends AppCompatActivity implements ImageStitchingV
 
         binding.verticalStitchScrollView.post(() -> {
             binding.horizontalStitchScrollView.post(() -> {
+                binding.imgVertical.setColorFilter(ContextCompat.getColor(this, R.color.text_color_theme), PorterDuff.Mode.SRC_IN);
+                binding.imgHorizontal.setColorFilter(ContextCompat.getColor(this, R.color.text_color_dark), PorterDuff.Mode.SRC_IN);
+                binding.textVertical.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
+                binding.textHorizontal.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+
                 binding.verticalStitchScrollView.setVisibility(View.VISIBLE);
                 binding.horizontalStitchScrollView.setVisibility(View.GONE);
                 initStitchView();
@@ -64,11 +70,22 @@ public class StitchActivity extends AppCompatActivity implements ImageStitchingV
         });
 
         binding.btnVertical.setOnClickListener(view -> {
+
+            binding.imgVertical.setColorFilter(ContextCompat.getColor(this, R.color.text_color_theme), PorterDuff.Mode.SRC_IN);
+            binding.imgHorizontal.setColorFilter(ContextCompat.getColor(this, R.color.text_color_dark), PorterDuff.Mode.SRC_IN);
+            binding.textVertical.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
+            binding.textHorizontal.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+
             binding.verticalStitchScrollView.setVisibility(View.VISIBLE);
             binding.horizontalStitchScrollView.setVisibility(View.GONE);
         });
 
         binding.btnHorizontal.setOnClickListener(view -> {
+            binding.imgVertical.setColorFilter(ContextCompat.getColor(this, R.color.text_color_dark), PorterDuff.Mode.SRC_IN);
+            binding.imgHorizontal.setColorFilter(ContextCompat.getColor(this, R.color.text_color_theme), PorterDuff.Mode.SRC_IN);
+            binding.textVertical.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+            binding.textHorizontal.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
+
             binding.verticalStitchScrollView.setVisibility(View.GONE);
             binding.horizontalStitchScrollView.setVisibility(View.VISIBLE);
         });
@@ -89,6 +106,7 @@ public class StitchActivity extends AppCompatActivity implements ImageStitchingV
             }
 
         });
+        binding.btnBack.setOnClickListener(view -> onBackPressed());
     }
 
 

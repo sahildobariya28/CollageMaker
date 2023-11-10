@@ -91,7 +91,7 @@ public class HomeActivity extends AppCompatActivity {
                 public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
                     if (multiplePermissionsReport.areAllPermissionsGranted()) {
                         Intent intent = new Intent(HomeActivity.this, MultipleImagePickerActivity.class);
-                        intent.putExtra(MultipleImagePickerActivity.KEY_LIMIT_MAX_IMAGE, 9);
+                        intent.putExtra(MultipleImagePickerActivity.KEY_LIMIT_MAX_IMAGE, 20);
                         intent.putExtra(MultipleImagePickerActivity.KEY_LIMIT_MIN_IMAGE, 2);
                         intent.putExtra("tracker", "ScrapBook");
                         startActivityForResult(intent, 1001);

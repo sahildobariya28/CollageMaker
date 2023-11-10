@@ -20,6 +20,7 @@ import com.photo.collagemaker.activities.editor.collage_editor.CollageEditorActi
 import com.photo.collagemaker.activities.freestyle.FreeStyleActivity;
 import com.photo.collagemaker.activities.material.CollageMaterialActivity;
 import com.photo.collagemaker.activities.multifit.MultiFitActivity;
+import com.photo.collagemaker.activities.stitch.NewStitchActivity;
 import com.photo.collagemaker.activities.stitch.StitchActivity;
 import com.photo.collagemaker.adapters.SelectedPhotoAdapter;
 import com.photo.collagemaker.constants.Constants;
@@ -84,7 +85,7 @@ public class MultipleImagePickerActivity extends AppCompatActivity
             ArrayList<String> imageList = getListString(listItemSelect);
             if (imageList.size() >= limitImageMin) {
                 if (tracker.equals("Stitch")){
-                    Intent intent = new Intent(this, StitchActivity.class);
+                    Intent intent = new Intent(this, NewStitchActivity.class);
                     intent.putStringArrayListExtra(KEY_DATA_RESULT, imageList);
                     startActivity(intent);
                 }else if (tracker.equals("CollageMaterial")){

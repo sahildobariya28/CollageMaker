@@ -91,6 +91,7 @@ public class CollageEditorViewModel extends ViewModel {
     public void rvSecondaryToolShow() {
         hideAllView();
         binding.rvSecondaryToolContainer.setVisibility(View.VISIBLE);
+        binding.constraintSaveControl.setVisibility(View.VISIBLE);
     }
 
     public void drawShow() {

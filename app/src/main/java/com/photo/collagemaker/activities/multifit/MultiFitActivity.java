@@ -40,7 +40,7 @@ import java.util.Locale;
 
 public class MultiFitActivity extends AppCompatActivity implements BackgroundGridAdapter.BackgroundGridListener {
 
-    public int selectedPosition = 0;
+    public int firstVisibleItem = 0;
     MultiFitAdapter multiFitAdapter;
 
     ActivityMultiFitBinding binding;
@@ -74,14 +74,20 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
         binding.backgroundContainer.btnBlur.setOnClickListener(view -> selectBackgroundBlur());
         binding.backgroundContainer.btnSelect.setOnClickListener(view -> selectColorPicker());
         binding.backgroundContainer.btnWhite.setOnClickListener(view -> {
-            viewModel.imageModelsList.get(selectedPosition).setDrawableId(Color.parseColor("#ffffff"));
-            viewModel.imageModelsList.get(selectedPosition).setColor(true);
-            multiFitAdapter.notifyItemChanged(selectedPosition);
+            for (int i = 0; i < viewModel.imageModelsList.size(); i++) {
+                viewModel.imageModelsList.get(i).setDrawableId(Color.parseColor("#ffffff"));
+                viewModel.imageModelsList.get(i).setColor(true);
+                multiFitAdapter.notifyItemChanged(i);
+            }
+
         });
         binding.backgroundContainer.btnBlack.setOnClickListener(view -> {
-            viewModel.imageModelsList.get(selectedPosition).setDrawableId(Color.parseColor("#000000"));
-            viewModel.imageModelsList.get(selectedPosition).setColor(true);
-            multiFitAdapter.notifyItemChanged(selectedPosition);
+            for (int i = 0; i < viewModel.imageModelsList.size(); i++) {
+                viewModel.imageModelsList.get(i).setDrawableId(Color.parseColor("#000000"));
+                viewModel.imageModelsList.get(i).setColor(true);
+                multiFitAdapter.notifyItemChanged(i);
+            }
+
         });
 
         binding.btnDone.setOnClickListener(view -> {
@@ -89,13 +95,15 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
             binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
             binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
             binding.colorPickerView.setVisibility(View.GONE);
-            binding.btnDone.setVisibility(View.GONE);
             binding.backgroundContainer.backgroundTools.setVisibility(View.VISIBLE);
             binding.carouselView.setVisibility(View.VISIBLE);
 
-            viewModel.imageModelsList.get(selectedPosition).setDrawableId(binding.colorPickerView.getColor());
-            viewModel.imageModelsList.get(selectedPosition).setColor(true);
-            multiFitAdapter.notifyItemChanged(selectedPosition);
+            for (int i = 0; i < viewModel.imageModelsList.size(); i++) {
+                viewModel.imageModelsList.get(i).setDrawableId(binding.colorPickerView.getColor());
+                viewModel.imageModelsList.get(i).setColor(true);
+                multiFitAdapter.notifyItemChanged(i);
+            }
+
         });
 
         binding.btnSave.setOnClickListener(view -> {
@@ -212,7 +220,8 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                selectedPosition = linearLayoutManager.findFirstVisibleItemPosition();
+                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+//                firstVisibleItem = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
             }
         });
 
@@ -270,7 +279,6 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
     }
 
     public void selectColorPicker() {
-        binding.btnDone.setVisibility(View.VISIBLE);
         binding.carouselView.setVisibility(View.GONE);
         binding.colorPickerView.setVisibility(View.VISIBLE);
 
@@ -279,7 +287,7 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
         binding.colorPickerView.setSelectorPoint(viewX, viewY);
 
 
-        binding.colorPickerView.setPaletteDrawable(new BitmapDrawable(getResources(), viewModel.imageList.get(selectedPosition)));
+        binding.colorPickerView.setPaletteDrawable(new BitmapDrawable(getResources(), viewModel.imageList.get(firstVisibleItem)));
         binding.colorPickerView.setColorListener((ColorListener) (color, fromUser) -> {
             binding.backgroundContainer.selectedColorPreview.setCardBackgroundColor(ColorStateList.valueOf(color));
             binding.backgroundContainer.selectedColorPreview.getBackground().setTint(color);
@@ -298,8 +306,11 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
 
     @Override
     public void onBackgroundSelected(BackgroundGridAdapter.SquareView squareView, int position, boolean isBlur) {
-        viewModel.imageModelsList.set(selectedPosition, squareView);
-        multiFitAdapter.notifyItemChanged(selectedPosition);
+        for (int i = 0; i < viewModel.imageModelsList.size(); i++) {
+            viewModel.imageModelsList.set(i, squareView);
+            multiFitAdapter.notifyItemChanged(i);
+        }
+
     }
 
     @Override
@@ -310,7 +321,6 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
             binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
             binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
             binding.colorPickerView.setVisibility(View.GONE);
-            binding.btnDone.setVisibility(View.GONE);
             binding.backgroundContainer.backgroundTools.setVisibility(View.VISIBLE);
             binding.carouselView.setVisibility(View.VISIBLE);
         } else {

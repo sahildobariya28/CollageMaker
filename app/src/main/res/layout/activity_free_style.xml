@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:fontFamily="@font/roboto_medium"
-            android:text="Collage Maker"
+            android:text="Free Style"
             android:textColor="@color/text_color_dark"
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -1181,6 +1181,19 @@
                     android:gravity="bottom|end"
                     android:orientation="vertical">
 
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvSecondaryTool"
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/theme_gray_bg"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btnDownArrow" />
+
+
                     <ImageView
                         android:id="@+id/btnDownArrow"
                         android:layout_width="40dp"
@@ -1191,17 +1204,6 @@
                         android:src="@drawable/img_down_arrow"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvSecondaryTool"
-                        android:layout_width="match_parent"
-                        android:layout_height="75dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="@color/theme_gray_bg"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

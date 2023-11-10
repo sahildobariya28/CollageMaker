@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="10dp"
+        android:paddingTop="30dp"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toTopOf="parent">
@@ -21,7 +21,7 @@
             android:layout_width="225dp"
             android:layout_height="50dp"
             android:layout_margin="5dp"
-            android:padding="15dp"
+            android:padding="20dp"
             android:scaleType="centerCrop"
             android:src="@drawable/img_photo_collage_title" />
 
@@ -36,7 +36,9 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:layout_margin="5dp"
+            android:layout_marginVertical="5dp"
+            android:layout_marginStart="10dp"
+            android:padding="2dp"
             android:src="@drawable/vip" />
 
         <ImageView
@@ -44,8 +46,9 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:layout_margin="5dp"
-            android:padding="8dp"
+            android:layout_marginVertical="5dp"
+            android:layout_marginEnd="10dp"
+            android:padding="10dp"
             android:src="@drawable/btn_setting" />
     </LinearLayout>
 
@@ -211,7 +214,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:orientation="horizontal"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintStart_toStartOf="parent"
