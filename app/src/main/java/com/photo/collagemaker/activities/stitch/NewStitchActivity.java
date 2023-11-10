@@ -45,16 +45,19 @@ public class NewStitchActivity extends AppCompatActivity {
         binding.btnBack.setOnClickListener(view -> onBackPressed());
 
         binding.verticalStitchScrollView.post(() -> {
-            binding.imgVertical.setColorFilter(ContextCompat.getColor(this, R.color.text_color_theme), PorterDuff.Mode.SRC_IN);
-            binding.imgHorizontal.setColorFilter(ContextCompat.getColor(this, R.color.text_color_dark), PorterDuff.Mode.SRC_IN);
-            binding.textVertical.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
-            binding.textHorizontal.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
+            binding.horizontalStitchScrollView.post(() -> {
+                binding.imgVertical.setColorFilter(ContextCompat.getColor(this, R.color.text_color_theme), PorterDuff.Mode.SRC_IN);
+                binding.imgHorizontal.setColorFilter(ContextCompat.getColor(this, R.color.text_color_dark), PorterDuff.Mode.SRC_IN);
+                binding.textVertical.setTextColor(ContextCompat.getColor(this, R.color.text_color_theme));
+                binding.textHorizontal.setTextColor(ContextCompat.getColor(this, R.color.text_color_dark));
 
-            binding.verticalStitchScrollView.setVisibility(View.VISIBLE);
-            binding.horizontalStitchScrollView.setVisibility(View.GONE);
+                binding.verticalStitchScrollView.setVisibility(View.VISIBLE);
+                binding.horizontalStitchScrollView.setVisibility(View.GONE);
 
-            initVerticalStitch();
-            setLoading(false);
+                initVerticalStitch();
+                initHorizontalStitch();
+                setLoading(false);
+            });
         });
 
         binding.btnVertical.setOnClickListener(view -> {
@@ -126,15 +129,15 @@ public class NewStitchActivity extends AppCompatActivity {
                     .into(imageView);
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
             );
             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             imageView.setLayoutParams(layoutParams);
 
 // Add the ImageView to the LinearLayout
-            binding.verticalStitch.setOrientation(LinearLayout.HORIZONTAL);
-            binding.verticalStitch.addView(imageView);
+            binding.horizontalStitch.setOrientation(LinearLayout.HORIZONTAL);
+            binding.horizontalStitch.addView(imageView);
         }
     }
 

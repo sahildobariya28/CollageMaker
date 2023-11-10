@@ -89,8 +89,8 @@
 
         <LinearLayout
             android:id="@+id/horizontalStitch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
 
@@ -104,7 +104,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipToPadding="false"
-        android:orientation="horizontal"
         android:paddingVertical="20dp"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/bottomBar"
