@@ -24,6 +24,34 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/btnFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:paddingHorizontal="10dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/icon_bg_light"
+                    android:padding="8dp"
+                    android:src="@drawable/img_filter" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
+                    android:text="Filter"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/btnCustom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -266,5 +294,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

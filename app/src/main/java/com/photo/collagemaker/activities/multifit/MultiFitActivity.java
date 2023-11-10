@@ -2,6 +2,7 @@ package com.photo.collagemaker.activities.multifit;
 
 import static com.photo.collagemaker.activities.multifit.MultiFitAdapter.getBitmapFromView;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -9,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -24,8 +26,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.photo.collagemaker.R;
 import com.photo.collagemaker.activities.PhotoShareActivity;
 import com.photo.collagemaker.activities.editor.collage_editor.adapter.BackgroundGridAdapter;
+import com.photo.collagemaker.activities.editor.collage_editor.adapter.FilterAdapter;
 import com.photo.collagemaker.activities.picker.MultipleImagePickerActivity;
+import com.photo.collagemaker.assets.FilterCodeAsset;
 import com.photo.collagemaker.databinding.ActivityMultiFitBinding;
+import com.photo.collagemaker.listener.FilterListener;
 import com.photo.collagemaker.utils.FilterUtils;
 import com.photo.collagemaker.utils.SaveFileUtils;
 import com.skydoves.colorpickerview.listeners.ColorListener;
@@ -34,11 +39,12 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MultiFitActivity extends AppCompatActivity implements BackgroundGridAdapter.BackgroundGridListener {
+public class MultiFitActivity extends AppCompatActivity implements BackgroundGridAdapter.BackgroundGridListener, FilterListener {
 
     public int firstVisibleItem = 0;
     MultiFitAdapter multiFitAdapter;
@@ -49,26 +55,42 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
     int currentSavePosition = 0;
     Dialog dialog;
 
+    // ArrayList
+    public ArrayList listFilterAll = new ArrayList<>();
+    public ArrayList listFilterBW = new ArrayList<>();
+    public ArrayList listFilterVintage = new ArrayList<>();
+    public ArrayList listFilterSmooth = new ArrayList<>();
+    public ArrayList listFilterCold = new ArrayList<>();
+    public ArrayList listFilterWarm = new ArrayList<>();
+    public ArrayList listFilterLegacy = new ArrayList<>();
+    public List<Drawable> drawableList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMultiFitBinding.inflate(getLayoutInflater());
-        viewModel = new ViewModelProvider(this, new MultiFitViewModelFactory(this)).get(MultiFitViewModel.class);
+        viewModel = new ViewModelProvider(this, new MultiFitViewModelFactory(this, binding)).get(MultiFitViewModel.class);
         setContentView(binding.getRoot());
 
         viewModel.imageList = getIntent().getStringArrayListExtra(MultipleImagePickerActivity.KEY_DATA_RESULT);
 
         for (int i = 0; i < viewModel.imageList.size(); i++) {
+            viewModel.imageDrawableList.add(new BitmapDrawable(getResources(), viewModel.imageList.get(i)));
+        }
+
+        for (int i = 0; i < viewModel.imageDrawableList.size(); i++) {
             Bitmap bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
             bitmap.setPixel(0, 0, Color.RED);
 
             viewModel.imageModelsList.add(new BackgroundGridAdapter.SquareView(Color.parseColor("#ffffff"), "", true));
         }
 
+        binding.backgroundContainer.btnFilter.setVisibility(View.VISIBLE);
 
         initMultiFitView();
+        initFilterView();
         setLoading(false);
 
+        binding.backgroundContainer.btnFilter.setOnClickListener(view -> setFilter());
         binding.backgroundContainer.btnColor.setOnClickListener(view -> setBackgroundColor());
         binding.backgroundContainer.btnGradient.setOnClickListener(view -> setBackgroundGradient());
         binding.backgroundContainer.btnBlur.setOnClickListener(view -> selectBackgroundBlur());
@@ -94,16 +116,17 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
             binding.backgroundContainer.recyclerViewColor.setVisibility(View.GONE);
             binding.backgroundContainer.recyclerViewGradient.setVisibility(View.GONE);
             binding.backgroundContainer.recyclerViewBlur.setVisibility(View.GONE);
-            binding.colorPickerView.setVisibility(View.GONE);
             binding.backgroundContainer.backgroundTools.setVisibility(View.VISIBLE);
+            binding.colorPickerView.setVisibility(View.GONE);
             binding.carouselView.setVisibility(View.VISIBLE);
 
-            for (int i = 0; i < viewModel.imageModelsList.size(); i++) {
-                viewModel.imageModelsList.get(i).setDrawableId(binding.colorPickerView.getColor());
-                viewModel.imageModelsList.get(i).setColor(true);
-                multiFitAdapter.notifyItemChanged(i);
+            if (binding.colorPickerView.isSelected()){
+                for (int i = 0; i < viewModel.imageModelsList.size(); i++) {
+                    viewModel.imageModelsList.get(i).setDrawableId(binding.colorPickerView.getColor());
+                    viewModel.imageModelsList.get(i).setColor(true);
+                    multiFitAdapter.notifyItemChanged(i);
+                }
             }
-
         });
 
         binding.btnSave.setOnClickListener(view -> {
@@ -118,36 +141,27 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
                 window.setAttributes(params);
             }
 
-//            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.setCancelable(false);
 
             ImageView collageView = dialog.findViewById(R.id.collageView);
-//            ViewGroup.LayoutParams layoutParams = collageView.getLayoutParams();
-//            layoutParams.width = binding.carouselView.getWidth();
-//            layoutParams.height = binding.carouselView.getHeight();
-//            collageView.setLayoutParams(layoutParams);
 
             showImage(collageView);
 
             dialog.show();
 
-//            multiFitAdapter.isSave = true;
-//            multiFitAdapter.notifyDataSetChanged();
         });
 
     }
 
     public void showImage(ImageView collageView) {
         BackgroundGridAdapter.SquareView squareView = viewModel.imageModelsList.get(currentSavePosition);
-
-        BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), viewModel.imageList.get(currentSavePosition));
-        collageView.setImageDrawable(bitmapDrawable);
+        collageView.setImageDrawable(viewModel.imageDrawableList.get(currentSavePosition));
 
 
         if (viewModel.imageModelsList.get(currentSavePosition).isColor) {
             collageView.setBackgroundColor(squareView.drawableId);
             collageView.post(() -> {
-                if (currentSavePosition == (viewModel.imageList.size() - 1)) {
+                if (currentSavePosition == (viewModel.imageDrawableList.size() - 1)) {
                     saveBitmap(collageView, true);
                 } else {
                     saveBitmap(collageView, false);
@@ -166,7 +180,7 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
                 protected void onPostExecute(Bitmap bitmap) {
                     collageView.setBackground(new BitmapDrawable(viewModel.activity.getResources(), bitmap));
                     collageView.post(() -> {
-                        if (currentSavePosition == (viewModel.imageList.size() - 1)) {
+                        if (currentSavePosition == (viewModel.imageDrawableList.size() - 1)) {
                             saveBitmap(collageView, true);
                         } else {
                             saveBitmap(collageView, false);
@@ -179,7 +193,7 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
         } else {
             collageView.setBackgroundResource(squareView.drawableId);
             collageView.post(() -> {
-                if (currentSavePosition == (viewModel.imageList.size() - 1)) {
+                if (currentSavePosition == (viewModel.imageDrawableList.size() - 1)) {
                     saveBitmap(collageView, true);
                 } else {
                     saveBitmap(collageView, false);
@@ -200,7 +214,7 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
                 viewModel.activity.startActivity(intent);
                 currentSavePosition = 0;
                 dialog.dismiss();
-            }else {
+            } else {
                 currentSavePosition++;
                 showImage(imageView);
             }
@@ -208,6 +222,28 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void initFilterView() {
+        binding.imageViewSaveFilter.setOnClickListener(view -> {
+            viewModel.rvPrimaryToolShow();
+        });
+
+
+        binding.recyclerViewFilterBW.setVisibility(View.GONE);
+        binding.recyclerViewFilterVintage.setVisibility(View.GONE);
+        binding.recyclerViewFilterSmooth.setVisibility(View.GONE);
+        binding.recyclerViewFilterCold.setVisibility(View.GONE);
+        binding.recyclerViewFilterWarm.setVisibility(View.GONE);
+        binding.recyclerViewFilterLegacy.setVisibility(View.GONE);
+
+        binding.linearLayoutAll.setOnClickListener(view -> viewModel.filterAllShow());
+        binding.linearLayoutSmooth.setOnClickListener(view -> viewModel.filterSmoothShow());
+        binding.linearLayoutBW.setOnClickListener(view -> viewModel.filterBWShow());
+        binding.linearLayoutVintage.setOnClickListener(view -> viewModel.filterVintageShow());
+        binding.linearLayoutCold.setOnClickListener(view -> viewModel.filterColdShow());
+        binding.linearLayoutWarm.setOnClickListener(view -> viewModel.filterWarmShow());
+        binding.linearLayoutLegacy.setOnClickListener(view -> viewModel.filterLegacyShow());
     }
 
     public void initMultiFitView() {
@@ -224,6 +260,26 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
 //                firstVisibleItem = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
             }
         });
+
+    }
+
+    public void setFilter() {
+
+        drawableList.clear();
+        if (viewModel.imageDrawableList.size() != 0){
+            for (String imagePath : viewModel.imageList) {
+                drawableList.add(new BitmapDrawable(getResources(), imagePath));
+            }
+        }
+
+        viewModel.filterAllShow();
+        new allFilters().execute();
+        new bwFilters().execute();
+        new vintageFilters().execute();
+        new smoothFilters().execute();
+        new coldFilters().execute();
+        new warmFilters().execute();
+        new legacyFilters().execute();
 
     }
 
@@ -258,14 +314,11 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
     }
 
     public void selectBackgroundBlur() {
-        binding.backgroundContainer.recyclerViewBlur.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.HORIZONTAL, false));
-        binding.backgroundContainer.recyclerViewBlur.setHasFixedSize(true);
-        binding.backgroundContainer.recyclerViewBlur.setAdapter(new BackgroundGridAdapter(getApplicationContext(), this, true));
 
 
         ArrayList arrayList = new ArrayList();
-        for (int i = 0; i < viewModel.imageList.size(); i++) {
-            Drawable d = new BitmapDrawable(getResources(), viewModel.imageList.get(i));
+        for (int i = 0; i < viewModel.imageDrawableList.size(); i++) {
+            Drawable d = viewModel.imageDrawableList.get(i);
             arrayList.add(d);
         }
 
@@ -287,7 +340,7 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
         binding.colorPickerView.setSelectorPoint(viewX, viewY);
 
 
-        binding.colorPickerView.setPaletteDrawable(new BitmapDrawable(getResources(), viewModel.imageList.get(firstVisibleItem)));
+        binding.colorPickerView.setPaletteDrawable(viewModel.imageDrawableList.get(firstVisibleItem));
         binding.colorPickerView.setColorListener((ColorListener) (color, fromUser) -> {
             binding.backgroundContainer.selectedColorPreview.setCardBackgroundColor(ColorStateList.valueOf(color));
             binding.backgroundContainer.selectedColorPreview.getBackground().setTint(color);
@@ -328,4 +381,171 @@ public class MultiFitActivity extends AppCompatActivity implements BackgroundGri
         }
 
     }
+
+
+    class allFilters extends AsyncTask<Void, Void, Void> {
+        public void onPreExecute() {
+            setLoading(true);
+        }
+
+        @SuppressLint("WrongThread")
+        public Void doInBackground(Void... voidArr) {
+            listFilterAll.clear();
+            listFilterAll.addAll(FilterCodeAsset.getListBitmapFilterAll(ThumbnailUtils.extractThumbnail(new BitmapDrawable(getResources(), viewModel.imageList.get(0)).getBitmap(), 70, 70)));
+            return null;
+        }
+
+        public void onPostExecute(Void voidR) {
+            binding.recyclerViewFilterAll.setAdapter(new FilterAdapter(listFilterAll, MultiFitActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.ALL_FILTERS)));
+            binding.constraintLayoutFilterLayout.setVisibility(View.VISIBLE);
+            setLoading(false);
+        }
+    }
+
+    class bwFilters extends AsyncTask<Void, Void, Void> {
+        public void onPreExecute() {
+            setLoading(true);
+        }
+
+        @SuppressLint("WrongThread")
+        public Void doInBackground(Void... voidArr) {
+            listFilterBW.clear();
+            listFilterBW.addAll(FilterCodeAsset.getListBitmapFilterBW(ThumbnailUtils.extractThumbnail(new BitmapDrawable(getResources(), viewModel.imageList.get(0)).getBitmap(), 70, 70)));
+            return null;
+        }
+
+        public void onPostExecute(Void voidR) {
+            binding.recyclerViewFilterBW.setAdapter(new FilterAdapter(listFilterBW, MultiFitActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.BW_FILTERS)));
+            setLoading(false);
+        }
+    }
+
+    class vintageFilters extends AsyncTask<Void, Void, Void> {
+        public void onPreExecute() {
+            setLoading(true);
+        }
+
+        @SuppressLint("WrongThread")
+        public Void doInBackground(Void... voidArr) {
+            listFilterVintage.clear();
+            listFilterVintage.addAll(FilterCodeAsset.getListBitmapFilterVintage(ThumbnailUtils.extractThumbnail(new BitmapDrawable(getResources(), viewModel.imageList.get(0)).getBitmap(), 70, 70)));
+            return null;
+        }
+
+        public void onPostExecute(Void voidR) {
+            binding.recyclerViewFilterVintage.setAdapter(new FilterAdapter(listFilterVintage, MultiFitActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.VINTAGE_FILTERS)));
+            setLoading(false);
+        }
+    }
+
+    class smoothFilters extends AsyncTask<Void, Void, Void> {
+        public void onPreExecute() {
+            setLoading(true);
+        }
+
+        @SuppressLint("WrongThread")
+        public Void doInBackground(Void... voidArr) {
+            listFilterSmooth.clear();
+            listFilterSmooth.addAll(FilterCodeAsset.getListBitmapFilterSmooth(ThumbnailUtils.extractThumbnail(new BitmapDrawable(getResources(), viewModel.imageList.get(0)).getBitmap(), 70, 70)));
+            return null;
+        }
+
+        public void onPostExecute(Void voidR) {
+            binding.recyclerViewFilterSmooth.setAdapter(new FilterAdapter(listFilterSmooth, MultiFitActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.SMOOTH_FILTERS)));
+
+            setLoading(false);
+        }
+    }
+
+    class coldFilters extends AsyncTask<Void, Void, Void> {
+        public void onPreExecute() {
+            setLoading(true);
+        }
+
+        @SuppressLint("WrongThread")
+        public Void doInBackground(Void... voidArr) {
+            listFilterCold.clear();
+            listFilterCold.addAll(FilterCodeAsset.getListBitmapFilterCold(ThumbnailUtils.extractThumbnail(new BitmapDrawable(getResources(), viewModel.imageList.get(0)).getBitmap(), 70, 70)));
+            return null;
+        }
+
+        public void onPostExecute(Void voidR) {
+            binding.recyclerViewFilterCold.setAdapter(new FilterAdapter(listFilterCold, MultiFitActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.COLD_FILTERS)));
+
+            setLoading(false);
+        }
+    }
+
+    class warmFilters extends AsyncTask<Void, Void, Void> {
+        public void onPreExecute() {
+            setLoading(true);
+        }
+
+        @SuppressLint("WrongThread")
+        public Void doInBackground(Void... voidArr) {
+            listFilterWarm.clear();
+            listFilterWarm.addAll(FilterCodeAsset.getListBitmapFilterWarm(ThumbnailUtils.extractThumbnail(new BitmapDrawable(getResources(), viewModel.imageList.get(0)).getBitmap(), 70, 70)));
+            return null;
+        }
+
+        public void onPostExecute(Void voidR) {
+            binding.recyclerViewFilterWarm.setAdapter(new FilterAdapter(listFilterWarm, MultiFitActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.WARM_FILTERS)));
+
+            setLoading(false);
+        }
+    }
+
+    class legacyFilters extends AsyncTask<Void, Void, Void> {
+        public void onPreExecute() {
+            setLoading(true);
+        }
+
+        @SuppressLint("WrongThread")
+        public Void doInBackground(Void... voidArr) {
+            listFilterLegacy.clear();
+            listFilterLegacy.addAll(FilterCodeAsset.getListBitmapFilterLegacy(ThumbnailUtils.extractThumbnail(new BitmapDrawable(getResources(), viewModel.imageList.get(0)).getBitmap(), 70, 70)));
+            return null;
+        }
+
+        public void onPostExecute(Void voidR) {
+            binding.recyclerViewFilterLegacy.setAdapter(new FilterAdapter(listFilterLegacy, MultiFitActivity.this, getApplicationContext(), Arrays.asList(FilterCodeAsset.LEGACY_FILTERS)));
+            setLoading(false);
+        }
+    }
+
+    class LoadBitmapWithFilter extends AsyncTask<String, List<Bitmap>, List<Bitmap>> {
+        LoadBitmapWithFilter() {
+        }
+
+        public void onPreExecute() {
+            setLoading(true);
+        }
+
+        public List<Bitmap> doInBackground(String... strArr) {
+            ArrayList arrayList = new ArrayList();
+            for (Drawable drawable : drawableList) {
+                arrayList.add(FilterUtils.getBitmapWithFilter(((BitmapDrawable) drawable).getBitmap(), strArr[0]));
+            }
+            return arrayList;
+        }
+
+
+        public void onPostExecute(List<Bitmap> list) {
+            for (int i = 0; i < list.size(); i++) {
+                BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), list.get(i));
+                bitmapDrawable.setAntiAlias(true);
+                bitmapDrawable.setFilterBitmap(true);
+
+                viewModel.imageDrawableList.set(i, bitmapDrawable);
+                multiFitAdapter.notifyItemChanged(i);
+            }
+            setLoading(false);
+        }
+    }
+
+    @Override
+    public void onFilterSelected(String str) {
+        new LoadBitmapWithFilter().execute(str);
+    }
+
 }

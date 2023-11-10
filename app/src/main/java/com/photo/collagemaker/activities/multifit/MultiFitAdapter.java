@@ -55,8 +55,7 @@ public class MultiFitAdapter extends RecyclerView.Adapter<MultiFitAdapter.ViewHo
         if (squareView.isColor) {
             holder.binding.collageView.setBackgroundColor(squareView.drawableId);
             holder.binding.collageView.post(() -> {
-                BitmapDrawable bitmapDrawable = new BitmapDrawable(viewModel.activity.getResources(), viewModel.imageList.get(position));
-                holder.binding.collageView.setImageDrawable(bitmapDrawable);
+                holder.binding.collageView.setImageDrawable(viewModel.imageDrawableList.get(position));
                 holder.binding.collageView.post(() -> {
                     viewModel.multiFitImageList.add(holder.binding.collageView);
                 });
@@ -73,8 +72,7 @@ public class MultiFitAdapter extends RecyclerView.Adapter<MultiFitAdapter.ViewHo
                 protected void onPostExecute(Bitmap bitmap) {
                     holder.binding.collageView.setBackground(new BitmapDrawable(viewModel.activity.getResources(), bitmap));
                     holder.binding.collageView.post(() -> {
-                        BitmapDrawable bitmapDrawable = new BitmapDrawable(viewModel.activity.getResources(), viewModel.imageList.get(position));
-                        holder.binding.collageView.setImageDrawable(bitmapDrawable);
+                        holder.binding.collageView.setImageDrawable(viewModel.imageDrawableList.get(position));
                         holder.binding.collageView.post(() -> {
                             viewModel.multiFitImageList.add(holder.binding.collageView);
                         });
@@ -85,8 +83,7 @@ public class MultiFitAdapter extends RecyclerView.Adapter<MultiFitAdapter.ViewHo
         } else {
             holder.binding.collageView.setBackgroundResource(squareView.drawableId);
             holder.binding.collageView.post(() -> {
-                BitmapDrawable bitmapDrawable = new BitmapDrawable(viewModel.activity.getResources(), viewModel.imageList.get(position));
-                holder.binding.collageView.setImageDrawable(bitmapDrawable);
+                holder.binding.collageView.setImageDrawable(viewModel.imageDrawableList.get(position));
                 holder.binding.collageView.post(() -> {
                     viewModel.multiFitImageList.add(holder.binding.collageView);
                 });
@@ -156,7 +153,7 @@ public class MultiFitAdapter extends RecyclerView.Adapter<MultiFitAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return viewModel.imageList.size();
+        return viewModel.imageDrawableList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
